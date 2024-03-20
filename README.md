@@ -1,0 +1,1 @@
+https://modern.ircdocs.horse/
