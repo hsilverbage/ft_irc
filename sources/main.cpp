@@ -9,7 +9,7 @@ int	main (int argc, char **argv)
 	}
 	try
 	{
-		Server	Server();
+		Server	Serv(argv[1], argv[2]);
 	}
 	catch(const std::exception& e)
 	{
