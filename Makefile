@@ -15,7 +15,8 @@ INCLUDES = -I ./includes
 DEPS = $(SRC:$(SRC_DIR)%.cpp=$(OBJ_DIR)/%.d)
 
 SRC =	$(SRC_DIR)main.cpp	\
-		$(SRC_DIR)Server.cpp
+		$(SRC_DIR)Server.cpp	\
+		$(SRC_DIR)Client.cpp
 
 OBJ = $(SRC:$(SRC_DIR)%.cpp=$(OBJ_DIR)/%.o)
 

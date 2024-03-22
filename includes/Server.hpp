@@ -13,6 +13,7 @@ class	Server
 		~Server();
 
 	private :
+	
 		Server(const Server& rhs);
 		Server& operator=(const Server& rhs);
 
