@@ -1,32 +1,35 @@
-#ifndef	CLIENT_HPP
-#define	CLIENT_HPP
+#ifndef CLIENT_HPP
+#define CLIENT_HPP
 
 #include <iostream>
 
 class Client
 {
-	public :
-	
+	public:
+
 		Client();
-		~Client();
-	
-		std::string&	getNickname() const;
-		std::string&	getRealName() const;
-		std::string&	getAddress() const;
+		// ~Client();
 
+		// std::string& getNickname() const;
+		// std::string& getRealName() const;
 
-	private :
+		int get_fd();
+		void set_fd(int fd);
+		void set_ip_address(std::string ipadd);
 
-		Client(const Client& rhs);
-		Client& operator=(const Client &rhs);
-		
-		bool	parsing_nickname();
+		// bool parsing_nickname();
 
-		std::string	_nickname;
-		std::string	_realName;
-		std::string	_address; //address of the host that the client is connecting from
+	private:
+
+		// Client(const Client& rhs);
+		// Client& operator=(const Client& rhs);
+
+		int _fd;				//-> client file descriptor
+		std::string _ipAddress; //-> client ip address	
+
+		// std::string _nickname;
+		// std::string _realName;
+
 };
-
-
 
 #endif

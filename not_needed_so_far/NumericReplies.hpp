@@ -1,18 +1,17 @@
-#ifndef	NUMERICPREPLIES_HPP
-#define	NUMERICPREPLIES_HPP
+#ifndef NUMERICPREPLIES_HPP
+#define NUMERICPREPLIES_HPP
 
+// CLASS TO BE DONE IN STATIC
 
-//CLASS TO BE DONE IN STATIC
-
-class	NumericReplies
+class NumericReplies
 {
-	public :
+	public:
 
 		NumericReplies();
 		~NumericReplies();
 
-	private :
-	
+	private:
+
 		NumericReplies(const NumericReplies& rhs);
 		NumericReplies& operator=(const NumericReplies& rhs);
 };
