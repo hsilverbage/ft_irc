@@ -13,22 +13,6 @@
 #include <unistd.h>
 #include <vector>
 
-// class Server
-// {
-// 	public:
-
-// 		Server(std::string port, std::string password);
-// 		~Server();
-
-// 	private:
-
-// 		Server(const Server& rhs);
-// 		Server& operator=(const Server& rhs);
-
-// 		std::string _port;
-// 		std::string _password;
-// };
-
 class Client;
 
 class Server
@@ -36,6 +20,7 @@ class Server
 	public:
 
 		Server();
+// 		~Server();
 
 		void server_init();						
 		void create_socket();					
@@ -52,6 +37,8 @@ class Server
 		static bool _signal;
 		std::vector<Client> _clients;
 		std::vector<struct pollfd> _fds;
+// 		Server(const Server& rhs);
+// 		Server& operator=(const Server& rhs);
 };
 
 #endif
