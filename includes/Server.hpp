@@ -19,7 +19,7 @@ class Server
 {
 	public:
 
-		Server();
+		Server(std::string port, std::string pass);
 // 		~Server();
 
 		void server_init();						
@@ -27,13 +27,16 @@ class Server
 		void accept_new_client();				
 		void receive_new_data(int fd);	
 		void close_fds();						
-		void clear_clients(int fd);	
+		void clear_clients(int fd);
 		static void signal_handler(int signum);
+		int servRun();
 
 	private:
 
+		struct sockaddr_in struct_socket;
 		int _port;						
 		int _socketFd;
+		std::string _pass;
 		static bool _signal;
 		std::vector<Client> _clients;
 		std::vector<struct pollfd> _fds;

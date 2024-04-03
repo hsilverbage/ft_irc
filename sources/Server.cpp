@@ -34,22 +34,37 @@ void Server::clear_clients(int fd)
 	}
 }
 
-// Server::~Server()
-// {
+int Server::servRun()
+{
+	struct_socket.sin_family = AF_INET;
+	struct_socket.sin_port = htons(_port);
+	struct_socket.sin_addr.s_addr = INADDR_ANY;
 
-// }
+	this->_socketFd = socket();
 
-// Server::Server(const Server& rhs)
-// {
-// 	*this = rhs;
-// }
 
-// Server&	Server::operator=(const Server& rhs)
-// {
-// 	if (this != &rhs)
-// 	{
+	return (this->_socketFd);
+}
 
-// 	}
-// 	return (*this);
-// }
+
+Server::~Server(std::string port, std::string pass) : _port(port), _pass(pass)
+{
+
+}
+
+Server::Server(const Server& rhs)
+{
+	*this = rhs;
+}
+
+Server&	Server::operator=(const Server& rhs)
+{
+	if (this != &rhs)
+	{
+
+	}
+	return (*this);
+}
+
+
 

@@ -16,5 +16,6 @@ int main(int argc, char** argv)
 	{
 		std::cerr << e.what() << '\n';
 	}
+	server.run(argv[1], argv[2]);
 	return (0);
 }
