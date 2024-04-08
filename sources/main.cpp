@@ -8,14 +8,10 @@ int main(int argc, char** argv)
 		return (-1);
 	}
 
-	try
-	{
-		Server Serv(argv[1], argv[2]);
-	}
-	catch (const std::exception& e)
-	{
-		std::cerr << e.what() << '\n';
-	}
-	server.run(argv[1], argv[2]);
+	Server Serv(argv[1], argv[2]);
+	signal(SIGINT, Server::SignalHandler);
+	signal(SIGQUIT, Server::SignalHandler);
+
+	Serv.ServInit();
 	return (0);
 }

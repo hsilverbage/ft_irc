@@ -12,6 +12,8 @@
 #include <sys/types.h>	//for socket()
 #include <unistd.h>
 #include <vector>
+#include <cstdlib>
+#include <string>
 
 class Client;
 
@@ -20,7 +22,7 @@ class Server
 	public:
 
 		Server(std::string port, std::string pass);
-// 		~Server();
+		~Server();
 
 		void server_init();						
 		void create_socket();					
@@ -28,20 +30,22 @@ class Server
 		void receive_new_data(int fd);	
 		void close_fds();						
 		void clear_clients(int fd);
-		static void signal_handler(int signum);
-		int servRun();
+		static void SignalHandler(int signum);
+		void setSocket();
+		void ServInit();
 
 	private:
 
 		struct sockaddr_in struct_socket;
+		std::vector<pollfd> fds;
 		int _port;						
 		int _socketFd;
 		std::string _pass;
 		static bool _signal;
 		std::vector<Client> _clients;
 		std::vector<struct pollfd> _fds;
-// 		Server(const Server& rhs);
-// 		Server& operator=(const Server& rhs);
+		Server(const Server& rhs);
+		Server& operator=(const Server& rhs);
 };
 
 #endif
