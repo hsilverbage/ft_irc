@@ -14,6 +14,7 @@
 #include <vector>
 #include <cstdlib>
 #include <string>
+#include <cstring>
 
 class Client;
 
@@ -37,7 +38,6 @@ class Server
 	private:
 
 		struct sockaddr_in struct_socket;
-		std::vector<pollfd> fds;
 		int _port;						
 		int _socketFd;
 		std::string _pass;

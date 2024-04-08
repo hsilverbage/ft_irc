@@ -39,12 +39,71 @@ void Server::clear_clients(int fd)
 	}
 }
 
+void Server::receive_new_data(int fd)
+{
+	char buff[1024];
+ 	memset(buff, 0, sizeof(buff));
+
+	ssize_t bytes = recv(fd, buff, sizeof(buff) - 1 , 0);
+	if(bytes <= 0)
+	{
+		clear_clients(fd);
+  		close(fd);
+ 	}
+	else
+		buff[bytes] = '\0';
+
+}
+
+void Server::accept_new_client()
+{
+	Client client;
+
+	struct pollfd poll;
+	socklen_t len = sizeof(struct_socket);
+
+	int acc = accept(_socketFd, (sockaddr *)&struct_socket, &len);
+	if (acc == -1)
+	{
+		std::cout << "accept failed" << std::endl;
+		return ;
+	}
+	if (fcntl(acc, F_SETFL, O_NONBLOCK) == -1)
+  	{
+		std::cout << "fcntl failed" << std::endl;
+		return;
+	}
+	poll.fd = acc; 
+ 	poll.events = POLLIN;
+ 	poll.revents = 0;
+	client.set_fd(acc);
+ 	client.set_ip_address(inet_ntoa((struct_socket.sin_addr)));
+ 	_clients.push_back(client);
+ 	_fds.push_back(poll);
+}
 
 void Server::ServInit()
 {
-	this->_port = 4444;
+	this->_port = 3434;
 	setSocket();
 	std::cout << " Waiting..." << std::endl;
+
+	while (Server::_signal == false)
+ 	{
+  		if((poll(&_fds[0],_fds.size(),-1) == -1) && Server::_signal == false)
+   			throw(std::runtime_error("poll() faild"));
+		for (size_t i = 0; i < _fds.size(); i++) 
+  		{
+   			if (_fds[i].revents & POLLIN)
+   			{
+    			if (_fds[i].fd == this->_socketFd)
+     				accept_new_client();
+    			else
+     				receive_new_data(_fds[i].fd);
+   			}
+  		}
+ 	}
+ 	CloseFds();
 }
 
 void Server::setSocket()
