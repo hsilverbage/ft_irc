@@ -11,11 +11,9 @@ void Server::server_init() {}
 
 void Server::create_socket() {}
 
-void Server::accept_new_client() {}
+// void Server::receive_new_data(int fd) {}
 
-void Server::receive_new_data(int fd) {}
-
-static void SignalHandler(int signum) {}
+// static void SignalHandler(int signum) {}
 
 void CloseFds() {}
 
@@ -128,13 +126,18 @@ void Server::setSocket()
 	poll.fd = this->_socketFd;
 	poll.events = POLLIN;
 	poll.revents = 0;
-	fds.push_back(poll);
+	_fds.push_back(poll);
 }
 
 
 Server::Server(std::string port, std::string pass) : _port(std::atoi(port.c_str())), _pass(pass)
 {
 
+}
+
+Server::~Server()
+{
+	
 }
 
 Server::Server(const Server& rhs)
