@@ -15,6 +15,7 @@
 #include <cstdlib>
 #include <string>
 #include <cstring>
+#include <sstream>
 
 class Client;
 
@@ -34,6 +35,11 @@ class Server
 		static void SignalHandler(int signum);
 		void setSocket();
 		void ServInit();
+
+		class	InvalidPort : public std::exception
+		{
+			const char* what() const throw();
+		};
 
 	private:
 
