@@ -8,14 +8,6 @@ void Server::SignalHandler(int signum)
 	Server::_signal = true;
 }
 
-void Server::server_init() {}
-
-void Server::create_socket() {}
-
-// void Server::receive_new_data(int fd) {}
-
-// static void SignalHandler(int signum) {}
-
 void CloseFds() {}
 
 void Server::clear_clients(int fd)
@@ -48,9 +40,14 @@ void Server::receive_new_data(int fd)
 	{
 		clear_clients(fd);
 		close(fd);
+		return;
 	}
 	else
 		buff[bytes] = '\0';
+		
+	Command	Cmd;
+
+	Cmd.parse_cmd(buff, fd);
 }
 
 void Server::accept_new_client()
@@ -63,12 +60,12 @@ void Server::accept_new_client()
 	int acc = accept(_socketFd, (sockaddr*)&struct_socket, &len);
 	if (acc == -1)
 	{
-		std::cout << "accept failed" << std::endl;
+		std::cout << "accept() failed" << std::endl;
 		return;
 	}
 	if (fcntl(acc, F_SETFL, O_NONBLOCK) == -1)
 	{
-		std::cout << "fcntl failed" << std::endl;
+		std::cout << "fcntl() failed" << std::endl;
 		return;
 	}
 	poll.fd		 = acc;
@@ -88,7 +85,7 @@ void Server::ServInit()
 	while (Server::_signal == false)
 	{
 		if ((poll(&_fds[0], _fds.size(), -1) == -1) && Server::_signal == false)
-			throw(std::runtime_error("poll() faild"));
+			throw(std::runtime_error("poll() failed"));
 		for (size_t i = 0; i < _fds.size(); i++)
 		{
 			if (_fds[i].revents & POLLIN)
@@ -107,21 +104,22 @@ void Server::setSocket()
 {
 	int l = 1;
 	struct pollfd poll;
+
 	struct_socket.sin_family	  = AF_INET;
 	struct_socket.sin_port		  = htons(this->_port);
 	struct_socket.sin_addr.s_addr = INADDR_ANY;
+	this->_socketFd				  = socket(AF_INET, SOCK_STREAM, 0);
 
-	this->_socketFd = socket(AF_INET, SOCK_STREAM, 0);
 	if (this->_socketFd == -1)
 		throw(std::runtime_error("socket not created"));
 	if (setsockopt(this->_socketFd, SOL_SOCKET, SO_REUSEADDR, &l, sizeof(l)) == -1)
-		throw(std::runtime_error("fail to set option on socket"));
+		throw(std::runtime_error("failed to set option on socket"));
 	if (fcntl(this->_socketFd, F_SETFL, O_NONBLOCK) == -1)
-		throw(std::runtime_error("fail to set option on socket"));
+		throw(std::runtime_error("failed to set option on socket"));
 	if (bind(this->_socketFd, (struct sockaddr*)&struct_socket, sizeof(struct_socket)) == -1)
-		throw(std::runtime_error("fail to bind socket"));
+		throw(std::runtime_error("failed to bind socket"));
 	if (listen(this->_socketFd, SOMAXCONN) == -1)
-		throw(std::runtime_error("listen failed"));
+		throw(std::runtime_error("listen() failed"));
 	poll.fd		 = this->_socketFd;
 	poll.events	 = POLLIN;
 	poll.revents = 0;
@@ -130,14 +128,14 @@ void Server::setSocket()
 
 Server::Server(std::string port, std::string pass) : _pass(pass)
 {
-	if (port.find_first_not_of("0123456789") != std::string::npos)
+	if (port.empty() || port.find_first_not_of("0123456789") != std::string::npos)
 		throw InvalidPort();
 
 	std::stringstream ss(port);
 	ss >> _port;
 	ss.str();
 
-	if(ss.fail())
+	if (ss.fail())
 		throw InvalidPort();
 	if (_port < 1024 || _port > 65535)
 		throw InvalidPort();
@@ -158,7 +156,7 @@ Server& Server::operator=(const Server& rhs)
 	return (*this);
 }
 
-const char*	Server::InvalidPort::what() const throw()
+const char* Server::InvalidPort::what() const throw()
 {
 	return ("Invalid port, a valid port is a number between 1024 and 65535");
 }

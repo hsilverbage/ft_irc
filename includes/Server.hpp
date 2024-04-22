@@ -12,12 +12,17 @@
 #include <sys/types.h>	//for socket()
 #include <unistd.h>
 #include <vector>
+#include <map>
 #include <cstdlib>
 #include <string>
 #include <cstring>
 #include <sstream>
 
+#include "Command.hpp"
+#include "Client.hpp"
+
 class Client;
+class Command;
 
 class Server
 {
@@ -48,8 +53,10 @@ class Server
 		int _socketFd;
 		std::string _pass;
 		static bool _signal;
+
 		std::vector<Client> _clients;
 		std::vector<struct pollfd> _fds;
+
 		Server(const Server& rhs);
 		Server& operator=(const Server& rhs);
 };

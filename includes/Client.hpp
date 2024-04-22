@@ -21,6 +21,9 @@ class Client
 
 		int _fd;
 		std::string _ipAddress;
+		std::string	_nickname;
+		std::string	_username;
+		std::string	_realname;
 };
 
 #endif
