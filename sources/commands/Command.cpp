@@ -1,19 +1,33 @@
 #include "Command.hpp"
 
-Command::Command() {}
+Command::Command()
+{
+}
 
-// Command::Command(Server* Serv) : _Server(Serv)
-// {
-
-// }
+Command::Command(Server* Serv) : _Serv(Serv)
+{
+	_commands["PASS"] = &Command::pass;
+	_commands["JOIN"] = &Command::join;
+	_commands["PART"] = &Command::part;
+	_commands["QUIT"] = &Command::quit;
+	_commands["NICK"] = &Command::nick;
+	_commands["KICK"] = &Command::kick;
+	_commands["MODE"] = &Command::mode;
+	_commands["WHO"] = &Command::who;
+	_commands["INVITE"] = &Command::invite;
+	_commands["TOPIC"] = &Command::topic;
+	_commands["USER"] = &Command::user;
+	_commands["PRIVMSG"] = &Command::privmsg;
+}
 
 Command::~Command() {}
 
 void	Command::exec_cmd(std::vector<std::string> args, int fd)
 {
-	std::cout << "from fd : " << fd << std::endl;
-	for (size_t i = 0; i < args.size(); i++)
-		std::cout << args[i] << std::endl;
+	std::map<std::string, find_cmd_function>::iterator it = _commands.find(args[0]);
+
+	if (it != _commands.end())
+		*(it->second)(args, client);
 }
 
 void	Command::parse_cmd(std::string buff, int fd)

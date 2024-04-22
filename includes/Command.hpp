@@ -11,6 +11,7 @@ class Command
 	public:
 
 		Command();
+		Command(Server* Serv);
 		~Command();
 
 		void parse_cmd(std::string buff, int fd);
@@ -20,6 +21,8 @@ class Command
 
 		typedef void (Command::*find_cmd_function)(std::vector<std::string>, Client *);
 		std::map<std::string, find_cmd_function> _commands;
+
+		Server*	_Serv;
 
 		void pass(std::vector<std::string> args, Client* Client);
 		void join(std::vector<std::string> args, Client* Client);

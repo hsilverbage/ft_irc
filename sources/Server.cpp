@@ -44,8 +44,8 @@ void Server::receive_new_data(int fd)
 	}
 	else
 		buff[bytes] = '\0';
-		
-	Command	Cmd;
+
+	Command	Cmd(this);
 
 	Cmd.parse_cmd(buff, fd);
 }
