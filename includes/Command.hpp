@@ -24,18 +24,19 @@ class Command
 
 		Server*	_Serv;
 
-		void pass(std::vector<std::string> args, Client* Client);
-		void join(std::vector<std::string> args, Client* Client);
-		void part(std::vector<std::string> args, Client* Client);
-		void quit(std::vector<std::string> args, Client* Client);
-		void nick(std::vector<std::string> args, Client* Client);
-		void kick(std::vector<std::string> args, Client* Client);
-		void mode(std::vector<std::string> args, Client* Client);
-		void who(std::vector<std::string> args, Client* Client);
-		void invite(std::vector<std::string> args, Client* Client);
-		void topic(std::vector<std::string> args, Client* Client);
-		void user(std::vector<std::string> args, Client* Client);
-		void privmsg(std::vector<std::string> args, Client* Client);
+		void	pass(std::vector<std::string> args, Client* client);
+		void	join(std::vector<std::string> args, Client* client);
+		void	part(std::vector<std::string> args, Client* client);
+		void	quit(std::vector<std::string> args, Client* client);
+		void	nick(std::vector<std::string> args, Client* client);
+		void	kick(std::vector<std::string> args, Client* client);
+		void	mode(std::vector<std::string> args, Client* client);
+		void	who(std::vector<std::string> args, Client* client);
+		void	invite(std::vector<std::string> args, Client* client);
+		void	topic(std::vector<std::string> args, Client* client);
+		void	user(std::vector<std::string> args, Client* client);
+		void	privmsg(std::vector<std::string> args, Client* client);
+		void	cap(std::vector<std::string> args, Client* client);
 };
 
 #endif

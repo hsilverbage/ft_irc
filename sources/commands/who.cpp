@@ -1,6 +1,6 @@
 #include "Command.hpp"
 
-void	Command::who(std::vector<std::string> args, Client* Client)
+void	Command::who(std::vector<std::string> args, Client* client)
 {
-	std::cout << "WHO" << args[0] << Client->get_nickname() << std::endl;
+	std::cout << "WHO CMD\t" << args[0] << client->get_nickname() << std::endl;
 }

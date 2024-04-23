@@ -16,31 +16,30 @@ Command::Command(Server* Serv) : _Serv(Serv)
 	_commands["TOPIC"]	 = &Command::topic;
 	_commands["USER"]	 = &Command::user;
 	_commands["PRIVMSG"] = &Command::privmsg;
+	_commands["CAP"]	 = &Command::cap;
 }
 
 Command::~Command() {}
 
 void Command::exec_cmd(std::vector<std::string> args, int fd)
 {
-	std::map<int, Client*>::iterator	it;
+	std::map<int, Client*>::iterator it;
 	it = _Serv->get_clients_map().find(fd);
 	if (it != _Serv->get_clients_map().end())
 	{
 		try
 		{
-			Client*	client = it->second;
-			find_cmd_function	ft_ptr = _commands.at(args[0]);
-		
+			for (size_t i = 0; i < args.size(); i++)
+				std::cout << args[i] << "\t";
+			std::cout << std::endl;
+			Client* client			 = it->second;
+			find_cmd_function ft_ptr = _commands.at(args[0]);
+
 			(this->*ft_ptr)(args, client);
 		}
-		catch(const std::out_of_range& e)
+		catch (const std::out_of_range& e)
 		{
-			std::cerr << e.what() << '\n';
 		}
-		for (size_t i = 0; i < args.size(); i++)
-			std::cout << args[i] << fd << std::endl;	
-		std::cout << std::endl;	
-
 	}
 }
 

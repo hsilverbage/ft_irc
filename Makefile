@@ -15,22 +15,24 @@ INCLUDES = -I ./includes
 
 DEPS = $(SRC:$(SRC_DIR)%.cpp=$(OBJ_DIR)/%.d)
 
-SRC =	$(SRC_DIR)main.cpp	\
-		$(SRC_DIR)Server.cpp	\
-		$(SRC_DIR)Client.cpp	\
-		$(CMD_DIR)Command.cpp	\
-		$(CMD_DIR)invite.cpp	\
-		$(CMD_DIR)join.cpp		\
-		$(CMD_DIR)kick.cpp		\
-		$(CMD_DIR)mode.cpp		\
-		$(CMD_DIR)nick.cpp		\
-		$(CMD_DIR)part.cpp		\
-		$(CMD_DIR)pass.cpp		\
-		$(CMD_DIR)privmsg.cpp	\
-		$(CMD_DIR)quit.cpp		\
-		$(CMD_DIR)topic.cpp		\
-		$(CMD_DIR)user.cpp		\
-		$(CMD_DIR)who.cpp
+SRC =	$(SRC_DIR)main.cpp				\
+		$(SRC_DIR)Server.cpp			\
+		$(SRC_DIR)Client.cpp			\
+		$(SRC_DIR)NumericReplies.cpp	\
+		$(CMD_DIR)Command.cpp			\
+		$(CMD_DIR)invite.cpp			\
+		$(CMD_DIR)join.cpp				\
+		$(CMD_DIR)kick.cpp				\
+		$(CMD_DIR)mode.cpp				\
+		$(CMD_DIR)nick.cpp				\
+		$(CMD_DIR)part.cpp				\
+		$(CMD_DIR)pass.cpp				\
+		$(CMD_DIR)privmsg.cpp			\
+		$(CMD_DIR)quit.cpp				\
+		$(CMD_DIR)topic.cpp				\
+		$(CMD_DIR)user.cpp				\
+		$(CMD_DIR)who.cpp				\
+		$(CMD_DIR)cap.cpp
 
 OBJ = $(SRC:$(SRC_DIR)%.cpp=$(OBJ_DIR)/%.o)
 

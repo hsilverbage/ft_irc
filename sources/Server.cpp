@@ -67,7 +67,7 @@ void Server::accept_new_client()
 	poll.revents = 0;
 	_fds.push_back(poll);
 
-	Client* client = new Client();
+	Client* client = new Client(acc);
 	_clients[acc] = client;
 	_clients[acc]->set_ip_address(inet_ntoa((struct_socket.sin_addr)));
 }

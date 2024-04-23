@@ -7,13 +7,20 @@ class Client
 {
 	public:
 
-		Client();
+		Client(int fd);
 		~Client();
 
-		void 	set_ip_address(std::string ipadd);
+		
 		std::string&	get_nickname();
 		std::string&	get_username();
 		std::string&	get_realname();
+
+		int	get_fd();
+
+		void 	set_ip_address(std::string ipadd);
+		void	set_realname(std::string name);
+		void	set_nickname(std::string name);
+		void	set_username(std::string name);
 
 	private:
 
@@ -24,6 +31,8 @@ class Client
 		std::string	_nickname;
 		std::string	_username;
 		std::string	_realname;
+
+		int	_fd;
 };
 
 #endif

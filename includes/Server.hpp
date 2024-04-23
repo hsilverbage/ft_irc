@@ -20,6 +20,7 @@
 
 #include "Command.hpp"
 #include "Client.hpp"
+#include "NumericReplies.hpp"
 
 class Client;
 class Command;
