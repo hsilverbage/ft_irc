@@ -22,21 +22,26 @@ Command::~Command() {}
 
 void Command::exec_cmd(std::vector<std::string> args, int fd)
 {
-	Client*	client = _Serv->find_client_with_fd(fd);
-	
-	try
+	std::map<int, Client*>::iterator	it;
+	it = _Serv->get_clients_map().find(fd);
+	if (it != _Serv->get_clients_map().end())
 	{
-		find_cmd_function	ft_ptr = _commands.at(args[0]);
-	
-		(this->*ft_ptr)(args, client);
+		try
+		{
+			Client*	client = it->second;
+			find_cmd_function	ft_ptr = _commands.at(args[0]);
+		
+			(this->*ft_ptr)(args, client);
+		}
+		catch(const std::out_of_range& e)
+		{
+			std::cerr << e.what() << '\n';
+		}
+		for (size_t i = 0; i < args.size(); i++)
+			std::cout << args[i] << fd << std::endl;	
+		std::cout << std::endl;	
+
 	}
-	catch(const std::out_of_range& e)
-	{
-		std::cerr << e.what() << '\n';
-	}
-	for (size_t i = 0; i < args.size(); i++)
-		std::cout << args[i] << fd << std::endl;	
-	std::cout << std::endl;	
 }
 
 void Command::parse_cmd(std::string buff, int fd)

@@ -2,18 +2,9 @@
 
 Client::Client()
 {
-	
-}
-
-
-int Client::get_fd()
-{
-	return (this->_fd);
-}
-
-void Client::set_fd(int fd)
-{
-	this->_fd = fd;
+	this->_nickname = "";
+	this->_username = "";
+	this->_realname = "";
 }
 
 void Client::set_ip_address(std::string ipAddress)
@@ -23,6 +14,21 @@ void Client::set_ip_address(std::string ipAddress)
 
 Client::~Client() 
 {
+}
+
+std::string&	Client::get_nickname()
+{
+	return (this->_nickname);
+}	
+
+std::string&	Client::get_username()
+{
+	return (this->_username);
+}
+
+std::string&	Client::get_realname()
+{
+	return (this->_realname);
 }
 
 // Client::Client(const Client& rhs)

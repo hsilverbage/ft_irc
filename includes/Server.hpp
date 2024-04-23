@@ -40,7 +40,7 @@ class Server
 		static void SignalHandler(int signum);
 		void setSocket();
 		void ServInit();
-		Client*	find_client_with_fd(int fd);
+		std::map<int, Client*>	get_clients_map();
 
 		class	InvalidPort : public std::exception
 		{
@@ -55,8 +55,8 @@ class Server
 		std::string _pass;
 		static bool _signal;
 
-		std::vector<Client*> _clients;
-		std::vector<struct pollfd> _fds;
+		std::map<int, Client*>		_clients;
+		std::vector<struct pollfd> 	_fds;
 
 		Server(const Server& rhs);
 		Server& operator=(const Server& rhs);

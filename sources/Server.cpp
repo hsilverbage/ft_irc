@@ -8,23 +8,20 @@ void Server::SignalHandler(int signum)
 	Server::_signal = true;
 }
 
-void CloseFds() {}
-
 void Server::clear_clients(int fd)
 {
+	std::map<int, Client*>::iterator	it;
+	
+	it = _clients.find(fd);
+	if (it != _clients.end())
+		_clients.erase(it);
+
 	for (size_t i = 0; i < _fds.size(); i++)
 	{
 		if (_fds[i].fd == fd)
 		{
+			close(fd);
 			_fds.erase(_fds.begin() + i);
-			break;
-		}
-	}
-	for (size_t i = 0; i < _clients.size(); i++)
-	{
-		if (_clients[i]->get_fd() == fd)
-		{
-			_clients.erase(_clients.begin() + i);
 			break;
 		}
 	}
@@ -39,21 +36,17 @@ void Server::receive_new_data(int fd)
 	if (bytes <= 0)
 	{
 		clear_clients(fd);
-		close(fd);
 		return;
 	}
 	else
 		buff[bytes] = '\0';
-	for (size_t i = 0; i < _clients.size(); i++)
-		std::cout << _clients[i]->get_fd() << std::endl;
-	// Command	Cmd(this);
+	Command	Cmd(this);
 
-	// Cmd.parse_cmd(buff, fd);
+	Cmd.parse_cmd(buff, fd);
 }
 
 void Server::accept_new_client()
 {
-	Client* client = new Client();
 
 	struct pollfd poll;
 	socklen_t len = sizeof(struct_socket);
@@ -72,10 +65,11 @@ void Server::accept_new_client()
 	poll.fd		 = acc;
 	poll.events	 = POLLIN;
 	poll.revents = 0;
-	client->set_fd(acc);
-	client->set_ip_address(inet_ntoa((struct_socket.sin_addr)));
-	_clients.push_back(client);
 	_fds.push_back(poll);
+
+	Client* client = new Client();
+	_clients[acc] = client;
+	_clients[acc]->set_ip_address(inet_ntoa((struct_socket.sin_addr)));
 }
 
 void Server::ServInit()
@@ -98,7 +92,6 @@ void Server::ServInit()
 			}
 		}
 	}
-	CloseFds();
 }
 
 void Server::setSocket()
@@ -142,19 +135,15 @@ Server::Server(std::string port, std::string pass) : _pass(pass)
 		throw InvalidPort();
 }
 
-Client*	Server::find_client_with_fd(int fd)
+std::map<int, Client*>	Server::get_clients_map()
 {
-	for (size_t i = 0; i < _clients.size(); i++)
-	{
-		if (_clients[i]->get_fd() == fd)
-			return (_clients[i]);
-	}
-	return (NULL);
+	return (this->_clients);
 }
 
 Server::~Server() 
 {
 	// TODO maybe delete _CLients
+	// TODO check if vector of fd socket is empty, if not close the rest
 }
 
 Server::Server(const Server& rhs)
