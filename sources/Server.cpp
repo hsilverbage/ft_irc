@@ -22,7 +22,7 @@ void Server::clear_clients(int fd)
 	}
 	for (size_t i = 0; i < _clients.size(); i++)
 	{
-		if (_clients[i].get_fd() == fd)
+		if (_clients[i]->get_fd() == fd)
 		{
 			_clients.erase(_clients.begin() + i);
 			break;
@@ -44,15 +44,16 @@ void Server::receive_new_data(int fd)
 	}
 	else
 		buff[bytes] = '\0';
+	for (size_t i = 0; i < _clients.size(); i++)
+		std::cout << _clients[i]->get_fd() << std::endl;
+	// Command	Cmd(this);
 
-	Command	Cmd(this);
-
-	Cmd.parse_cmd(buff, fd);
+	// Cmd.parse_cmd(buff, fd);
 }
 
 void Server::accept_new_client()
 {
-	Client client;
+	Client* client = new Client();
 
 	struct pollfd poll;
 	socklen_t len = sizeof(struct_socket);
@@ -71,8 +72,8 @@ void Server::accept_new_client()
 	poll.fd		 = acc;
 	poll.events	 = POLLIN;
 	poll.revents = 0;
-	client.set_fd(acc);
-	client.set_ip_address(inet_ntoa((struct_socket.sin_addr)));
+	client->set_fd(acc);
+	client->set_ip_address(inet_ntoa((struct_socket.sin_addr)));
 	_clients.push_back(client);
 	_fds.push_back(poll);
 }
@@ -141,7 +142,20 @@ Server::Server(std::string port, std::string pass) : _pass(pass)
 		throw InvalidPort();
 }
 
-Server::~Server() {}
+Client*	Server::find_client_with_fd(int fd)
+{
+	for (size_t i = 0; i < _clients.size(); i++)
+	{
+		if (_clients[i]->get_fd() == fd)
+			return (_clients[i]);
+	}
+	return (NULL);
+}
+
+Server::~Server() 
+{
+	// TODO maybe delete _CLients
+}
 
 Server::Server(const Server& rhs)
 {

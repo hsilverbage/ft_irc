@@ -21,7 +21,9 @@ void Client::set_ip_address(std::string ipAddress)
 	this->_ipAddress = ipAddress;
 }
 
-// Client::~Client() {}
+Client::~Client() 
+{
+}
 
 // Client::Client(const Client& rhs)
 // {

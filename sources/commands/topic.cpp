@@ -2,5 +2,5 @@
 
 void	Command::topic(std::vector<std::string> args, Client* Client)
 {
-	
+	std::cout << "TOPIC" << args[0] << Client->get_fd() << std::endl;
 }

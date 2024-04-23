@@ -8,11 +8,12 @@ class Client
 	public:
 
 		Client();
-		// ~Client();
+		~Client();
 
-		int get_fd();
-		void set_fd(int fd);
-		void set_ip_address(std::string ipadd);
+		int		get_fd();
+		void	set_fd(int fd);
+		void 	set_ip_address(std::string ipadd);
+
 
 	private:
 

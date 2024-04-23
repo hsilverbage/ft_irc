@@ -1,39 +1,46 @@
 #include "Command.hpp"
 
-Command::Command()
-{
-}
+Command::Command() {}
 
 Command::Command(Server* Serv) : _Serv(Serv)
 {
-	_commands["PASS"] = &Command::pass;
-	_commands["JOIN"] = &Command::join;
-	_commands["PART"] = &Command::part;
-	_commands["QUIT"] = &Command::quit;
-	_commands["NICK"] = &Command::nick;
-	_commands["KICK"] = &Command::kick;
-	_commands["MODE"] = &Command::mode;
-	_commands["WHO"] = &Command::who;
-	_commands["INVITE"] = &Command::invite;
-	_commands["TOPIC"] = &Command::topic;
-	_commands["USER"] = &Command::user;
+	_commands["PASS"]	 = &Command::pass;
+	_commands["JOIN"]	 = &Command::join;
+	_commands["PART"]	 = &Command::part;
+	_commands["QUIT"]	 = &Command::quit;
+	_commands["NICK"]	 = &Command::nick;
+	_commands["KICK"]	 = &Command::kick;
+	_commands["MODE"]	 = &Command::mode;
+	_commands["WHO"]	 = &Command::who;
+	_commands["INVITE"]	 = &Command::invite;
+	_commands["TOPIC"]	 = &Command::topic;
+	_commands["USER"]	 = &Command::user;
 	_commands["PRIVMSG"] = &Command::privmsg;
 }
 
 Command::~Command() {}
 
-void	Command::exec_cmd(std::vector<std::string> args, int fd)
+void Command::exec_cmd(std::vector<std::string> args, int fd)
 {
-	std::map<std::string, find_cmd_function>::iterator it = _commands.find(args[0]);
-
-	if (it != _commands.end())
-		*(it->second)(args, client);
+	Client*	client = _Serv->find_client_with_fd(fd);
+	
+	try
+	{
+		find_cmd_function	ft_ptr = _commands.at(args[0]);
+	
+		(this->*ft_ptr)(args, client);
+	}
+	catch(const std::out_of_range& e)
+	{
+		std::cerr << e.what() << '\n';
+	}
+	for (size_t i = 0; i < args.size(); i++)
+		std::cout << args[i] << fd << std::endl;	
+	std::cout << std::endl;	
 }
 
-void	Command::parse_cmd(std::string buff, int fd)
+void Command::parse_cmd(std::string buff, int fd)
 {
-	// std::cout << buff << "from fd :" << fd << std::endl;
-
 	std::string line;
 	std::vector<std::string> args;
 
@@ -54,9 +61,7 @@ void	Command::parse_cmd(std::string buff, int fd)
 				}
 			}
 			if (args.size() > 0)
-			{
 				exec_cmd(args, fd);
-			}
 			line.clear();
 			args.clear();
 			i = 0;
