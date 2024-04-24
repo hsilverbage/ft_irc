@@ -5,6 +5,7 @@ Client::Client(int fd) : _fd(fd)
 	this->_nickname = "";
 	this->_username = "";
 	this->_realname = "";
+	this->_isConnected = false;
 }
 
 void Client::set_ip_address(std::string ipAddress)
@@ -14,6 +15,11 @@ void Client::set_ip_address(std::string ipAddress)
 
 Client::~Client() 
 {
+}
+
+bool	Client::get_isConnected()
+{
+	return (this->_isConnected);
 }
 
 std::string&	Client::get_nickname()
@@ -29,6 +35,11 @@ std::string&	Client::get_username()
 std::string&	Client::get_realname()
 {
 	return (this->_realname);
+}
+
+bool	Client::set_isConnected(bool status)
+{
+	return (this->_isConnected = status);
 }
 
 void	Client::set_realname(std::string name)

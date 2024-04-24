@@ -63,19 +63,62 @@ void NumericReplies::ERR_ERRONEUSNICKNAME(Client* client)
 void NumericReplies::NOTIF_CHANGENICK(Client* client, std::string newNick)
 {
 	if (client->get_nickname() != "")
-		std::cout << client->get_nickname() << " changed his nickname to " << newNick << std::endl;
-	/*
-		The NICK message may be sent from the server to clients to acknowledge their NICK command was successful, and to
-	   inform other clients about the change of nickname. In these cases, the <source> of the message will be the old
-	   nickname [ [ "!" user ] "@" host ] of the user who is changing their nickname.
+	{
+		std::stringstream ss;
 
-		Message Examples:
+		ss << client->get_nickname() << " changed his nickname to " << newNick << "\"\n\r";
+		std::string str = ss.str();
+		if (ss.fail())
+		{
+			std::cerr << "stringstream failed" << std::endl;
+			return;
+		}
+		if (send(client->get_fd(), str.c_str(), str.size(), 0) == -1)
+			std::cerr << "send() failed" << std::endl;
+	}
+}
 
-		:WiZ NICK Kilroy          ; WiZ changed his nickname to Kilroy.
+void NumericReplies::ERR_ALREADYREGISTERED(Client* client)
+{
+	std::stringstream ss;
 
-		:dan-!d@localhost NICK Mamoped
-								; dan- changed his nickname to Mamoped.
+	ss << "462 : " << client->get_nickname() << " :You may not reregister\n\r";
+	std::string str = ss.str();
+	if (ss.fail())
+	{
+		std::cerr << "stringstream failed" << std::endl;
+		return;
+	}
+	if (send(client->get_fd(), str.c_str(), str.size(), 0) == -1)
+		std::cerr << "send() failed" << std::endl;
+}
 
-		TODO SEE IF I SEND THIS TO EVERYONE IN THE CHANEL OR NOT
-	*/
+void NumericReplies::NOTIF_USERNAME_SET(Client* client)
+{
+	std::stringstream ss;
+
+	ss << "User gets registered with username \"" << client->get_username() << "\" and real name \"" << client->get_realname() << "\"\n\r";
+	std::string str = ss.str();
+	if (ss.fail())
+	{
+		std::cerr << "stringstream failed" << std::endl;
+		return;
+	}
+	if (send(client->get_fd(), str.c_str(), str.size(), 0) == -1)
+		std::cerr << "send() failed" << std::endl;
+}
+
+void NumericReplies::ERR_PASSWDMISMATCH(Client* client)
+{
+	std::stringstream ss;
+
+	ss << "464 : " << client->get_username() << " :Password incorrect\n\r";
+	std::string str = ss.str();
+	if (ss.fail())
+	{
+		std::cerr << "stringstream failed" << std::endl;
+		return;
+	}
+	if (send(client->get_fd(), str.c_str(), str.size(), 0) == -1)
+		std::cerr << "send() failed" << std::endl;
 }

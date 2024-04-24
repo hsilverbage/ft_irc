@@ -2,6 +2,8 @@
 
 void Command::nick(std::vector<std::string> args, Client* client)
 {
+	if (client->get_isConnected() == false)
+		return;
 	if (args.size() < 2)
 	{
 		NumericReplies::ERR_NONICKNAMEGIVEN(client);

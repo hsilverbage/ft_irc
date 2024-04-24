@@ -14,6 +14,8 @@ class Client
 		std::string&	get_nickname();
 		std::string&	get_username();
 		std::string&	get_realname();
+		
+		bool	get_isConnected();		
 
 		int	get_fd();
 
@@ -21,6 +23,8 @@ class Client
 		void	set_realname(std::string name);
 		void	set_nickname(std::string name);
 		void	set_username(std::string name);
+		
+		bool	set_isConnected(bool status);
 
 	private:
 
@@ -31,6 +35,7 @@ class Client
 		std::string	_nickname;
 		std::string	_username;
 		std::string	_realname;
+		bool		_isConnected;
 
 		int	_fd;
 };

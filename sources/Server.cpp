@@ -40,9 +40,9 @@ void Server::receive_new_data(int fd)
 	}
 	else
 		buff[bytes] = '\0';
-	// Command	Cmd(this);
+	Command	Cmd(this);
 
-	// Cmd.parse_cmd(buff, fd);
+	Cmd.parse_cmd(buff, fd);
 }
 
 void Server::accept_new_client()
@@ -120,7 +120,7 @@ void Server::setSocket()
 	_fds.push_back(poll);
 }
 
-Server::Server(std::string port, std::string pass) : _pass(pass)
+Server::Server(std::string port, std::string pwd) : _pwd(pwd)
 {
 	if (port.empty() || port.find_first_not_of("0123456789") != std::string::npos)
 		throw InvalidPort();
@@ -138,6 +138,11 @@ Server::Server(std::string port, std::string pass) : _pass(pass)
 std::map<int, Client*>	Server::get_clients_map()
 {
 	return (this->_clients);
+}
+
+std::string&	Server::get_pwd()
+{
+	return (this->_pwd);
 }
 
 Server::~Server() 

@@ -31,10 +31,13 @@ void Command::exec_cmd(std::vector<std::string> args, int fd)
 			Client* client			 = it->second;
 			find_cmd_function ft_ptr = _commands.at(args[0]);
 
+			//FIX /pass get "pass" instead of PASS
+
 			(this->*ft_ptr)(args, client);
 		}
 		catch (const std::out_of_range& e)
 		{
+			std::cout << "TEST" << std::endl;
 		}
 	}
 }
@@ -60,6 +63,9 @@ void Command::parse_cmd(std::string buff, int fd)
 					j	 = 0;
 				}
 			}
+			for (size_t i = 0; i < args.size(); i++)
+				std::cout << args[i] << " ";
+			std::cout << std::endl;
 			if (args.size() > 0)
 				exec_cmd(args, fd);
 			line.clear();

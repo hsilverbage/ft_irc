@@ -3,6 +3,8 @@
 void Command::privmsg(std::vector<std::string> args, Client* client)
 {
 	std::cout << "PRIVMSG CMD\t" << args[0] << client->get_nickname() << std::endl;
+	if (client->get_isConnected() == false)
+		return;
 }
 
 /*

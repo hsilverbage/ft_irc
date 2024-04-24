@@ -42,6 +42,7 @@ class Server
 		void setSocket();
 		void ServInit();
 		std::map<int, Client*>	get_clients_map();
+		std::string&	get_pwd();
 
 		class	InvalidPort : public std::exception
 		{
@@ -53,7 +54,7 @@ class Server
 		struct sockaddr_in struct_socket;
 		int _port;						
 		int _socketFd;
-		std::string _pass;
+		std::string _pwd;
 		static bool _signal;
 
 		std::map<int, Client*>		_clients;
