@@ -16,7 +16,6 @@ Command::Command(Server* Serv) : _Serv(Serv)
 	_commands["TOPIC"]	 = &Command::topic;
 	_commands["USER"]	 = &Command::user;
 	_commands["PRIVMSG"] = &Command::privmsg;
-	_commands["CAP"]	 = &Command::cap;
 }
 
 Command::~Command() {}
@@ -29,9 +28,6 @@ void Command::exec_cmd(std::vector<std::string> args, int fd)
 	{
 		try
 		{
-			for (size_t i = 0; i < args.size(); i++)
-				std::cout << args[i] << "\t";
-			std::cout << std::endl;
 			Client* client			 = it->second;
 			find_cmd_function ft_ptr = _commands.at(args[0]);
 

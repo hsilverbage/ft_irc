@@ -2,8 +2,6 @@
 
 void Command::nick(std::vector<std::string> args, Client* client)
 {
-	std::cout << "NICK CMD\t" << args[0] << client->get_nickname() << std::endl;
-
 	if (args.size() < 2)
 	{
 		NumericReplies::ERR_NONICKNAMEGIVEN(client);
@@ -19,8 +17,11 @@ void Command::nick(std::vector<std::string> args, Client* client)
 			return;
 		}
 	}
-	if (args[1][0] == ':' || args[1][0] == '$' || args[1][0] == '#' || args.size() != 2)
+	if (args[1].empty() || args[1].find_first_of(":$#") == 0 || args.size() != 2)
+	{
 		NumericReplies::ERR_ERRONEUSNICKNAME(client);
+		return;
+	}
+	NumericReplies::NOTIF_CHANGENICK(client, args[1]);
 	client->set_nickname(args[1]);
-	NumericReplies::NOTIF_CHANGENICK(client);
 }

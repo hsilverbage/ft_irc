@@ -1,6 +1,6 @@
 #include "NumericReplies.hpp"
 
-void	NumericReplies::ERR_NEEDMOREPARAMS(Client* client, std::string cmd)
+void NumericReplies::ERR_NEEDMOREPARAMS(Client* client, std::string cmd)
 {
 	std::stringstream ss;
 
@@ -15,7 +15,7 @@ void	NumericReplies::ERR_NEEDMOREPARAMS(Client* client, std::string cmd)
 		std::cerr << "send() failed" << std::endl;
 }
 
-void	NumericReplies::ERR_NONICKNAMEGIVEN(Client* client)
+void NumericReplies::ERR_NONICKNAMEGIVEN(Client* client)
 {
 	std::stringstream ss;
 
@@ -30,7 +30,7 @@ void	NumericReplies::ERR_NONICKNAMEGIVEN(Client* client)
 		std::cerr << "send() failed" << std::endl;
 }
 
-void	NumericReplies::ERR_NICKNAMEINUSE(Client* client)
+void NumericReplies::ERR_NICKNAMEINUSE(Client* client)
 {
 	std::stringstream ss;
 
@@ -45,7 +45,7 @@ void	NumericReplies::ERR_NICKNAMEINUSE(Client* client)
 		std::cerr << "send() failed" << std::endl;
 }
 
-void	NumericReplies::ERR_ERRONEUSNICKNAME(Client* client)
+void NumericReplies::ERR_ERRONEUSNICKNAME(Client* client)
 {
 	std::stringstream ss;
 
@@ -60,18 +60,22 @@ void	NumericReplies::ERR_ERRONEUSNICKNAME(Client* client)
 		std::cerr << "send() failed" << std::endl;
 }
 
-void	NumericReplies::NOTIF_CHANGENICK(Client* client)
+void NumericReplies::NOTIF_CHANGENICK(Client* client, std::string newNick)
 {
-	The NICK message may be sent from the server to clients to acknowledge their NICK command was successful, and to inform
-	other clients about the change of nickname. In these cases, the <source> of the message will be the old nickname [ [ "!"
-	user ] "@" host ] of the user who is changing their nickname.
+	if (client->get_nickname() != "")
+		std::cout << client->get_nickname() << " changed his nickname to " << newNick << std::endl;
+	/*
+		The NICK message may be sent from the server to clients to acknowledge their NICK command was successful, and to
+	   inform other clients about the change of nickname. In these cases, the <source> of the message will be the old
+	   nickname [ [ "!" user ] "@" host ] of the user who is changing their nickname.
 
-	Message Examples:
+		Message Examples:
 
-  	:WiZ NICK Kilroy          ; WiZ changed his nickname to Kilroy.
+		:WiZ NICK Kilroy          ; WiZ changed his nickname to Kilroy.
 
-	  :dan-!d@localhost NICK Mamoped
-							; dan- changed his nickname to Mamoped.
+		:dan-!d@localhost NICK Mamoped
+								; dan- changed his nickname to Mamoped.
 
-	TODO SEE IF I SEND THIS TO EVERYONE IN THE CHANEL OR NOT 
+		TODO SEE IF I SEND THIS TO EVERYONE IN THE CHANEL OR NOT
+	*/
 }

@@ -2,7 +2,20 @@
 
 void	Command::user(std::vector<std::string> args, Client* client)
 {
-	std::cout << "USER CMD\t" << args[0] << client->get_nickname() << std::endl;
+	std::cout << "USER CMD\t" << client->get_nickname() << std::endl;
+	for (size_t i = 0; i < args.size(); i++)
+		std::cout << args[i] << std::endl;
+
+	if (args.size() < 4)
+	{
+		NumericReplies::ERR_NEEDMOREPARAMS(client, "USER");
+		return;	
+	}
+	if (args[1].empty())
+	{
+		NumericReplies::ERR_NEEDMOREPARAMS(client, "USER");
+		return;
+	}
 }
 
 /*

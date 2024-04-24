@@ -40,9 +40,9 @@ void Server::receive_new_data(int fd)
 	}
 	else
 		buff[bytes] = '\0';
-	Command	Cmd(this);
+	// Command	Cmd(this);
 
-	Cmd.parse_cmd(buff, fd);
+	// Cmd.parse_cmd(buff, fd);
 }
 
 void Server::accept_new_client()

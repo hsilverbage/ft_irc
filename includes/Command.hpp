@@ -36,7 +36,6 @@ class Command
 		void	topic(std::vector<std::string> args, Client* client);
 		void	user(std::vector<std::string> args, Client* client);
 		void	privmsg(std::vector<std::string> args, Client* client);
-		void	cap(std::vector<std::string> args, Client* client);
 };
 
 #endif

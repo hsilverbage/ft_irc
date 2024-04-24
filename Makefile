@@ -31,8 +31,7 @@ SRC =	$(SRC_DIR)main.cpp				\
 		$(CMD_DIR)quit.cpp				\
 		$(CMD_DIR)topic.cpp				\
 		$(CMD_DIR)user.cpp				\
-		$(CMD_DIR)who.cpp				\
-		$(CMD_DIR)cap.cpp
+		$(CMD_DIR)who.cpp
 
 OBJ = $(SRC:$(SRC_DIR)%.cpp=$(OBJ_DIR)/%.o)
 

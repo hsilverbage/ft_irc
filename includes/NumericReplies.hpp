@@ -16,7 +16,7 @@ class NumericReplies
 
 		// NOTIFICATION
 
-		static void	NOTIF_CHANGENICK(Client* client);
+		static void	NOTIF_CHANGENICK(Client* client, std::string newNick);
 
 	private:
 
