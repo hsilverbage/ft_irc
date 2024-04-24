@@ -6,16 +6,16 @@ void	Command::user(std::vector<std::string> args, Client* client)
 	for (size_t i = 0; i < args.size(); i++)
 		std::cout << args[i] << std::endl;
 
-	if (args.size() < 4)
-	{
-		NumericReplies::ERR_NEEDMOREPARAMS(client, "USER");
-		return;	
-	}
-	if (args[1].empty())
-	{
-		NumericReplies::ERR_NEEDMOREPARAMS(client, "USER");
-		return;
-	}
+	// if (args.size() < 4)
+	// {
+	// 	NumericReplies::ERR_NEEDMOREPARAMS(client, "USER");
+	// 	return;	
+	// }
+	// if (args[1].empty())
+	// {
+	// 	NumericReplies::ERR_NEEDMOREPARAMS(client, "USER");
+	// 	return;
+	// }
 }
 
 /*
