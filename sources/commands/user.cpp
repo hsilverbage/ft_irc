@@ -2,13 +2,8 @@
 
 void Command::user(std::vector<std::string> args, Client* client)
 {
-	std::cout << "the client is connected :" << client->get_isConnected() << std::endl;
-	if (client->get_isConnected() == false)
-	{
-		//TODO ERASE THIS TEST
-		NumericReplies::ERR_ALREADYREGISTERED(client);
+	if (client->get_pwdIsCorrect() == false)
 		return;
-	}
 	if (args.size() < 4)
 	{
 		NumericReplies::ERR_NEEDMOREPARAMS(client, "USER");
@@ -35,9 +30,10 @@ void Command::user(std::vector<std::string> args, Client* client)
 		}
 	}
 	if (realname[0] == ':')
-		realname = realname.substr(1, realname.size()); 
+		realname = realname.substr(1, realname.size());
 	client->set_realname(realname);
 	NumericReplies::NOTIF_USERNAME_SET(client);
+	// TODO check if client->nick != "" then welcome
 }
 
 /*

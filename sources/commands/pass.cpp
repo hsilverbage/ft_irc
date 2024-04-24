@@ -2,7 +2,7 @@
 
 void Command::pass(std::vector<std::string> args, Client* client)
 {
-	if (client->get_nickname() != "" || client->get_username() != "")
+	if (client->get_nickname() != "" || client->get_username() != "" || client->get_isConnected())
 		return;
 	if (args.size() < 2)
 	{
@@ -25,8 +25,7 @@ void Command::pass(std::vector<std::string> args, Client* client)
 		client->set_isConnected(false);
 		return;
 	}
-	std::cout << "setting is connected to true" << std::endl;
-	client->set_isConnected(true);
+	client->set_pwdIsCorrect(true);
 }
 
 /*
