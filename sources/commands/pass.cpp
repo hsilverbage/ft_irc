@@ -8,6 +8,7 @@ void Command::pass(std::vector<std::string> args, Client* client)
 	{
 		NumericReplies::ERR_NEEDMOREPARAMS(client, "PASS");
 		client->set_isConnected(false);
+		std::cout << "TEST : PWD IS SET TO FALSE" << std::endl;
 		return;
 	}
 	std::string pass = args[1];
@@ -23,9 +24,11 @@ void Command::pass(std::vector<std::string> args, Client* client)
 	{
 		NumericReplies::ERR_PASSWDMISMATCH(client);
 		client->set_isConnected(false);
+		std::cout << "TEST : PWD IS SET TO FALSE" << std::endl;
 		return;
 	}
 	client->set_pwdIsCorrect(true);
+	std::cout << "TEST : PWD IS SET TO TRUE" << std::endl;
 }
 
 /*

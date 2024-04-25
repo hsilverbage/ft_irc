@@ -33,7 +33,11 @@ void Command::user(std::vector<std::string> args, Client* client)
 		realname = realname.substr(1, realname.size());
 	client->set_realname(realname);
 	NumericReplies::NOTIF_USERNAME_SET(client);
-	// TODO check if client->nick != "" then welcome
+	if (client->get_pwdIsCorrect() && client->get_nickname() != "" && client->get_username() != "" && client->get_isConnected() == false)
+	{
+		NumericReplies::RPL_WELCOME(client);
+		client->set_isConnected(true);
+	}
 }
 
 /*

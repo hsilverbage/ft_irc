@@ -13,15 +13,19 @@ class NumericReplies
 		static void ERR_NONICKNAMEGIVEN(Client* client);
 		static void ERR_NICKNAMEINUSE(Client* client);
 		static void ERR_ERRONEUSNICKNAME(Client* client);
-		static void	ERR_ALREADYREGISTERED(Client* client);
-		static void	ERR_PASSWDMISMATCH(Client* client);
+		static void ERR_ALREADYREGISTERED(Client* client);
+		static void ERR_PASSWDMISMATCH(Client* client);
 
 		// NOTIFICATION
 
-		static void	NOTIF_CHANGENICK(Client* client, std::string newNick);
-		static void	NOTIF_USERNAME_SET(Client* client);
+		static void NOTIF_CHANGENICK(Client* client, std::string newNick);
+		static void NOTIF_USERNAME_SET(Client* client);
 
-	private:
+		// REPLY
+
+		static void RPL_WELCOME(Client* client);
+
+	private :
 
 		NumericReplies() {};
 		~NumericReplies() {};

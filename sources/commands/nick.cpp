@@ -26,5 +26,10 @@ void Command::nick(std::vector<std::string> args, Client* client)
 	}
 	NumericReplies::NOTIF_CHANGENICK(client, args[1]);
 	client->set_nickname(args[1]);
-	// TODO check if client->user != "" then welcome
+	if (client->get_pwdIsCorrect() && client->get_nickname() != "" && client->get_username() != "" && client->get_isConnected() == false)
+	{
+		NumericReplies::RPL_WELCOME(client);
+		client->set_isConnected(true);
+	}
+	std::cout << "NICK IS SET TO " << client->get_nickname() << std::endl;
 }
