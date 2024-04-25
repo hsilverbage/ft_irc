@@ -149,6 +149,7 @@ Server::~Server()
 {
 	// TODO maybe delete _CLients
 	// TODO check if vector of fd socket is empty, if not close the rest
+	// TODO might need to delete channel as well
 }
 
 Server::Server(const Server& rhs)

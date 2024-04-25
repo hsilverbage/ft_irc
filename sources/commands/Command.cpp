@@ -31,8 +31,6 @@ void Command::exec_cmd(std::vector<std::string> args, int fd)
 			Client* client			 = it->second;
 			find_cmd_function ft_ptr = _commands.at(args[0]);
 
-			//FIX /pass get "pass" instead of PASS
-
 			(this->*ft_ptr)(args, client);
 		}
 		catch (const std::out_of_range& e)

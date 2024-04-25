@@ -21,9 +21,11 @@
 #include "Command.hpp"
 #include "Client.hpp"
 #include "NumericReplies.hpp"
+#include "Channel.hpp"
 
 class Client;
 class Command;
+class Channel;
 
 class Server
 {
@@ -57,8 +59,9 @@ class Server
 		std::string _pwd;
 		static bool _signal;
 
-		std::map<int, Client*>		_clients;
-		std::vector<struct pollfd> 	_fds;
+		std::map<int, Client*>			_clients;
+		std::map<std::string, Channel*>	_channel;
+		std::vector<struct pollfd> 		_fds;
 
 		Server(const Server& rhs);
 		Server& operator=(const Server& rhs);
