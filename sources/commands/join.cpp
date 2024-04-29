@@ -7,9 +7,11 @@ void Command::join(std::vector<std::string> args, Client* client)
 		return;
 	std::map<std::string, Channel*> channel = _Serv->get_channel();
 	std::vector<std::string>::iterator it = std::find(channel.begin(), channel.end(), arg[1]);
-    if (it != numbers.end()) {
-        std::cout << "Element trouvé à la position : " << std::distance(numbers.begin(), it) << std::endl;
-    } else {
+    if (it != channel.end()) 
+	{
+    }
+	else
+	{
         std::cout << "Element non trouvé" << std::endl;
     }
 }
