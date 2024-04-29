@@ -2,10 +2,10 @@
 
 Channel::Channel(std::string key, Client* client, std::string channelName) : _key(key)
 {
-	this->_topic = "";
+	this->_topic					   = "";
 	_ClientOperators[client->get_fd()] = client;
-	this->_maxClient = 100; // TODO SEE VLAUE TO SET
-	this->_channelName = channelName;
+	this->_maxClient				   = 100; // TODO SEE VLAUE TO SET
+	this->_channelName				   = channelName;
 }
 
 Channel::~Channel() {}
@@ -19,7 +19,6 @@ Channel& Channel::operator=(const Channel& rhs)
 {
 	if (this != &rhs)
 	{
-
 	}
 	return (*this);
 }
@@ -66,15 +65,21 @@ void Channel::add_client_to_channel(Client* client)
 	send_msg_to_everyone_in_channel(client->get_nickname() + " is joining the channel " + get_channel_name() + "\r\n");
 }
 
-void Channel::remove_client_from_channel(Client* client)
+void Channel::remove_client_from_channel(Client* client, std::string reason)
 {
 	std::map<int, Client*>::iterator it = _Clients.find(client->get_fd());
 
 	if (it != _Clients.end())
 	{
+		if (reason.empty())
+			send_msg_to_everyone_in_channel(client->get_nickname() + " is leaving the channel " + get_channel_name() + "\r\n"); 
+		else
+			send_msg_to_everyone_in_channel(client->get_nickname() + " is leaving the channel " + get_channel_name() + " because " + reason + "\r\n");
 		this->_Clients.erase(it);
 		client->set_nb_channel(client->get_nb_channel() - 1);
+		return;
 	}
+	NumericReplies::ERR_NOTONCHANNEL(client, get_channel_name());
 }
 
 void Channel::add_client_to_operators(Client* client)
@@ -93,10 +98,8 @@ void Channel::remove_client_from_operators(Client* client)
 void Channel::send_msg_to_everyone_in_channel(const std::string str)
 {
 	for (std::map<int, Client*>::iterator it = _Clients.begin(); it != _Clients.end(); it++)
-	{
 		if (send(it->first, str.c_str(), str.size(), 0) == -1)
 			std::cerr << "send() failed" << std::endl;
-	}
 }
 
 std::string& Channel::get_channel_name()

@@ -11,7 +11,7 @@ void Command::join(std::vector<std::string> args, Client* client)
 		std::map<std::string, Channel*> channel = _Serv->get_channel();
 		for (std::map<std::string, Channel*>::iterator it = channel.begin(); it != channel.end(); it++)
 		{
-			it->second->remove_client_from_channel(client);
+			it->second->remove_client_from_channel(client, "");
 			//TODO SEND A MSG TO TELL EVERYONE THAT THE CLIENT LEFT THE CHHANEL AS IN PART PROBABLY GONNA PUT IN DIRECTLY IN THE FUNCTION ABOVE AS IN ASS IN add_client_to_channel()
 		}
 	}

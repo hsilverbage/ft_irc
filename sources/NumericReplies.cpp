@@ -19,8 +19,7 @@ void NumericReplies::ERR_NOSUCHCHANNEL(Client* client, std::string channel)
 {
 	std::stringstream ss;
 
-	std::cout << client->get_nickname() << " " << channel << " : No such channel" << std::endl;
-	// CHECK ERROR MSG : "<client> <channel> :No such channel"
+	ss << "403 : " <<client->get_nickname() << " " << channel << " : No such channel\r\n";
 	std::string str = ss.str();
 	if (ss.fail())
 	{
@@ -295,6 +294,21 @@ void NumericReplies::RPL_WELCOME(Client* client)
 	std::stringstream ss;
 
 	ss << "001 : " << client->get_nickname() << " :Welcome to the best_irc Network, " << client->get_nickname() << "[!" << client->get_username() << "@localhost]\r\n";
+	std::string str = ss.str();
+	if (ss.fail())
+	{
+		std::cerr << "stringstream failed" << std::endl;
+		return;
+	}
+	if (send(client->get_fd(), str.c_str(), str.size(), 0) == -1)
+		std::cerr << "send() failed" << std::endl;
+}
+
+void NumericReplies::ERR_NOTONCHANNEL(Client* client, std::string name)
+{
+	std::stringstream ss;
+
+	ss << "442 : " << client->get_nickname() << " " << name << " :You're not on that channel\r\n";
 	std::string str = ss.str();
 	if (ss.fail())
 	{
