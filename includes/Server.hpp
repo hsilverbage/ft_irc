@@ -34,7 +34,8 @@ class Server
 		Server(std::string port, std::string pass);
 		~Server();
 
-		void server_init();						
+		void server_init();
+		std::map<std::string, Channel*>&	get_channel();	
 		void create_socket();					
 		void accept_new_client();				
 		void receive_new_data(int fd);	
