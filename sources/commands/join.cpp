@@ -2,27 +2,72 @@
 
 void Command::join(std::vector<std::string> args, Client* client)
 {
-	size_t maxChannel = 10;
-	std::cout << "JOIN CMD\t" << args[0] << client->get_nickname() << std::endl;
 	if (client->get_isConnected() == false)
 		return;
-	if (args[1].empty())
+	if (args.size() < 2)
 		return (NumericReplies::ERR_NEEDMOREPARAMS(client, "USER"));
-	std::map<std::string, Channel*> channel = _Serv->get_channel();
-	std::vector<std::string>::iterator it = std::find(channel.begin(), channel.end(), args[1]);
-    if (it != channel.end()) 
+	if (args[1][0] == '0')
 	{
-		if (client->_nbChannel >= maxChannel)
-			return (NumericReplies::ERR_TOOMANYCHANNELS(client, args[1]));
-		// SET client->_nbchannel++; but where ?
-		if (Channel->get_key() != args[2])
-			return (NumericReplies::ERR_BADCHANNELKEY(client, args[1]));
-    }
-	else
+		std::map<std::string, Channel*> channel = _Serv->get_channel();
+		for (std::map<std::string, Channel*>::iterator it = channel.begin(); it != channel.end(); it++)
+		{
+			it->second->remove_client_from_channel(client);
+			//TODO SEND A MSG TO TELL EVERYONE THAT THE CLIENT LEFT THE CHHANEL AS IN PART PROBABLY GONNA PUT IN DIRECTLY IN THE FUNCTION ABOVE AS IN ASS IN add_client_to_channel()
+		}
+	}
+
+	std::map<std::string, Channel*> channel_map = _Serv->get_channel();
+	std::vector<std::string> argsChannel;
+	std::vector<std::string> argsKey;
+
+
+	for (size_t i = 1; i < args.size(); i++)
+		if (args[i][0] == '&' || args[i][0] == '#')
+			argsChannel.push_back(args[i]);
+		else
+			argsKey.push_back(args[i]);
+	if (argsChannel.size() < argsKey.size())
+		NumericReplies::ERR_BADCHANMASK(client, argsKey[0]);
+
+	for (size_t i = 0; i < argsChannel.size(); i++)
 	{
-        if (args[0] == "#" || args[0] == "&")
-			return (NumericReplies::ERR_NOSUCHCHANNEL(client ,args[1]));
-    }
+		std::map<std::string, Channel*>::iterator it = channel_map.find(argsChannel[i]);
+		std::string	channelName = argsChannel[i];
+		std::string	channelKey = "";
+
+		if (i < argsKey.size())
+			channelKey = argsKey[i];
+		if (it != channel_map.end())  // SOULD WE CONTINU OR STOP AS SOON AS ONE CHANNEL FUCKS UP ?
+		{
+			if (client->get_nb_channel() >= MAXCHANNEL)
+				NumericReplies::ERR_TOOMANYCHANNELS(client, channelName);
+			else if (it->second->get_key() != channelKey)
+			{
+				NumericReplies::ERR_BADCHANNELKEY(client, channelName);
+			}
+			else
+			{
+				it->second->add_client_to_channel(client);
+				if (!it->second->get_topic().empty())
+					NumericReplies::RPL_TOPIC(client);
+				/*TODO : if joining the channel is successful :
+						- all relevant information about that channel including the JOIN,PART, KICK, and MODE messages affecting the channel
+						- They receive all PRIVMSG and NOTICE messages sent to the channel
+						- receive QUIT messages from other clients joined to the same channel
+						- A JOIN message with the client as the message <source> and the channel they have joined as the first parameter of the message.
+				*/
+			}
+		}
+		else
+		{
+			Channel* channel = new Channel(channelKey, client, channelName);
+
+			channel->add_client_to_channel(client);
+			_Serv->add_channel_to_map(channel, argsChannel[i]);
+			
+			// return (NumericReplies::ERR_NOSUCHCHANNEL(client, args[1]));
+		}
+	}
 }
 
 /*

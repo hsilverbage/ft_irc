@@ -1,10 +1,13 @@
 #ifndef COMMAND_HPP
 #define COMMAND_HPP
 
+#define MAXCHANNEL 10
+
 #include "Server.hpp"
 
 class Server;
 class Client;
+class Channel;
 
 class Command
 {

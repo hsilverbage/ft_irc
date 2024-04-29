@@ -31,11 +31,11 @@ void NumericReplies::ERR_NOSUCHCHANNEL(Client* client, std::string channel)
 		std::cerr << "send() failed" << std::endl;
 }
 
-void	NumericReplies::ERR_BADCHANMASK(Client* client)
+void	NumericReplies::ERR_BADCHANMASK(Client* client, std::string channelName)
 {
 	std::stringstream ss;
 
-	// WRITE THE ERROR MSG W/ CHANNEL : "<channel> :Bad Channel Mask"
+	ss << channelName << " :Bad Channel Mask\r\n";
 	std::string str = ss.str();
 	if (ss.fail())
 	{
@@ -155,8 +155,7 @@ void NumericReplies::ERR_BADCHANNELKEY(Client* client, std::string channel)
 {
 	std::stringstream ss;
 
-	std::cout << client->get_nickname() << " " << channel << " : Cannot join channel (+k)" << std::endl;
-	// CHECK : "<client> <channel> :Cannot join channel (+k)"
+	ss << client->get_nickname() << " " << channel << " : Cannot join channel (+k)" << std::endl;
 	std::string str = ss.str();
 	if (ss.fail())
 	{

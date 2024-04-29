@@ -136,7 +136,7 @@ Server::Server(std::string port, std::string pwd) : _pwd(pwd)
 }
 
 
-std::map<int, Client*>	Server::get_clients_map()
+std::map<int, Client*>&	Server::get_clients_map()
 {
 	return (this->_clients);
 }
@@ -146,16 +146,25 @@ std::string&	Server::get_pwd()
 	return (this->_pwd);
 }
 
-std::map<std::string, Channel*> Server::get_channel()
+std::map<std::string, Channel*>& Server::get_channel()
 {
 	return (this->_channel);
 }
 
+void Server::add_channel_to_map(Channel* channel, std::string name)
+{
+	std::cout << "TEST2" << std::endl;
+	_channel[name] = channel;
+}
+
 Server::~Server() 
 {
-	// TODO maybe delete _CLients
 	// TODO check if vector of fd socket is empty, if not close the rest
-	// TODO might need to delete channel as well
+	for (std::map<std::string, Channel*>::iterator it = _channel.begin(); it != _channel.end(); it++)
+		delete it->second;
+	for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
+		delete it->second;
+	
 }
 
 Server::Server(const Server& rhs)

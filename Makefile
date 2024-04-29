@@ -19,6 +19,7 @@ SRC =	$(SRC_DIR)main.cpp				\
 		$(SRC_DIR)Server.cpp			\
 		$(SRC_DIR)Client.cpp			\
 		$(SRC_DIR)NumericReplies.cpp	\
+		$(SRC_DIR)Channel.cpp			\
 		$(CMD_DIR)Command.cpp			\
 		$(CMD_DIR)invite.cpp			\
 		$(CMD_DIR)join.cpp				\
@@ -30,8 +31,7 @@ SRC =	$(SRC_DIR)main.cpp				\
 		$(CMD_DIR)privmsg.cpp			\
 		$(CMD_DIR)quit.cpp				\
 		$(CMD_DIR)topic.cpp				\
-		$(CMD_DIR)user.cpp				\
-		$(CMD_DIR)who.cpp
+		$(CMD_DIR)user.cpp				
 
 OBJ = $(SRC:$(SRC_DIR)%.cpp=$(OBJ_DIR)/%.o)
 

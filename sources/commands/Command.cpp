@@ -11,7 +11,6 @@ Command::Command(Server* Serv) : _Serv(Serv)
 	_commands["NICK"]	 = &Command::nick;
 	_commands["KICK"]	 = &Command::kick;
 	_commands["MODE"]	 = &Command::mode;
-	_commands["WHO"]	 = &Command::who;
 	_commands["INVITE"]	 = &Command::invite;
 	_commands["TOPIC"]	 = &Command::topic;
 	_commands["USER"]	 = &Command::user;

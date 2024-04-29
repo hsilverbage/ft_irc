@@ -21,7 +21,7 @@ class NumericReplies
 		static void	ERR_BANNEDFROMCHAN(Client* client);
 		static void	ERR_CHANNELISFULL(Client* client);
 		static void	ERR_INVITEONLYCHAN(Client* client);
-		static void	ERR_BADCHANMASK(Client* client);
+		static void	ERR_BADCHANMASK(Client* client, std::string channelName);
 		// NOTIFICATION
 
 		static void NOTIF_CHANGENICK(Client* client, std::string newNick);
