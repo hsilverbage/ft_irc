@@ -119,7 +119,6 @@ void NumericReplies::ERR_PASSWDMISMATCH(Client* client)
 		std::cerr << "stringstream failed" << std::endl;
 		return;
 	}
-	std::cout << "IN STR THERE IS" << str.c_str();
 	if (send(client->get_fd(), str.c_str(), str.size() + 1, 0) == -1)
 		std::cerr << "send() failed" << std::endl;
 }
@@ -128,7 +127,7 @@ void NumericReplies::RPL_WELCOME(Client* client)
 {
 	std::stringstream ss;
 
-	ss << "001 : " << client->get_nickname() << " :Welcome to the best_irc Network, " << client->get_nickname() << "[!" << client->get_username() << "@localhost]\n\r";
+	ss << "001 : " << client->get_nickname() << " :Welcome to the best_irc Network, " << client->get_nickname() << "[!" << client->get_username() << "@localhost]\r\n";
 	std::string str = ss.str();
 	if (ss.fail())
 	{

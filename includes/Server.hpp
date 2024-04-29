@@ -23,6 +23,8 @@
 #include "NumericReplies.hpp"
 #include "Channel.hpp"
 
+#define RN "\r\n"
+
 class Client;
 class Command;
 class Channel;

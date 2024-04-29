@@ -49,26 +49,24 @@ void Command::parse_cmd(std::string buff, int fd)
 	{
 		if (buff[i] == '\n')
 		{
-			line = buff.substr(0, i +1);
+			line = buff.substr(0, i + 1);
 			buff.erase(0, i + 1);
 			for (size_t j = 0; j < line.size(); j++)
 			{
-				if (line[j] == ' ' || j == line.size() - 1)
+				if (line[j] == ' ' || line[j] == '\r' || line[j] == '\n' || j == line.size() - 1)
 				{
 					args.push_back(line.substr(0, j));
 					line = line.erase(0, j + 1);
 					j	 = 0;
 				}
 			}
-			std::cout << "args contains :";
-			for (size_t i = 0; i < args.size(); i++)
-				std::cout << args[i] << " ";
-			std::cout << std::endl;
 			if (args.size() > 0)
 				exec_cmd(args, fd);
 			i = 0;
 			line.clear();
 			args.clear();
 		}
+		if (buff.empty())
+			return;
 	}
 }
