@@ -26,6 +26,7 @@ class NumericReplies
 		static void	RPL_TOPICWHOTIME(Client* client);
 		static void	RPL_NAMREPLY(Client* client);
 		static void	RPL_ENDOFNAMES(Client* client);
+		test
 		// NOTIFICATION
 
 		static void	NOTIF_CHANGENICK(Client* client, std::string newNick);
