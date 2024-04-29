@@ -5,6 +5,13 @@ void Command::join(std::vector<std::string> args, Client* client)
 	std::cout << "JOIN CMD\t" << args[0] << client->get_nickname() << std::endl;
 	if (client->get_isConnected() == false)
 		return;
+	std::map<std::string, Channel*> channel = _Serv->get_channel();
+	std::vector<std::string>::iterator it = std::find(channel.begin(), channel.end(), arg[1]);
+    if (it != numbers.end()) {
+        std::cout << "Element trouvé à la position : " << std::distance(numbers.begin(), it) << std::endl;
+    } else {
+        std::cout << "Element non trouvé" << std::endl;
+    }
 }
 
 /*

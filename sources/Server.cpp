@@ -145,6 +145,11 @@ std::string&	Server::get_pwd()
 	return (this->_pwd);
 }
 
+std::map<std::string, Channel*> Server::get_channel()
+{
+	return (this->_channel);
+}
+
 Server::~Server() 
 {
 	// TODO maybe delete _CLients

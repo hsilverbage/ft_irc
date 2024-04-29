@@ -13,8 +13,8 @@ class NumericReplies
 		static void ERR_NONICKNAMEGIVEN(Client* client);
 		static void ERR_NICKNAMEINUSE(Client* client);
 		static void ERR_ERRONEUSNICKNAME(Client* client);
-		static void ERR_ALREADYREGISTERED(Client* client);
-		static void ERR_PASSWDMISMATCH(Client* client);
+		static void	ERR_ALREADYREGISTERED(Client* client);
+		static void	ERR_PASSWDMISMATCH(Client* client);
 
 		// NOTIFICATION
 

@@ -15,6 +15,171 @@ void NumericReplies::ERR_NEEDMOREPARAMS(Client* client, std::string cmd)
 		std::cerr << "send() failed" << std::endl;
 }
 
+void NumericReplies::ERR_NOSUCHCHANNEL(Client* client)
+{
+	std::stringstream ss;
+
+	// WRITE THE ERROR MSG W/ CHANNEL : "<client> <channel> :No such channel"
+	std::string str = ss.str();
+	if (ss.fail())
+	{
+		std::cerr << "stringstream failed" << std::endl;
+		return;
+	}
+	if (send(client->get_fd(), str.c_str(), str.size(), 0) == -1)
+		std::cerr << "send() failed" << std::endl;
+}
+
+void	NumericReplies::ERR_BADCHANMASK(Client* client)
+{
+	std::stringstream ss;
+
+	// WRITE THE ERROR MSG W/ CHANNEL : "<channel> :Bad Channel Mask"
+	std::string str = ss.str();
+	if (ss.fail())
+	{
+		std::cerr << "stringstream failed" << std::endl;
+		return;
+	}
+	if (send(client->get_fd(), str.c_str(), str.size(), 0) == -1)
+		std::cerr << "send() failed" << std::endl;
+}
+
+void	NumericReplies::RPL_TOPICWHOTIME(Client* client)
+{
+	std::stringstream ss;
+
+	// WRITE THE ERROR MSG W/ CHANNEL : "<client> <channel> <nick> <setat>"
+	std::string str = ss.str();
+	if (ss.fail())
+	{
+		std::cerr << "stringstream failed" << std::endl;
+		return;
+	}
+	if (send(client->get_fd(), str.c_str(), str.size(), 0) == -1)
+		std::cerr << "send() failed" << std::endl;
+}
+
+void	NumericReplies::RPL_NAMREPLY(Client* client)
+{
+	std::stringstream ss;
+
+	// WRITE THE ERROR MSG W/ CHANNEL :  "<client> <symbol> <channel> :[prefix]<nick>{ [prefix]<nick>}"
+	std::string str = ss.str();
+	if (ss.fail())
+	{
+		std::cerr << "stringstream failed" << std::endl;
+		return;
+	}
+	if (send(client->get_fd(), str.c_str(), str.size(), 0) == -1)
+		std::cerr << "send() failed" << std::endl;
+}
+
+void	NumericReplies::RPL_ENDOFNAMES(Client* client)
+{
+	std::stringstream ss;
+
+	// WRITE THE ERROR MSG W/ CHANNEL :   "<client> <channel> :End of /NAMES list"
+	std::string str = ss.str();
+	if (ss.fail())
+	{
+		std::cerr << "stringstream failed" << std::endl;
+		return;
+	}
+	if (send(client->get_fd(), str.c_str(), str.size(), 0) == -1)
+		std::cerr << "send() failed" << std::endl;
+}
+
+void	NumericReplies::RPL_TOPIC(Client* client)
+{
+	std::stringstream ss;
+
+	// WRITE THE ERROR MSG W/ CHANNEL :  "<client> <channel> :<topic>"
+	std::string str = ss.str();
+	if (ss.fail())
+	{
+		std::cerr << "stringstream failed" << std::endl;
+		return;
+	}
+	if (send(client->get_fd(), str.c_str(), str.size(), 0) == -1)
+		std::cerr << "send() failed" << std::endl;
+}
+
+void	NumericReplies::ERR_INVITEONLYCHAN(Client* client)
+{
+	std::stringstream ss;
+
+	// WRITE THE ERROR MSG W/ CHANNEL : "<client> <channel> :Cannot join channel (+i)"
+	std::string str = ss.str();
+	if (ss.fail())
+	{
+		std::cerr << "stringstream failed" << std::endl;
+		return;
+	}
+	if (send(client->get_fd(), str.c_str(), str.size(), 0) == -1)
+		std::cerr << "send() failed" << std::endl;
+}
+
+void	NumericReplies::ERR_BANNEDFROMCHAN(Client* client)
+{
+	std::stringstream ss;
+
+	// WRITE THE ERROR MSG W/ CHANNEL : "<client> <channel> :Cannot join channel (+b)"
+	std::string str = ss.str();
+	if (ss.fail())
+	{
+		std::cerr << "stringstream failed" << std::endl;
+		return;
+	}
+	if (send(client->get_fd(), str.c_str(), str.size(), 0) == -1)
+		std::cerr << "send() failed" << std::endl;
+}
+
+void	NumericReplies::ERR_CHANNELISFULL(Client* client)
+{
+	std::stringstream ss;
+
+	// WRITE THE ERROR MSG W/ CHANNEL :  "<client> <channel> :Cannot join channel (+l)"
+	std::string str = ss.str();
+	if (ss.fail())
+	{
+		std::cerr << "stringstream failed" << std::endl;
+		return;
+	}
+	if (send(client->get_fd(), str.c_str(), str.size(), 0) == -1)
+		std::cerr << "send() failed" << std::endl;
+}
+
+void NumericReplies::ERR_BADCHANNELKEY(Client* client)
+{
+	std::stringstream ss;
+
+	// WRITE THE ERROR MSG W/ CHANNEL : "<client> <channel> :Cannot join channel (+k)"
+	std::string str = ss.str();
+	if (ss.fail())
+	{
+		std::cerr << "stringstream failed" << std::endl;
+		return;
+	}
+	if (send(client->get_fd(), str.c_str(), str.size(), 0) == -1)
+		std::cerr << "send() failed" << std::endl;
+}
+
+void NumericReplies::ERR_TOOMANYCHANNELS(Client* client)
+{
+	std::stringstream ss;
+
+	// WRITE THE ERROR MSG W/ CHANNEL & MAXCHANNELS :  "<client> <channel> :You have joined too many channels"
+	std::string str = ss.str();
+	if (ss.fail())
+	{
+		std::cerr << "stringstream failed" << std::endl;
+		return;
+	}
+	if (send(client->get_fd(), str.c_str(), str.size(), 0) == -1)
+		std::cerr << "send() failed" << std::endl;
+}
+
 void NumericReplies::ERR_NONICKNAMEGIVEN(Client* client)
 {
 	std::stringstream ss;
