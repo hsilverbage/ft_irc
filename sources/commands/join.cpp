@@ -2,17 +2,26 @@
 
 void Command::join(std::vector<std::string> args, Client* client)
 {
+	size_t maxChannel = 10;
 	std::cout << "JOIN CMD\t" << args[0] << client->get_nickname() << std::endl;
 	if (client->get_isConnected() == false)
 		return;
+	if (args[1].empty())
+		return (NumericReplies::ERR_NEEDMOREPARAMS(client, "USER"));
 	std::map<std::string, Channel*> channel = _Serv->get_channel();
-	std::vector<std::string>::iterator it = std::find(channel.begin(), channel.end(), arg[1]);
+	std::vector<std::string>::iterator it = std::find(channel.begin(), channel.end(), args[1]);
     if (it != channel.end()) 
 	{
+		if (client->_nbChannel >= maxChannel)
+			return (NumericReplies::ERR_TOOMANYCHANNELS(client, args[1]));
+		// SET client->_nbchannel++; but where ?
+		if (Channel->get_key() != args[2])
+			return (NumericReplies::ERR_BADCHANNELKEY(client, args[1]));
     }
 	else
 	{
-        std::cout << "Element non trouvé" << std::endl;
+        if (args[0] == "#" || args[0] == "&")
+			return (NumericReplies::ERR_NOSUCHCHANNEL(client ,args[1]));
     }
 }
 

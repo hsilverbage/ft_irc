@@ -15,11 +15,12 @@ void NumericReplies::ERR_NEEDMOREPARAMS(Client* client, std::string cmd)
 		std::cerr << "send() failed" << std::endl;
 }
 
-void NumericReplies::ERR_NOSUCHCHANNEL(Client* client)
+void NumericReplies::ERR_NOSUCHCHANNEL(Client* client, std::string channel)
 {
 	std::stringstream ss;
 
-	// WRITE THE ERROR MSG W/ CHANNEL : "<client> <channel> :No such channel"
+	std::cout << client->get_nickname() << " " << channel << " : No such channel" << std::endl;
+	// CHECK ERROR MSG : "<client> <channel> :No such channel"
 	std::string str = ss.str();
 	if (ss.fail())
 	{
@@ -150,11 +151,12 @@ void	NumericReplies::ERR_CHANNELISFULL(Client* client)
 		std::cerr << "send() failed" << std::endl;
 }
 
-void NumericReplies::ERR_BADCHANNELKEY(Client* client)
+void NumericReplies::ERR_BADCHANNELKEY(Client* client, std::string channel)
 {
 	std::stringstream ss;
 
-	// WRITE THE ERROR MSG W/ CHANNEL : "<client> <channel> :Cannot join channel (+k)"
+	std::cout << client->get_nickname() << " " << channel << " : Cannot join channel (+k)" << std::endl;
+	// CHECK : "<client> <channel> :Cannot join channel (+k)"
 	std::string str = ss.str();
 	if (ss.fail())
 	{
@@ -165,11 +167,12 @@ void NumericReplies::ERR_BADCHANNELKEY(Client* client)
 		std::cerr << "send() failed" << std::endl;
 }
 
-void NumericReplies::ERR_TOOMANYCHANNELS(Client* client)
+void NumericReplies::ERR_TOOMANYCHANNELS(Client* client, std::string channel)
 {
 	std::stringstream ss;
 
-	// WRITE THE ERROR MSG W/ CHANNEL & MAXCHANNELS :  "<client> <channel> :You have joined too many channels"
+	std::cout << client->get_nickname() << " " << channel << " : You have joined too many channels" << std::endl;
+	// CHECK  :  "<client> <channel> :You have joined too many channels"
 	std::string str = ss.str();
 	if (ss.fail())
 	{

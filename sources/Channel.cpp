@@ -61,3 +61,5 @@ size_t	Channel::set_maxClient(size_t max)
 {
 	this->_maxClient = max;
 }
+
+

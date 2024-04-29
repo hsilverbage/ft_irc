@@ -135,6 +135,7 @@ Server::Server(std::string port, std::string pwd) : _pwd(pwd)
 		throw InvalidPort();
 }
 
+
 std::map<int, Client*>	Server::get_clients_map()
 {
 	return (this->_clients);
@@ -174,3 +175,4 @@ const char* Server::InvalidPort::what() const throw()
 {
 	return ("Invalid port, a valid port is a number between 1024 and 65535");
 }
+

@@ -7,6 +7,7 @@ Client::Client(int fd) : _fd(fd)
 	this->_realname = "";
 	this->_isConnected = false;
 	this->_pwdIsCorrect = false;
+	this->_nbChannel = 0;
 }
 
 void Client::set_ip_address(std::string ipAddress)
@@ -43,6 +44,11 @@ std::string&	Client::get_realname()
 	return (this->_realname);
 }
 
+size_t	Client::get_nb_channel()
+{
+	return (this->_nbChannel);
+}
+
 bool	Client::set_isConnected(bool status)
 {
 	return (this->_isConnected = status);
@@ -66,6 +72,11 @@ void	Client::set_nickname(std::string name)
 void	Client::set_username(std::string name)
 {
 	this->_username = name;
+}
+
+void	Client::set_nb_channel(size_t nbChannel)
+{
+	this->_nbChannel = nbChannel;
 }
 
 int	Client::get_fd()

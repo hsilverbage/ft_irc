@@ -14,6 +14,7 @@ class Client
 		std::string&	get_nickname();
 		std::string&	get_username();
 		std::string&	get_realname();
+		size_t			get_nb_channel();
 		
 		bool	get_isConnected();
 		bool	get_pwdIsCorrect();		
@@ -24,6 +25,7 @@ class Client
 		void	set_realname(std::string name);
 		void	set_nickname(std::string name);
 		void	set_username(std::string name);
+		void	set_nb_channel(size_t nbChannel);
 
 		bool	set_isConnected(bool status);
 		bool	set_pwdIsCorrect(bool status);
@@ -37,6 +39,7 @@ class Client
 		std::string	_nickname;
 		std::string	_username;
 		std::string	_realname;
+		size_t		_nbChannel;
 		bool		_isConnected;
 		bool		_pwdIsCorrect;
 
