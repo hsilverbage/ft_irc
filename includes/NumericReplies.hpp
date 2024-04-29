@@ -16,6 +16,7 @@ class NumericReplies
 		static void	ERR_ALREADYREGISTERED(Client* client);
 		static void	ERR_PASSWDMISMATCH(Client* client);
 
+		test
 		// NOTIFICATION
 
 		static void NOTIF_CHANGENICK(Client* client, std::string newNick);
