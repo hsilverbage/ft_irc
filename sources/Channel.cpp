@@ -154,3 +154,12 @@ bool	Channel::isOperator(int fd)
 		return (true);
 	return (false);
 }
+
+bool	Channel::is_client_in_channel(int fd)
+{
+	std::map<int, Client*>::iterator it = _Clients.find(fd);
+
+	if (it == _Clients.end())
+		return (false);
+	return (true);
+}

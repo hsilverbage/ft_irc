@@ -39,6 +39,7 @@ class Channel
 
 		bool get_topicProtected();
 		bool isOperator(int fd);
+		bool is_client_in_channel(int fd);
 
 
 	private :
