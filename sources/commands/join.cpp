@@ -37,7 +37,7 @@ void Command::join(std::vector<std::string> args, Client* client)
 
 		if (i < argsKey.size())
 			channelKey = argsKey[i];
-		if (it != channel_map.end())  // SOULD WE CONTINU OR STOP AS SOON AS ONE CHANNEL FUCKS UP ?
+		if (it != channel_map.end())
 		{
 			if (client->get_nb_channel() >= MAXCHANNEL)
 				NumericReplies::ERR_TOOMANYCHANNELS(client, channelName);

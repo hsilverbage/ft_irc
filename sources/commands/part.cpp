@@ -44,4 +44,3 @@ void Command::part(std::vector<std::string> args, Client* client)
 	}
 }
 
-*/
