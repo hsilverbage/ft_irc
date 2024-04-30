@@ -18,8 +18,8 @@ class NumericReplies
 		static void ERR_NOSUCHCHANNEL(Client* client, std::string channel);
 		static void ERR_TOOMANYCHANNELS(Client* client, std::string channel);
 		static void ERR_BADCHANNELKEY(Client* client, std::string channel);
-		static void ERR_BANNEDFROMCHAN(Client* client);
-		static void ERR_CHANNELISFULL(Client* client);
+		static void ERR_BANNEDFROMCHAN(Client* client, std::string channel);
+		static void ERR_CHANNELISFULL(Client* client, std::string channel);
 		static void ERR_INVITEONLYCHAN(Client* client);
 		static void ERR_NOTONCHANNEL(Client* client, std::string name);
 		static void ERR_CHANOPRIVSNEEDED(Client* client, std::string channelName);
@@ -34,7 +34,7 @@ class NumericReplies
 		static void RPL_WELCOME(Client* client);
 		static void RPL_TOPIC(Client* client);
 		static void RPL_TOPICWHOTIME(Client* client);
-		static void RPL_NAMREPLY(Client* client);
+		static void RPL_NAMREPLY(Client* client, std::map<int, Client*> clients, std::string channel);
 		static void RPL_ENDOFNAMES(Client* client);
 		static void RPL_TOPIC(Client* client, std::string channelName, std::string topicName);
 		static void RPL_NOTOPIC(Client* client, std::string channelName);
