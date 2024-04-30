@@ -6,6 +6,7 @@ Channel::Channel(std::string key, Client* client, std::string channelName) : _ke
 	_ClientOperators[client->get_fd()] = client;
 	this->_maxClient				   = 100; // TODO SEE VLAUE TO SET
 	this->_channelName				   = channelName;
+	this->_topicProtected = false;
 }
 
 Channel::~Channel() {}
@@ -72,9 +73,11 @@ void Channel::remove_client_from_channel(Client* client, std::string reason)
 	if (it != _Clients.end())
 	{
 		if (reason.empty())
-			send_msg_to_everyone_in_channel(client->get_nickname() + " is leaving the channel " + get_channel_name() + "\r\n"); 
+			send_msg_to_everyone_in_channel(client->get_nickname() + " is leaving the channel " + get_channel_name() +
+											"\r\n");
 		else
-			send_msg_to_everyone_in_channel(client->get_nickname() + " is leaving the channel " + get_channel_name() + " because " + reason + "\r\n");
+			send_msg_to_everyone_in_channel(client->get_nickname() + " is leaving the channel " + get_channel_name() +
+											" because " + reason + "\r\n");
 		this->_Clients.erase(it);
 		client->set_nb_channel(client->get_nb_channel() - 1);
 		return;
@@ -105,4 +108,23 @@ void Channel::send_msg_to_everyone_in_channel(const std::string str)
 std::string& Channel::get_channel_name()
 {
 	return (this->_channelName);
+}
+
+bool	Channel::get_topicProtected()
+{
+	return (this->_topicProtected);
+}
+
+void	Channel::set_topicProtected(bool status)
+{
+	this->_topicProtected = status;
+}
+
+bool	Channel::isOperator(int fd)
+{
+	std::map<int, Client*>::iterator it = _ClientOperators.find(fd);
+
+	if (it != _ClientOperators.end())
+		return (true);
+	return (false);
 }

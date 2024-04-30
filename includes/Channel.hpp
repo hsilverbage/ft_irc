@@ -21,13 +21,18 @@ class Channel
 		std::string& get_topic();
 		std::string& get_channel_name();
 		
-		void set_topic(std::string topic);
 		void add_client_to_channel(Client* client);
 		void remove_client_from_channel(Client* client, std::string reason);
 		void add_client_to_operators(Client* client);
 		void remove_client_from_operators(Client* client);
 		void send_msg_to_everyone_in_channel(const std::string str);
 		void set_maxClient(size_t max);
+		void set_topic(std::string topic);
+		void set_topicProtected(bool status);
+
+		bool get_topicProtected();
+		bool isOperator(int fd);
+
 
 	private :
 
@@ -42,6 +47,8 @@ class Channel
 		std::string _channelName;
 		std::string _key;
 		std::string _topic;
+
+		bool	_topicProtected;
 };
 
 #endif

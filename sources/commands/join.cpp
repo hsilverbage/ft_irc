@@ -27,7 +27,7 @@ void Command::join(std::vector<std::string> args, Client* client)
 		else
 			argsKey.push_back(args[i]);
 	if (argsChannel.size() < argsKey.size())
-		NumericReplies::ERR_BADCHANMASK(client, argsKey[0]);
+		NumericReplies::ERR_NOSUCHCHANNEL(client, argsKey[0]);
 
 	for (size_t i = 0; i < argsChannel.size(); i++)
 	{
