@@ -7,7 +7,7 @@ Channel::Channel(std::string key, Client* client, std::string channelName) : _ke
 	this->_channelName				   = channelName;
 	this->_topicProtected = false;
 	this->_nbClient					   = 0;
-	this->_maxClient = 0;
+	this->_inviteOnly 				   = false;
 }
 
 Channel::~Channel() {}
@@ -20,6 +20,26 @@ std::string& Channel::get_key()
 std::string& Channel::get_topic()
 {
 	return (this->_topic);
+}
+
+bool	get_invite_only()
+{
+	return (this->_inviteOnly);
+}
+
+void set_invite_only(bool status)
+{
+	this->_inviteOnly = status;
+}
+
+bool	get_invite_only()
+{
+	return (this->_inviteOnly);
+}
+
+void set_invite_only(bool status)
+{
+	this->_inviteOnly = status;
 }
 
 void Channel::set_topic(std::string topic, Client* client)
@@ -48,6 +68,16 @@ std::map<int, Client*>& Channel::get_banned()
 	return (this->_Banned);
 }
 
+std::vector<Client*>& Channel::get_invited()
+{
+	return (this->_Invited);
+}
+
+std::vector<Client*>& Channel::get_invited()
+{
+	return (this->_Invited);
+}
+
 size_t Channel::get_maxClient()
 {
 	return (this->_maxClient);
@@ -56,6 +86,11 @@ size_t Channel::get_maxClient()
 size_t Channel::get_nbClient()
 {
 	return (this->_nbClient);
+}
+
+void Channel::set_invited_client(Client* client)
+{
+	this->_Invited.push_back(client);
 }
 
 void Channel::set_nbClient(size_t actualNb)
@@ -83,8 +118,7 @@ void Channel::ban_client(Client* client, std::string reason)
 			send_msg_to_everyone_in_channel(client->get_nickname() + " is banned from the channel " + get_channel_name() + " because " + reason + "\r\n");
 		this->_Clients.erase(it);
 		set_nbClient(this->_nbClient - 1);
-		this->_Banned.first.insert(client->get_fd());
-		this->_Banned.second.insert(client->get_nickname());
+		_Banned[client->get_fd()] = client;
 		client->set_nb_channel(client->get_nb_channel() - 1);
 	}
 	else
