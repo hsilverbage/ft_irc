@@ -7,6 +7,7 @@ Channel::Channel(std::string key, Client* client, std::string channelName) : _ke
 	this->_channelName				   = channelName;
 	this->_topicProtected = false;
 	this->_nbClient					   = 0;
+	this->_maxClient = 0;
 }
 
 Channel::~Channel() {}
@@ -53,7 +54,7 @@ std::map<int, Client*>& Channel::get_clients()
 	return (this->_Clients);
 }
 
-std::map<int Client*>& Channel::get_banned()
+std::map<int, Client*>& Channel::get_banned()
 {
 	return (this->_Banned);
 }

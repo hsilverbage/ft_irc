@@ -35,7 +35,7 @@ class NumericReplies
 		static void RPL_TOPIC(Client* client);
 		static void RPL_TOPICWHOTIME(Client* client);
 		static void RPL_NAMREPLY(Client* client, std::map<int, Client*> clients, std::string channel);
-		static void RPL_ENDOFNAMES(Client* client);
+		static void RPL_ENDOFNAMES(Client* client, std::string channel);
 		static void RPL_TOPIC(Client* client, std::string channelName, std::string topicName);
 		static void RPL_NOTOPIC(Client* client, std::string channelName);
 

@@ -51,8 +51,8 @@ void	NumericReplies::RPL_NAMREPLY(Client* client, std::map<int, Client*> clients
 
 	// CHECK :  "<client> <symbol> <channel> :[prefix]<nick>{ [prefix]<nick>}"
 	ss <<  "353 : " << client->get_nickname() << " " << channel << " :\n";
-	for (int i = 0; i < clients.size(); i++)
-		ss << clients->second->get_nickname() << "\n";
+	for (std::map<int, Client*>::iterator it = clients.begin(); it != clients.end(); it++)
+		ss << it->second->get_nickname() << "\n";
 	ss << "\r\n";
 	std::string str = ss.str();
 	if (ss.fail())

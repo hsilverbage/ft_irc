@@ -49,6 +49,7 @@ class Channel
 		std::map<int, Client*> _Banned;
 
 		size_t _nbClient;
+		size_t _maxClient;
 
 		std::string _channelName;
 		std::string _key;
