@@ -2,7 +2,7 @@
 
 void	Command::quit(std::vector<std::string> args, Client* client)
 {
-	std::string	reason = ""
+	std::string	reason = "";
 	if (args.size() > 1)
 	{
 		for (size_t i = 1; i < args.size(); i++)
