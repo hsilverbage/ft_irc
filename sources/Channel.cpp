@@ -7,6 +7,7 @@ Channel::Channel(std::string key, Client* client, std::string channelName) : _ke
 	this->_channelName				   = channelName;
 	this->_topicProtected = false;
 	this->_nbClient					   = 0;
+	this->_inviteOnly 				   = false;
 }
 
 Channel::~Channel() {}
@@ -36,12 +37,20 @@ std::string& Channel::get_topic()
 	return (this->_topic);
 }
 
+bool	get_invite_only()
+{
+	return (this->_inviteOnly);
+}
+
+void set_invite_only(bool status)
+{
+	this->_inviteOnly = status;
+}
+
 void Channel::set_topic(std::string topic)
 {
 	this->_topic = topic;
 }
-
-
 
 std::map<int, Client*>& Channel::get_ClientOperators()
 {
@@ -58,6 +67,11 @@ std::map<int Client*>& Channel::get_banned()
 	return (this->_Banned);
 }
 
+std::vector<Client*>& Channel::get_invited()
+{
+	return (this->_Invited);
+}
+
 // size_t Channel::get_maxClient()
 // {
 // 	return (this->_maxClient);
@@ -66,6 +80,11 @@ std::map<int Client*>& Channel::get_banned()
 size_t Channel::get_nbClient()
 {
 	return (this->_nbClient);
+}
+
+void Channel::set_invited_client(Client* client)
+{
+	this->_Invited.push_back(client);
 }
 
 void Channel::set_nbClient(size_t actualNb)

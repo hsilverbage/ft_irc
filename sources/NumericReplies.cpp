@@ -95,11 +95,12 @@ void	NumericReplies::RPL_TOPIC(Client* client)
 		std::cerr << "send() failed" << std::endl;
 }
 
-void	NumericReplies::ERR_INVITEONLYCHAN(Client* client)
+void	NumericReplies::ERR_INVITEONLYCHAN(Client* client, std::string channel)
 {
 	std::stringstream ss;
 
-	// WRITE THE ERROR MSG W/ CHANNEL : "<client> <channel> :Cannot join channel (+i)"
+	//  CHECK : "<client> <channel> :Cannot join channel (+i)"
+	ss << "473 : " << client->get_nickname() << " " << channel << " : Cannot join channel (+i)\r\n";
 	std::string str = ss.str();
 	if (ss.fail())
 	{

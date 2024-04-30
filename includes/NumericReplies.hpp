@@ -20,7 +20,7 @@ class NumericReplies
 		static void ERR_BADCHANNELKEY(Client* client, std::string channel);
 		static void ERR_BANNEDFROMCHAN(Client* client, std::string channel);
 		static void ERR_CHANNELISFULL(Client* client, std::string channel);
-		static void ERR_INVITEONLYCHAN(Client* client);
+		static void ERR_INVITEONLYCHAN(Client* client, std::string channel);
 		static void ERR_NOTONCHANNEL(Client* client, std::string name);
 		static void ERR_CHANOPRIVSNEEDED(Client* client, std::string channelName);
 

@@ -15,6 +15,7 @@ class Channel
 		std::map<int, Client*>& get_clients();
 		std::map<int, Client*>& get_ClientOperators();
 		std::map<int, Client*>& get_banned();
+		std::vector<Client*>&	get_invited();
 
 		size_t get_maxClient();
 
@@ -22,7 +23,10 @@ class Channel
 		std::string&	get_topic();
 		std::string&	get_channel_name();
 		size_t			get_nbClient();
-		
+		bool			get_invite_only();
+
+		void set_invited_client(Client* client);
+		void set_invite_only(bool status);
 		void ban_client(Client* client, std::string reason);
 		void set_nbClient(size_t actualNb);
 		void set_topic(std::string topic);
@@ -44,11 +48,13 @@ class Channel
 		Channel(const Channel& rhs);
 		Channel& operator=(const Channel& rhs);
 
-		std::map<int, Client*> _Clients;
-		std::map<int, Client*> _ClientOperators;
-		std::map<int, Client*> _Banned;
+		std::map<int, Client*>	_Clients;
+		std::map<int, Client*>	_ClientOperators;
+		std::map<int, Client*>	_Banned;
+		std::vector<Client*>	_Invited;	
 
-		size_t _nbClient;
+		size_t	_nbClient;
+		bool	_inviteOnly;
 
 		std::string _channelName;
 		std::string _key;

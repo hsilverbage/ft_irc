@@ -27,8 +27,7 @@ void Command::join(std::vector<std::string> args, Client* client)
 		else
 			argsKey.push_back(args[i]);
 	if (argsChannel.size() < argsKey.size())
-		NumericReplies::ERR_NOSUCHCHANNEL(client, argsKey[0]);
-
+		return (NumericReplies::ERR_NOSUCHCHANNEL(client, argsKey[0]));
 	for (size_t i = 0; i < argsChannel.size(); i++)
 	{
 		std::map<std::string, Channel*>::iterator it = channel_map.find(argsChannel[i]);
@@ -44,7 +43,8 @@ void Command::join(std::vector<std::string> args, Client* client)
     		for (ite = banned.begin(); ite != banned.end(); ++ite) 
 			{
         		if (ite->second->get_nickname() == client->get_nickname())
-			}	
+					return (NumericReplies::ERR_BANNEDFROMCHAN(client, channelName));
+			}
 			if (client->get_nb_channel() >= MAXCHANNEL)
 				NumericReplies::ERR_TOOMANYCHANNELS(client, channelName);
 			else if (it->second->get_nbClient() >= MAXCLIENT)
@@ -57,7 +57,17 @@ void Command::join(std::vector<std::string> args, Client* client)
 			}
 			else
 			{
-				
+				if (it->second->get_invite_only() == true)
+				{
+					std::vector<Client*> invited = it->second->get_invited();
+					for (int j = 0; j < invited.size(); j++)
+					{
+						if (invited[j].get_nickname() == client->get_nickname())
+							break;
+						else
+							return (NumericReplies::ERR_INVITEONLYCHAN(client, channelName));
+					}
+				}
 				it->second->add_client_to_channel(client);
 				NumericReplies::RPL_NAMREPLY(client, it->second->get_clients(), channelName);
 				NumericReplies::RPL_ENDOFNAMES(client, channelName);
@@ -77,8 +87,6 @@ void Command::join(std::vector<std::string> args, Client* client)
 
 			channel->add_client_to_channel(client);
 			_Serv->add_channel_to_map(channel, argsChannel[i]);
-			
-			// return (NumericReplies::ERR_NOSUCHCHANNEL(client, args[1]));
 		}
 	}
 }
@@ -131,12 +139,12 @@ Numeric Replies:
 	ERR_NOSUCHCHANNEL (403) ok
 	ERR_TOOMANYCHANNELS (405) ok
 	ERR_BADCHANNELKEY (475) ok
-	ERR_BANNEDFROMCHAN (474)
+	ERR_BANNEDFROMCHAN (474) OK
 	ERR_CHANNELISFULL (471) ok
-	ERR_INVITEONLYCHAN (473) MAYBE TO DO IT DEPEND OF INVITE OPTIONS
+	ERR_INVITEONLYCHAN (473) OK
 	ERR_BADCHANMASK (476) ok
 	RPL_TOPIC (332) OK
-	RPL_TOPICWHOTIME (333)
+	RPL_TOPICWHOTIME (333) BLC
 	RPL_NAMREPLY (353) OK
 	RPL_ENDOFNAMES (366) OK
 
