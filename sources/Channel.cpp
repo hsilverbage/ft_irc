@@ -12,21 +12,6 @@ Channel::Channel(std::string key, Client* client, std::string channelName) : _ke
 
 Channel::~Channel() {}
 
-Channel::Channel(const Channel& rhs)
-{
-	*this = rhs;
-}
-
-
-
-Channel& Channel::operator=(const Channel& rhs)
-{
-	if (this != &rhs)
-	{
-	}
-	return (*this);
-}
-
 std::string& Channel::get_key()
 {
 	return (this->_key);
@@ -37,12 +22,16 @@ std::string& Channel::get_topic()
 	return (this->_topic);
 }
 
-void Channel::set_topic(std::string topic)
+void Channel::set_topic(std::string topic, Client* client)
 {
 	this->_topic = topic;
+	this->_whoSetTopic = client->get_nickname();
 }
 
-
+std::string&	Channel::who_set_topic()
+{
+	return (this->_whoSetTopic);
+}
 
 std::map<int, Client*>& Channel::get_ClientOperators()
 {
@@ -59,10 +48,10 @@ std::map<int, Client*>& Channel::get_banned()
 	return (this->_Banned);
 }
 
-// size_t Channel::get_maxClient()
-// {
-// 	return (this->_maxClient);
-// }
+size_t Channel::get_maxClient()
+{
+	return (this->_maxClient);
+}
 
 size_t Channel::get_nbClient()
 {

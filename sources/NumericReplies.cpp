@@ -355,3 +355,18 @@ void NumericReplies::RPL_TOPIC(Client* client, std::string channelName, std::str
 	if (send(client->get_fd(), str.c_str(), str.size(), 0) == -1)
 		std::cerr << "send() failed" << std::endl;
 }
+
+void NumericReplies::RPL_TOPICWHOTIME(Client* client, Channel* channel)
+{
+	std::stringstream ss;
+
+	ss << "333 : " << client->get_nickname() << " " << channel->get_channel_name() << " the topic was set by" << channel->who_set_topic() << "\r\n";
+	std::string str = ss.str();
+	if (ss.fail())
+	{
+		std::cerr << "stringstream failed" << std::endl;
+		return;
+	}
+	if (send(client->get_fd(), str.c_str(), str.size(), 0) == -1)
+		std::cerr << "send() failed" << std::endl;
+}

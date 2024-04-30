@@ -21,6 +21,8 @@ class Channel
 		std::string&	get_key();
 		std::string&	get_topic();
 		std::string&	get_channel_name();
+		std::string&	who_set_topic();
+
 		size_t			get_nbClient();
 		
 		void ban_client(Client* client, std::string reason);
@@ -32,7 +34,7 @@ class Channel
 		void remove_client_from_operators(Client* client);
 		void send_msg_to_everyone_in_channel(const std::string str);
 		void set_maxClient(size_t max);
-		void set_topic(std::string topic);
+		void set_topic(std::string topic, Client* client);
 		void set_topicProtected(bool status);
 
 		bool get_topicProtected();
@@ -40,9 +42,6 @@ class Channel
 
 
 	private :
-
-		Channel(const Channel& rhs);
-		Channel& operator=(const Channel& rhs);
 
 		std::map<int, Client*> _Clients;
 		std::map<int, Client*> _ClientOperators;
@@ -54,6 +53,8 @@ class Channel
 		std::string _channelName;
 		std::string _key;
 		std::string _topic;
+		std::string	_whoSetTopic;
+	
 
 		bool	_topicProtected;
 };
