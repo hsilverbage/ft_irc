@@ -60,11 +60,15 @@ void	NumericReplies::RPL_TOPICWHOTIME(Client* client)
 		std::cerr << "send() failed" << std::endl;
 }
 
-void	NumericReplies::RPL_NAMREPLY(Client* client)
+void	NumericReplies::RPL_NAMREPLY(Client* client, std::map<int, Client*> clients, std::string channel)
 {
 	std::stringstream ss;
 
-	// WRITE THE ERROR MSG W/ CHANNEL :  "<client> <symbol> <channel> :[prefix]<nick>{ [prefix]<nick>}"
+	// CHECK :  "<client> <symbol> <channel> :[prefix]<nick>{ [prefix]<nick>}"
+	ss <<  "353 : " << client->get_nickname() << " " << channel << " :\n";
+	for (int i = 0; i < clients.size(); i++)
+		ss << clients->second->get_nickname() << "\n";
+	ss << "\r\n";
 	std::string str = ss.str();
 	if (ss.fail())
 	{
@@ -75,11 +79,12 @@ void	NumericReplies::RPL_NAMREPLY(Client* client)
 		std::cerr << "send() failed" << std::endl;
 }
 
-void	NumericReplies::RPL_ENDOFNAMES(Client* client)
+void	NumericReplies::RPL_ENDOFNAMES(Client* client, std::string channel)
 {
 	std::stringstream ss;
 
-	// WRITE THE ERROR MSG W/ CHANNEL :   "<client> <channel> :End of /NAMES list"
+	// CHECK :   "<client> <channel> :End of /NAMES list"
+	ss << "366 : " << client->get_nickname() << " " << channel << " : End of /NAMES list\r\n";
 	std::string str = ss.str();
 	if (ss.fail())
 	{
@@ -120,11 +125,12 @@ void	NumericReplies::ERR_INVITEONLYCHAN(Client* client)
 		std::cerr << "send() failed" << std::endl;
 }
 
-void	NumericReplies::ERR_BANNEDFROMCHAN(Client* client)
+void	NumericReplies::ERR_BANNEDFROMCHAN(Client* client, std::string channel)
 {
 	std::stringstream ss;
 
-	// WRITE THE ERROR MSG W/ CHANNEL : "<client> <channel> :Cannot join channel (+b)"
+	// CHECK : "<client> <channel> :Cannot join channel (+b)"
+	ss << "474 : " << client->get_nickname() << " " << channel << " : Cannot join channel (+b)\r\n";
 	std::string str = ss.str();
 	if (ss.fail())
 	{
@@ -135,11 +141,12 @@ void	NumericReplies::ERR_BANNEDFROMCHAN(Client* client)
 		std::cerr << "send() failed" << std::endl;
 }
 
-void	NumericReplies::ERR_CHANNELISFULL(Client* client)
+void	NumericReplies::ERR_CHANNELISFULL(Client* client, std::string channel)
 {
 	std::stringstream ss;
 
-	// WRITE THE ERROR MSG W/ CHANNEL :  "<client> <channel> :Cannot join channel (+l)"
+	// CHECK  :  "<client> <channel> :Cannot join channel (+l)"
+	ss << "471 : " << client->get_nickname() << " " << channel << " : Cannot join channel (+l)\r\n";
 	std::string str = ss.str();
 	if (ss.fail())
 	{

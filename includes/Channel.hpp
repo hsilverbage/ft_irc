@@ -14,13 +14,17 @@ class Channel
 
 		std::map<int, Client*>& get_clients();
 		std::map<int, Client*>& get_ClientOperators();
+		std::map<int, Client*>& get_banned();
 
 		size_t get_maxClient();
 
-		std::string& get_key();
-		std::string& get_topic();
-		std::string& get_channel_name();
+		std::string&	get_key();
+		std::string&	get_topic();
+		std::string&	get_channel_name();
+		size_t			get_nbClient();
 		
+		void ban_client(Client* client, std::string reason);
+		void set_nbClient(size_t actualNb);
 		void set_topic(std::string topic);
 		void add_client_to_channel(Client* client);
 		void remove_client_from_channel(Client* client, std::string reason);
@@ -36,8 +40,9 @@ class Channel
 
 		std::map<int, Client*> _Clients;
 		std::map<int, Client*> _ClientOperators;
+		std::map<int, Client*> _Banned;
 
-		size_t _maxClient; // TODO WHRERE DO WE SET MAX IENCLE
+		size_t _nbClient;
 
 		std::string _channelName;
 		std::string _key;

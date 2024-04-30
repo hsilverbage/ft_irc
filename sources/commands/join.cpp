@@ -39,8 +39,18 @@ void Command::join(std::vector<std::string> args, Client* client)
 			channelKey = argsKey[i];
 		if (it != channel_map.end())  // SOULD WE CONTINU OR STOP AS SOON AS ONE CHANNEL FUCKS UP ?
 		{
+			std::map<int, Client*> banned = it->second->get_banned();
+			std::map<int, Client*>::iterator ite;
+    		for (ite = banned.begin(); ite != banned.end(); ++ite) 
+			{
+        		if (ite->second->get_nickname() == client->get_nickname())
+			}	
 			if (client->get_nb_channel() >= MAXCHANNEL)
 				NumericReplies::ERR_TOOMANYCHANNELS(client, channelName);
+			else if (it->second->get_nbClient() >= MAXCLIENT)
+			{
+				NumericReplies::ERR_CHANNELISFULL(client, channelName);
+			}
 			else if (it->second->get_key() != channelKey)
 			{
 				NumericReplies::ERR_BADCHANNELKEY(client, channelName);
@@ -49,6 +59,8 @@ void Command::join(std::vector<std::string> args, Client* client)
 			{
 				
 				it->second->add_client_to_channel(client);
+				NumericReplies::RPL_NAMREPLY(client, it->second->get_clients(), channelName);
+				NumericReplies::RPL_ENDOFNAMES(client, channelName);
 				if (!it->second->get_topic().empty())
 					NumericReplies::RPL_TOPIC(client);
 				/*TODO : if joining the channel is successful :
@@ -115,18 +127,18 @@ messages as a series of messages with a single channel name on each.
 
 Numeric Replies:
 
-	ERR_NEEDMOREPARAMS (461)
-	ERR_NOSUCHCHANNEL (403)
-	ERR_TOOMANYCHANNELS (405)
-	ERR_BADCHANNELKEY (475)
+	ERR_NEEDMOREPARAMS (461) ok
+	ERR_NOSUCHCHANNEL (403) ok
+	ERR_TOOMANYCHANNELS (405) ok
+	ERR_BADCHANNELKEY (475) ok
 	ERR_BANNEDFROMCHAN (474)
-	ERR_CHANNELISFULL (471)
-	ERR_INVITEONLYCHAN (473)
-	ERR_BADCHANMASK (476)
-	RPL_TOPIC (332)
+	ERR_CHANNELISFULL (471) ok
+	ERR_INVITEONLYCHAN (473) MAYBE TO DO IT DEPEND OF INVITE OPTIONS
+	ERR_BADCHANMASK (476) ok
+	RPL_TOPIC (332) OK
 	RPL_TOPICWHOTIME (333)
-	RPL_NAMREPLY (353)
-	RPL_ENDOFNAMES (366)
+	RPL_NAMREPLY (353) OK
+	RPL_ENDOFNAMES (366) OK
 
 Command Examples:
 

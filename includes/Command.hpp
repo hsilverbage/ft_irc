@@ -2,6 +2,7 @@
 #define COMMAND_HPP
 
 #define MAXCHANNEL 10
+#define MAXCLIENT 10
 
 #include "Server.hpp"
 

@@ -4,8 +4,8 @@ Channel::Channel(std::string key, Client* client, std::string channelName) : _ke
 {
 	this->_topic					   = "";
 	_ClientOperators[client->get_fd()] = client;
-	this->_maxClient				   = 100; // TODO SEE VLAUE TO SET
 	this->_channelName				   = channelName;
+	this->_nbClient					   = 0;
 }
 
 Channel::~Channel() {}
@@ -14,6 +14,8 @@ Channel::Channel(const Channel& rhs)
 {
 	*this = rhs;
 }
+
+
 
 Channel& Channel::operator=(const Channel& rhs)
 {
@@ -38,6 +40,8 @@ void Channel::set_topic(std::string topic)
 	this->_topic = topic;
 }
 
+
+
 std::map<int, Client*>& Channel::get_ClientOperators()
 {
 	return (this->_ClientOperators);
@@ -48,21 +52,52 @@ std::map<int, Client*>& Channel::get_clients()
 	return (this->_Clients);
 }
 
-size_t Channel::get_maxClient()
+std::map<int Client*>& Channel::get_banned()
 {
-	return (this->_maxClient);
+	return (this->_Banned);
 }
 
-void Channel::set_maxClient(size_t max)
+// size_t Channel::get_maxClient()
+// {
+// 	return (this->_maxClient);
+// }
+
+size_t Channel::get_nbClient()
 {
-	this->_maxClient = max;
+	return (this->_nbClient);
+}
+
+void Channel::set_nbClient(size_t actualNb)
+{
+	this->_nbClient = actualNb;
 }
 
 void Channel::add_client_to_channel(Client* client)
 {
 	this->_Clients[client->get_fd()] = client;
 	client->set_nb_channel(client->get_nb_channel() + 1);
+	set_nbClient(this->_nbClient + 1);
 	send_msg_to_everyone_in_channel(client->get_nickname() + " is joining the channel " + get_channel_name() + "\r\n");
+}
+
+void Channel::ban_client(Client* client, std::string reason)
+{
+	std::map<int, Client*>::iterator it = _Clients.find(client->get_fd());
+
+	if (it != _Clients.end())
+	{
+		if (reason.empty())
+			send_msg_to_everyone_in_channel(client->get_nickname() + " is banned from the channel " + get_channel_name() + "\r\n"); 
+		else
+			send_msg_to_everyone_in_channel(client->get_nickname() + " is banned from the channel " + get_channel_name() + " because " + reason + "\r\n");
+		this->_Clients.erase(it);
+		set_nbClient(this->_nbClient - 1);
+		this->_Banned.first.insert(client->get_fd());
+		this->_Banned.second.insert(client->get_nickname());
+		client->set_nb_channel(client->get_nb_channel() - 1);
+	}
+	else
+		NumericReplies::ERR_NOTONCHANNEL(client, get_channel_name());
 }
 
 void Channel::remove_client_from_channel(Client* client, std::string reason)
@@ -76,10 +111,11 @@ void Channel::remove_client_from_channel(Client* client, std::string reason)
 		else
 			send_msg_to_everyone_in_channel(client->get_nickname() + " is leaving the channel " + get_channel_name() + " because " + reason + "\r\n");
 		this->_Clients.erase(it);
+		set_nbClient(this->_nbClient - 1);
 		client->set_nb_channel(client->get_nb_channel() - 1);
-		return;
 	}
-	NumericReplies::ERR_NOTONCHANNEL(client, get_channel_name());
+	else
+		NumericReplies::ERR_NOTONCHANNEL(client, get_channel_name());
 }
 
 void Channel::add_client_to_operators(Client* client)
