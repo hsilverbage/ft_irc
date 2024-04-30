@@ -56,7 +56,6 @@ class Channel
 		std::map<int, Client*>	_Banned;
 		std::vector<Client*>	_Invited;	
 
-		size_t	_nbClient;
 		bool	_inviteOnly;
 		size_t _nbClient;
 		size_t _maxClient;

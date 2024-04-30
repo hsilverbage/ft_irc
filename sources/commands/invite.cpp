@@ -11,8 +11,10 @@ void Command::invite(std::vector<std::string> args, Client* client)
 		return (NumericReplies::ERR_NEEDMOREPARAMS(client, "USER"));
 
 	std::map<std::string, Channel*> channel = _Serv->get_channel();
-
-	if (Channel::isOperator(client->get_fd()))
+	std::map<std::string, Channel*>::iterator it = channel.find(args[2]);
+	if (it == channel.end())
+		// CHANNEL DOESNT EXIST
+	if (channel[args[2]]->isOperator(client->get_fd()))
 	{
 		
 	}

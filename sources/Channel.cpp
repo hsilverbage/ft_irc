@@ -22,22 +22,12 @@ std::string& Channel::get_topic()
 	return (this->_topic);
 }
 
-bool	get_invite_only()
+bool	Channel::get_invite_only()
 {
 	return (this->_inviteOnly);
 }
 
-void set_invite_only(bool status)
-{
-	this->_inviteOnly = status;
-}
-
-bool	get_invite_only()
-{
-	return (this->_inviteOnly);
-}
-
-void set_invite_only(bool status)
+void Channel::set_invite_only(bool status)
 {
 	this->_inviteOnly = status;
 }
@@ -66,11 +56,6 @@ std::map<int, Client*>& Channel::get_clients()
 std::map<int, Client*>& Channel::get_banned()
 {
 	return (this->_Banned);
-}
-
-std::vector<Client*>& Channel::get_invited()
-{
-	return (this->_Invited);
 }
 
 std::vector<Client*>& Channel::get_invited()
