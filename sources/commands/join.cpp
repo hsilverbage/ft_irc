@@ -47,6 +47,7 @@ void Command::join(std::vector<std::string> args, Client* client)
 			}
 			else
 			{
+				
 				it->second->add_client_to_channel(client);
 				if (!it->second->get_topic().empty())
 					NumericReplies::RPL_TOPIC(client);
