@@ -5,22 +5,29 @@ void Command::invite(std::vector<std::string> args, Client* client)
 	std::cout << "INVITE CMD\t" << args[0] << client->get_nickname() << std::endl;
 	if (client->get_isConnected() == false)
 		return;
-	if (client->get_isConnected() == false)
-		return;
 	if (args.size() < 2)
 		return (NumericReplies::ERR_NEEDMOREPARAMS(client, "USER"));
 
 	std::map<std::string, Channel*> channel = _Serv->get_channel();
 	std::map<std::string, Channel*>::iterator it = channel.find(args[2]);
 	if (it == channel.end())
-		// CHANNEL DOESNT EXIST
-	if (channel[args[2]]->isOperator(client->get_fd()))
+		return (NumericReplies::ERR_NOSUCHCHANNEL(client, args[2]));
+	
+	std::map<int, Client*> client_map = _Serv->get_clients_map();
+	std::map<int, Client*>::iterator iter;
+	for (iter = client_map.begin(); iter != client_map.end(); ++iter) 
 	{
-		
+		if (iter->second->get_nickname() == args[1])
+		{
+			if (it->second->is_client_in_channel(iter->first))
+				return (NumericReplies::ERR_USERONCHANNEL(client, args[2]));
+			else if (it->second->get_invite_only() && !channel[args[2]]->isOperator(client->get_fd()))
+				return (NumericReplies::ERR_CHANOPRIVSNEEDED(client, args[2]));
+			else
+				NumericReplies::RPL_INVITING(client, args[2]);
+		}
+		// MAYBE AN ERROR WHEN THE NICK DON'T MATCH WITH THE CLIENT_MAP
 	}
-
-
-
 }
 
 /*
@@ -48,12 +55,12 @@ with the issuer as <source>, to the target user. Other channel members SHOULD NO
 
 Numeric Replies:
 
-	RPL_INVITING (341)
-	ERR_NEEDMOREPARAMS (461)
-	ERR_NOSUCHCHANNEL (403)
-	ERR_NOTONCHANNEL (442)
-	ERR_CHANOPRIVSNEEDED (482)
-	ERR_USERONCHANNEL (443)
+	RPL_INVITING (341) OK
+	ERR_NEEDMOREPARAMS (461) OK
+	ERR_NOSUCHCHANNEL (403) OK
+	ERR_NOTONCHANNEL (442) OK
+	ERR_CHANOPRIVSNEEDED (482) OK
+	ERR_USERONCHANNEL (443) OK
 
 Command Examples:
 

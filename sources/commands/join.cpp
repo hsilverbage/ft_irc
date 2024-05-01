@@ -62,7 +62,7 @@ void Command::join(std::vector<std::string> args, Client* client)
 					std::vector<Client*> invited = it->second->get_invited();
 					for (int j = 0; j < invited.size(); j++)
 					{
-						if (invited[j].get_nickname() == client->get_nickname())
+						if (invited[j]->get_nickname() == client->get_nickname())
 							break;
 						else
 							return (NumericReplies::ERR_INVITEONLYCHAN(client, channelName));

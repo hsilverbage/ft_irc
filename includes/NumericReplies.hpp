@@ -21,7 +21,10 @@ class NumericReplies
 		static void ERR_BANNEDFROMCHAN(Client* client, std::string channel);
 		static void ERR_CHANNELISFULL(Client* client, std::string channel);
 		static void ERR_INVITEONLYCHAN(Client* client, std::string channel);
+		static void RPL_INVITING(Client* client, std::string channel);
+		static void ERR_CHANOPRIVSNEEDED(Client* client, std::string channel);
 		static void ERR_NOTONCHANNEL(Client* client, std::string name);
+		static void ERR_USERONCHANNEL(Client* client, std::string channel);
 		static void ERR_CHANOPRIVSNEEDED(Client* client, std::string channelName);
 
 		// NOTIFICATION
