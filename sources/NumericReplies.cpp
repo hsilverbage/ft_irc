@@ -69,6 +69,22 @@ void NumericReplies::ERR_NOSUCHNICK(Client* client, std::string noSuchelement)
 		std::cerr << "send() failed" << std::endl;
 }
 
+void NumericReplies::ERR_CANNOTSENDTOCHAN(Client* client, std::string channel)
+{
+	std::stringstream ss;
+
+	// CHECK "<client> <channel> :Cannot send to channel"
+	ss << "404 : " <<client->get_nickname() << " " << channel << " : Cannot send to channel\r\n";
+	std::string str = ss.str();
+	if (ss.fail())
+	{
+		std::cerr << "stringstream failed" << std::endl;
+		return;
+	}
+	if (send(client->get_fd(), str.c_str(), str.size(), 0) == -1)
+		std::cerr << "send() failed" << std::endl;
+}
+
 void NumericReplies::ERR_NOSUCHCHANNEL(Client* client, std::string channel)
 {
 	std::stringstream ss;

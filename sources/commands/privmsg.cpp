@@ -14,66 +14,88 @@ void Command::privmsg(std::vector<std::string> args, Client* client)
 	std::vector<std::string> target_vec;
 	std::map<std::string, Channel*> channel = _Serv->get_channel();
 	std::map<std::string, Channel*>::iterator ite =	channel.begin();
+	std::map<int, Client*> client_map = _Serv->get_clients_map();
+	std::map<int, Client*>::iterator it = client_map.begin();
 
 	if (args[1][0] && (args[1][0] == '@' || args[1][0] == '#' || args[1][0] == '%'))
 	{
 		
-		while (args[i][0] && args[i][0] != ':')
+		while (args[i + 1][0] && args[i + 1][0] != ':')
 		{
 			if (ite->second->is_channel(channel, args[i]))
 				target_vec.push_back(args[i++]);
 			else
+				return (NumericReplies::ERR_NOSUCHNICK(client, args[i]));
+		}
+		if (args[i + 1][0] && args[i + 1][0] == ':')
+		{
+			while (!args[i + 1].empty())
 			{
-				std::cout << "NO SUCH CHANNEL\r\n";
-				return ;
+				message += args[i + 1];
+				message += ' ';
+				i++;
 			}
 		}
-		if (args[i][0] && args[i][0] == ':')
-			message = args[i];
 		else
 			return (NumericReplies::ERR_NORECIPIENT(client, "PRIVMSG"));
-		for (i = 0; i < target_vec.size(); i++)
-			ite->second->send_msg_to_everyone_in_channel(target_vec[i]);
+		for (ite = channel.begin(); ite != channel.end(); ite++)
+		{
+			if (ite->first == target_vec[i] && ite->second->is_client_in_channel(client->get_fd()))
+				ite->second->send_msg_to_everyone_in_channel(message);
+			else if (ite->first == target_vec[i] && !ite->second->is_client_in_channel(client->get_fd()))
+				return (NumericReplies::ERR_CANNOTSENDTOCHAN(client, target_vec[i]));
+			i++;
+		}
 	}
 	else
 	{
-		while (args[i][0] && args[i][0] != ':')
+		while (args[i + 1][0] && args[i + 1][0] != ':')
 		{
-			if (ite->second->is_channel(channel, args[i]))
+			if (client->is_client(client_map, args[i]))
 				target_vec.push_back(args[i++]);
 			else
+				return (NumericReplies::ERR_NOSUCHNICK(client, args[i]));
+		}
+		if (args[i + 1][0] && args[i + 1][0] == ':')
+		{
+			while (!args[i + 1].empty())
 			{
-				std::cout << "NO SUCH CHANNEL\r\n";
-				return ;
+				message += args[i + 1];
+				message += ' ';
+				i++;
 			}
 		}
-		if (args[i][0] && args[i][0] == ':')
-			message = args[i];
 		else
 			return (NumericReplies::ERR_NORECIPIENT(client, "PRIVMSG"));
-		for (i = 0; i < target_vec.size(); i++)
-			ite->second->send_msg_to_everyone_in_channel(target_vec[i]);
-
-
-
-
-
-		if (it != channel.end())
-			return (it->second->send_msg_to_everyone_in_channel(args[2]));
-		else
-			return (NumericReplies::ERR_NOSUCHNICK(client, args[1]));
-
-		std::map<int, Client*> client_map = _Serv->get_clients_map();
-		std::map<int, Client*>::iterator iter;
-		for (iter = client_map.begin(); iter != client_map.end(); ++iter) 
+		for (it = client_map.begin(); it != client_map.end(); it++)
 		{
-			if (iter->second->get_nickname() == args[1])
-				return (it->second->send_msg_to_someone(iter->first, args[2]));
-			if (iter == client_map.end())
-				return (NumericReplies::ERR_NOSUCHNICK(client, args[1]));
+			if (it->second->get_nickname() == target_vec[i])
+			{
+				ite->second->send_msg_to_someone(it->second->get_fd(), message);
+				i++;
+			}
+			else
+				return (NumericReplies::ERR_NOSUCHNICK(client, target_vec[i]));
 		}
-
 	}
+		
+}
+
+	// 	if (it != channel.end())
+	// 		return (it->second->send_msg_to_everyone_in_channel(args[2]));
+	// 	else
+	// 		return (NumericReplies::ERR_NOSUCHNICK(client, args[1]));
+
+	
+	// 	for (iter = client_map.begin(); iter != client_map.end(); ++iter) 
+	// 	{
+	// 		if (iter->second->get_nickname() == args[1])
+	// 			return (it->second->send_msg_to_someone(iter->first, args[2]));
+	// 		if (iter == client_map.end())
+	// 			return (NumericReplies::ERR_NOSUCHNICK(client, args[1]));
+	// 	}
+
+	// }
 	
 	
 }

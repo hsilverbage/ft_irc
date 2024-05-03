@@ -2,6 +2,7 @@
 #define CLIENT_HPP
 
 #include <iostream>
+#include <map>
 #include "Server.hpp"
 
 class Client

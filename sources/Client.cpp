@@ -88,8 +88,10 @@ bool Client::is_client(std::map<int, Client*> client_map, std::string nickname)
 {
 	for (std::map<int, Client*>::iterator it = client_map.begin(); it != client_map.end(); it++)
 	{
-
+		if (it->second->get_nickname() == nickname)
+			return true;
 	}
+	return false;
 }
 
 

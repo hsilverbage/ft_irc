@@ -22,13 +22,13 @@ class NumericReplies
 		static void ERR_CHANNELISFULL(Client* client, std::string channel);
 		static void ERR_INVITEONLYCHAN(Client* client, std::string channel);
 		static void RPL_INVITING(Client* client, std::string channel);
-		static void ERR_CHANOPRIVSNEEDED(Client* client, std::string channel);
 		static void ERR_NOTONCHANNEL(Client* client, std::string name);
 		static void ERR_USERONCHANNEL(Client* client, std::string channel);
 		static void ERR_CHANOPRIVSNEEDED(Client* client, std::string channelName);
 		static void ERR_USERNOTINCHANNEL(Client* client, std::string nickname, std::string channel);
 		static void ERR_NOSUCHNICK(Client* client, std::string noSuchelement);
 		static void ERR_NORECIPIENT(Client* client, std::string command);
+		static void	ERR_CANNOTSENDTOCHAN(Client* client, std::string channel);
 
 		// NOTIFICATION
 
