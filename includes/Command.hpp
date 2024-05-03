@@ -40,6 +40,7 @@ class Command
 		void	topic(std::vector<std::string> args, Client* client);
 		void	user(std::vector<std::string> args, Client* client);
 		void	privmsg(std::vector<std::string> args, Client* client);
+		void	ban(std::vector<std::string> args, Client* client);
 };
 
 #endif

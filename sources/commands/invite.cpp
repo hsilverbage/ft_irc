@@ -6,7 +6,7 @@ void Command::invite(std::vector<std::string> args, Client* client)
 	if (client->get_isConnected() == false)
 		return;
 	if (args.size() < 2)
-		return (NumericReplies::ERR_NEEDMOREPARAMS(client, "USER"));
+		return (NumericReplies::ERR_NEEDMOREPARAMS(client, "INVITE"));
 
 	std::map<std::string, Channel*> channel = _Serv->get_channel();
 	std::map<std::string, Channel*>::iterator it = channel.find(args[2]);

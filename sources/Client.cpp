@@ -84,6 +84,14 @@ int	Client::get_fd()
 	return (this->_fd);
 }
 
+bool Client::is_client(std::map<int, Client*> client_map, std::string nickname)
+{
+	for (std::map<int, Client*>::iterator it = client_map.begin(); it != client_map.end(); it++)
+	{
+
+	}
+}
+
 
 // Client::Client(const Client& rhs)
 // {

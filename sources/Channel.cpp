@@ -91,6 +91,27 @@ void Channel::add_client_to_channel(Client* client)
 	send_msg_to_everyone_in_channel(client->get_nickname() + " is joining the channel " + get_channel_name() + "\r\n");
 }
 
+
+bool Channel::is_channel(std::map<std::string, Channel*> channels, std::string channelTarg)
+{
+	for (std::map<std::string, Channel*>::iterator it = channels.begin(); it != channels.end(); it++)
+	{
+		if (it->first == channelTarg)
+			return true;
+	}
+	return false;
+}
+
+bool Channel::is_banned(std::string nickname)
+{
+	for (std::map<int, Client*>::iterator it = _Banned.begin(); it != _Banned.end(); it++)
+	{
+		if (it->second->get_nickname() == nickname)
+			return true;
+	}
+	return false;
+}
+
 void Channel::ban_client(Client* client, std::string reason)
 {
 	std::map<int, Client*>::iterator it = _Clients.find(client->get_fd());
@@ -143,11 +164,21 @@ void Channel::remove_client_from_operators(Client* client)
 		this->_ClientOperators.erase(it);
 }
 
+void Channel::send_msg_to_someone(int fd, const std::string str)
+{
+	if (send(fd, str.c_str(), str.size(), 0) == -1)
+		std::cerr << "send() failed" << std::endl;
+}
+
 void Channel::send_msg_to_everyone_in_channel(const std::string str)
 {
 	for (std::map<int, Client*>::iterator it = _Clients.begin(); it != _Clients.end(); it++)
+	{
+		if (is_banned(it->second->get_nickname()))
+			it++;
 		if (send(it->first, str.c_str(), str.size(), 0) == -1)
 			std::cerr << "send() failed" << std::endl;
+	}
 }
 
 std::string& Channel::get_channel_name()

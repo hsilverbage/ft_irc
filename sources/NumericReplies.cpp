@@ -15,6 +15,60 @@ void NumericReplies::ERR_NEEDMOREPARAMS(Client* client, std::string cmd)
 		std::cerr << "send() failed" << std::endl;
 }
 
+
+void NumericReplies::ERR_USERNOTINCHANNEL(Client* client, std::string nickname, std::string channel)
+{
+	std::stringstream ss;
+
+
+	//   "<client> <nick> <channel> :They aren't on that channel"
+
+	ss << "441 : " <<client->get_nickname() << " " << nickname << " " << channel << " " << " : They aren't on that channel\r\n";
+	std::string str = ss.str();
+	if (ss.fail())
+	{
+		std::cerr << "stringstream failed" << std::endl;
+		return;
+	}
+	if (send(client->get_fd(), str.c_str(), str.size(), 0) == -1)
+		std::cerr << "send() failed" << std::endl;
+}
+
+void NumericReplies::ERR_NORECIPIENT(Client* client, std::string command)
+{
+	std::stringstream ss;
+
+
+	// "<client> :No recipient given (<command>)"
+	ss << "411 : " << client->get_nickname() << " : :No recipient given " << command << "\r\n";
+	std::string str = ss.str();
+	if (ss.fail())
+	{
+		std::cerr << "stringstream failed" << std::endl;
+		return;
+	}
+	if (send(client->get_fd(), str.c_str(), str.size(), 0) == -1)
+		std::cerr << "send() failed" << std::endl;
+}
+
+
+void NumericReplies::ERR_NOSUCHNICK(Client* client, std::string noSuchelement)
+{
+	std::stringstream ss;
+
+
+	// CHECK  "<client> <nickname> :No such nick/channel"
+	ss << "401 : " << client->get_nickname() << " : No such " << noSuchelement << "\r\n";
+	std::string str = ss.str();
+	if (ss.fail())
+	{
+		std::cerr << "stringstream failed" << std::endl;
+		return;
+	}
+	if (send(client->get_fd(), str.c_str(), str.size(), 0) == -1)
+		std::cerr << "send() failed" << std::endl;
+}
+
 void NumericReplies::ERR_NOSUCHCHANNEL(Client* client, std::string channel)
 {
 	std::stringstream ss;

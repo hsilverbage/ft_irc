@@ -37,13 +37,15 @@ class Channel
 		void add_client_to_operators(Client* client);
 		void remove_client_from_operators(Client* client);
 		void send_msg_to_everyone_in_channel(const std::string str);
+		void send_msg_to_someone(int fd, const std::string str);
 		void set_maxClient(size_t max);
 		void set_topic(std::string topic, Client* client);
 		void set_topicProtected(bool status);
-
 		bool get_topicProtected();
 		bool isOperator(int fd);
+		bool is_banned(std::string nickname);
 		bool is_client_in_channel(int fd);
+		bool is_channel(std::map<std::string, Channel*> channels, std::string channelTarg);
 
 
 	private :

@@ -5,6 +5,77 @@ void Command::privmsg(std::vector<std::string> args, Client* client)
 	std::cout << "PRIVMSG CMD\t" << args[0] << client->get_nickname() << std::endl;
 	if (client->get_isConnected() == false)
 		return;
+	if (args.size() < 3)
+		return (NumericReplies::ERR_NEEDMOREPARAMS(client, "PRIVMSG"));
+
+	int i = 0;
+
+	std::string message;
+	std::vector<std::string> target_vec;
+	std::map<std::string, Channel*> channel = _Serv->get_channel();
+	std::map<std::string, Channel*>::iterator ite =	channel.begin();
+
+	if (args[1][0] && (args[1][0] == '@' || args[1][0] == '#' || args[1][0] == '%'))
+	{
+		
+		while (args[i][0] && args[i][0] != ':')
+		{
+			if (ite->second->is_channel(channel, args[i]))
+				target_vec.push_back(args[i++]);
+			else
+			{
+				std::cout << "NO SUCH CHANNEL\r\n";
+				return ;
+			}
+		}
+		if (args[i][0] && args[i][0] == ':')
+			message = args[i];
+		else
+			return (NumericReplies::ERR_NORECIPIENT(client, "PRIVMSG"));
+		for (i = 0; i < target_vec.size(); i++)
+			ite->second->send_msg_to_everyone_in_channel(target_vec[i]);
+	}
+	else
+	{
+		while (args[i][0] && args[i][0] != ':')
+		{
+			if (ite->second->is_channel(channel, args[i]))
+				target_vec.push_back(args[i++]);
+			else
+			{
+				std::cout << "NO SUCH CHANNEL\r\n";
+				return ;
+			}
+		}
+		if (args[i][0] && args[i][0] == ':')
+			message = args[i];
+		else
+			return (NumericReplies::ERR_NORECIPIENT(client, "PRIVMSG"));
+		for (i = 0; i < target_vec.size(); i++)
+			ite->second->send_msg_to_everyone_in_channel(target_vec[i]);
+
+
+
+
+
+		if (it != channel.end())
+			return (it->second->send_msg_to_everyone_in_channel(args[2]));
+		else
+			return (NumericReplies::ERR_NOSUCHNICK(client, args[1]));
+
+		std::map<int, Client*> client_map = _Serv->get_clients_map();
+		std::map<int, Client*>::iterator iter;
+		for (iter = client_map.begin(); iter != client_map.end(); ++iter) 
+		{
+			if (iter->second->get_nickname() == args[1])
+				return (it->second->send_msg_to_someone(iter->first, args[2]));
+			if (iter == client_map.end())
+				return (NumericReplies::ERR_NOSUCHNICK(client, args[1]));
+		}
+
+	}
+	
+	
 }
 
 /*

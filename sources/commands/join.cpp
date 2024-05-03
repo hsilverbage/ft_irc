@@ -5,7 +5,7 @@ void Command::join(std::vector<std::string> args, Client* client)
 	if (client->get_isConnected() == false)
 		return;
 	if (args.size() < 2)
-		return (NumericReplies::ERR_NEEDMOREPARAMS(client, "USER"));
+		return (NumericReplies::ERR_NEEDMOREPARAMS(client, "JOIN"));
 	if (args[1][0] == '0')
 	{
 		std::map<std::string, Channel*> channel = _Serv->get_channel();

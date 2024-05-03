@@ -2,6 +2,7 @@
 #define CLIENT_HPP
 
 #include <iostream>
+#include "Server.hpp"
 
 class Client
 {
@@ -30,6 +31,7 @@ class Client
 
 		bool	set_isConnected(bool status);
 		bool	set_pwdIsCorrect(bool status);
+		bool	is_client(std::map<int, Client*> client_map, std::string nickname);
 
 	private:
 
