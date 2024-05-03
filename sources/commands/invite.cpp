@@ -24,7 +24,7 @@ void Command::invite(std::vector<std::string> args, Client* client)
 			else if (it->second->get_invite_only() && !channel[args[2]]->isOperator(client->get_fd()))
 				return (NumericReplies::ERR_CHANOPRIVSNEEDED(client, args[2]));
 			else
-				NumericReplies::RPL_INVITING(client, args[2]);
+				NumericReplies::RPL_INVITING(client, args[2]); 
 		}
 		// MAYBE AN ERROR WHEN THE NICK DON'T MATCH WITH THE CLIENT_MAP
 	}
