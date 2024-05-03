@@ -22,6 +22,7 @@ SRC =	$(SRC_DIR)main.cpp				\
 		$(SRC_DIR)Channel.cpp			\
 		$(CMD_DIR)Command.cpp			\
 		$(CMD_DIR)invite.cpp			\
+		$(CMD_DIR)ban.cpp				\
 		$(CMD_DIR)join.cpp				\
 		$(CMD_DIR)kick.cpp				\
 		$(CMD_DIR)mode.cpp				\

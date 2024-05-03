@@ -98,7 +98,7 @@ void Command::privmsg(std::vector<std::string> args, Client* client)
 	// }
 	
 	
-}
+
 
 /*
 Sending Messages
