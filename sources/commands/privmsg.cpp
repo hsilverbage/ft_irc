@@ -8,7 +8,7 @@ void Command::privmsg(std::vector<std::string> args, Client* client)
 	if (args.size() < 3)
 		return (NumericReplies::ERR_NEEDMOREPARAMS(client, "PRIVMSG"));
 
-	int i = 0;
+	size_t i = 0;
 
 	std::string message;
 	std::vector<std::string> target_vec;
@@ -19,25 +19,30 @@ void Command::privmsg(std::vector<std::string> args, Client* client)
 
 	if (args[1][0] && (args[1][0] == '@' || args[1][0] == '#' || args[1][0] == '%'))
 	{
-		
+		std::cout << args[1] << std::endl;
 		while (args[i + 1][0] && args[i + 1][0] != ':')
 		{
-			if (ite->second->is_channel(channel, args[i]))
-				target_vec.push_back(args[i++]);
-			else
-				return (NumericReplies::ERR_NOSUCHNICK(client, args[i]));
+			if (ite->second->is_channel(channel, args[i + 1]))
+				target_vec.push_back(args[i + 1]);
+			else if (ite == channel.end())
+				return (NumericReplies::ERR_NOSUCHNICK(client, args[i + 1]));
+			i++;
 		}
 		if (args[i + 1][0] && args[i + 1][0] == ':')
 		{
-			while (!args[i + 1].empty())
+			i++;
+			while (i < args.size())
 			{
 				message += args[i + 1];
-				message += ' ';
+				if (i != args.size())
+					message.push_back(' ');
+				message.push_back('\0');
 				i++;
 			}
 		}
 		else
 			return (NumericReplies::ERR_NORECIPIENT(client, "PRIVMSG"));
+		i = 0;
 		for (ite = channel.begin(); ite != channel.end(); ite++)
 		{
 			if (ite->first == target_vec[i] && ite->second->is_client_in_channel(client->get_fd()))
@@ -51,22 +56,29 @@ void Command::privmsg(std::vector<std::string> args, Client* client)
 	{
 		while (args[i + 1][0] && args[i + 1][0] != ':')
 		{
-			if (client->is_client(client_map, args[i]))
-				target_vec.push_back(args[i++]);
+			if (client->is_client(client_map, args[i + 1]))
+				target_vec.push_back(args[i + 1]);
 			else
-				return (NumericReplies::ERR_NOSUCHNICK(client, args[i]));
+				return (NumericReplies::ERR_NOSUCHNICK(client, args[i + 1]));
+			i++;
 		}
 		if (args[i + 1][0] && args[i + 1][0] == ':')
 		{
-			while (!args[i + 1].empty())
+			i++;
+			while (i < args.size())
 			{
-				message += args[i + 1];
-				message += ' ';
+				message += args[i + 1];std::cout << message.size() << std::endl;
+				if (i != args.size())
+					message.push_back(' ');
+				message.push_back('\0');
 				i++;
 			}
+			std::cout << "fin de boucle" << std::endl;
+
 		}
 		else
 			return (NumericReplies::ERR_NORECIPIENT(client, "PRIVMSG"));
+		i = 0;
 		for (it = client_map.begin(); it != client_map.end(); it++)
 		{
 			if (it->second->get_nickname() == target_vec[i])
@@ -74,7 +86,7 @@ void Command::privmsg(std::vector<std::string> args, Client* client)
 				ite->second->send_msg_to_someone(it->second->get_fd(), message);
 				i++;
 			}
-			else
+			else if (it == client_map.end())
 				return (NumericReplies::ERR_NOSUCHNICK(client, target_vec[i]));
 		}
 	}

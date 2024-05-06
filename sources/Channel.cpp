@@ -96,6 +96,7 @@ bool Channel::is_channel(std::map<std::string, Channel*> channels, std::string c
 {
 	for (std::map<std::string, Channel*>::iterator it = channels.begin(); it != channels.end(); it++)
 	{
+		std::cout << it->first << " : " << channelTarg << std::endl;
 		if (it->first == channelTarg)
 			return true;
 	}
@@ -212,4 +213,14 @@ bool	Channel::is_client_in_channel(int fd)
 	if (it == _Clients.end())
 		return (false);
 	return (true);
+}
+
+bool	Channel::is_nick_in_channel(const std::string nickname)
+{
+	for (std::map<int, Client*>::iterator it = _Clients.begin(); it != _Clients.end(); it++)
+	{
+		if (it->second->get_nickname() == nickname)
+			return (true);
+	}
+	return (false);
 }

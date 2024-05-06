@@ -20,9 +20,9 @@ void Command::ban(std::vector<std::string> args, Client* client)
 
     std::map<int, Client*> client_map = _Serv->get_clients_map();
 	std::map<int, Client*>::iterator iter;
-	for (iter = client_map.begin(); iter != client_map.end(); ++iter) 
+	for (iter = client_map.begin(); iter != client_map.end(); iter++) 
 	{
-        if (it->second->is_client_in_channel(iter->first))
+        if (it->second->is_client_in_channel(iter->first) && iter->first != client->get_fd())
         {
             it->second->ban_client(client, args[4]);
             return ;

@@ -86,6 +86,7 @@ void Command::join(std::vector<std::string> args, Client* client)
 			Channel* channel = new Channel(channelKey, client, channelName);
 
 			channel->add_client_to_channel(client);
+			std::cout << "OK" << std::endl;
 			_Serv->add_channel_to_map(channel, argsChannel[i]);
 		}
 	}
