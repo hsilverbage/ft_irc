@@ -1,12 +1,12 @@
-.obj/Server.o: sources//Server.cpp includes/Server.hpp \
- includes/Client.hpp includes/Server.hpp includes/Channel.hpp \
+.obj/Channel.o: sources//Channel.cpp includes/Channel.hpp \
+ includes/Server.hpp includes/Client.hpp includes/Channel.hpp \
  includes/Client.hpp includes/Command.hpp includes/NumericReplies.hpp
+
+includes/Channel.hpp:
 
 includes/Server.hpp:
 
 includes/Client.hpp:
-
-includes/Server.hpp:
 
 includes/Channel.hpp:
 

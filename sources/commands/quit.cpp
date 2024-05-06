@@ -15,7 +15,7 @@ void	Command::quit(std::vector<std::string> args, Client* client)
 	{
 		if (it->second->is_client_in_channel(client->get_fd()))
 		{
-			it->second->remove_client_from_channel(client);
+			it->second->remove_client_from_channel(client, "");
 			it->second->send_msg_to_everyone_in_channel(client->get_nickname() + " Quit: Bye for now! " + reason + "\r\n");
 		}
 	}

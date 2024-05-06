@@ -428,20 +428,6 @@ void NumericReplies::ERR_NOTONCHANNEL(Client* client, std::string name)
 		std::cerr << "send() failed" << std::endl;
 }
 
-void NumericReplies::ERR_CHANOPRIVSNEEDED(Client* client, std::string channelName)
-{
-	std::stringstream ss;
-
-	ss << "482 : " << client->get_nickname() << " " << channelName << " :You're not channel operator\r\n";
-	std::string str = ss.str();
-	if (ss.fail())
-	{
-		std::cerr << "stringstream failed" << std::endl;
-		return;
-	}
-	if (send(client->get_fd(), str.c_str(), str.size(), 0) == -1)
-		std::cerr << "send() failed" << std::endl;
-}
 
 void NumericReplies::RPL_NOTOPIC(Client* client, std::string channelName)
 {

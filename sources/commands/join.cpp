@@ -60,7 +60,7 @@ void Command::join(std::vector<std::string> args, Client* client)
 				if (it->second->get_invite_only() == true)
 				{
 					std::vector<Client*> invited = it->second->get_invited();
-					for (int j = 0; j < invited.size(); j++)
+					for (size_t j = 0; j < invited.size(); j++)
 					{
 						if (invited[j]->get_nickname() == client->get_nickname())
 							break;

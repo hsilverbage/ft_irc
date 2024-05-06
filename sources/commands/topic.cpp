@@ -45,7 +45,7 @@ void	Command::topic(std::vector<std::string> args, Client* client)
 		}
 		if (args[2][0] == ':' && args[2].size() == 1)
 		{
-			it_channel->second->set_topic("");
+			// it_channel->second->set_topic("");
 			it_channel->second->send_msg_to_everyone_in_channel("Clearing the topic on " + args[1]);
 		}
 		else
@@ -54,7 +54,7 @@ void	Command::topic(std::vector<std::string> args, Client* client)
 				it_channel->second->send_msg_to_everyone_in_channel(client->get_nickname() + " set the topic to : " + args[2] +  " on " + it_channel->second->get_channel_name());
 			else
 				it_channel->second->send_msg_to_everyone_in_channel(client->get_nickname() + " changed the topic : " + it_channel->second->get_topic() + " to" + args[2] + " on " + it_channel->second->get_channel_name());
-			it_channel->second->set_topic(args[2]);
+			// it_channel->second->set_topic(args[2]);
 		}
 	}
 
