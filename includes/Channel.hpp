@@ -32,6 +32,7 @@ class Channel
 		void set_invited_client(Client* client);
 		void set_invite_only(bool status);
 		void ban_client(Client* client, std::string reason);
+		void unban_client(Client* client);
 		void set_nbClient(size_t actualNb);
 		void set_topic(std::string topic);
 		void add_client_to_channel(Client* client);

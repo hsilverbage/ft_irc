@@ -41,6 +41,7 @@ class Command
 		void	user(std::vector<std::string> args, Client* client);
 		void	privmsg(std::vector<std::string> args, Client* client);
 		void	ban(std::vector<std::string> args, Client* client);
+		void	unban(std::vector<std::string> args, Client* client);
 };
 
 #endif

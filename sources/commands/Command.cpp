@@ -16,6 +16,7 @@ Command::Command(Server* Serv) : _Serv(Serv)
 	_commands["USER"]	 = &Command::user;
 	_commands["PRIVMSG"] = &Command::privmsg;
 	_commands["BAN"]	 = &Command::ban;
+	_commands["UNBAN"]   = &Command::unban;
 }
 
 Command::~Command() {}

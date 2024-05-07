@@ -22,19 +22,19 @@ void	Command::kick(std::vector<std::string> args, Client* client)
 	std::map<int, Client*>::iterator iter;
 	for (iter = client_map.begin(); iter != client_map.end(); iter++) 
 	{
-        std::cout << "debug 1 " << std::endl;
-        if (it->second->is_nick_in_channel(args[2]) && iter->first != client->get_fd())
+        if (it->second->is_nick_in_channel(args[2]))
         {
-            std::cout << "debug 2 " << std::endl;
-            it->second->remove_client_from_channel(iter->second, args[4]);
+            if (args[2] == client->get_nickname())
+                break;
+            if (args.size() == 3)
+                it->second->remove_client_from_channel(iter->second, "No reason");
+            else if (args.size() == 4)
+                it->second->remove_client_from_channel(iter->second, args[4]);
             return ;
         }
     }
     if (iter == client_map.end())
-    {
-        std::cout << "debug 3 " << std::endl;
 	    return (NumericReplies::ERR_USERNOTINCHANNEL(client, args[2], args[1]));
-    }
 }
 
 /*

@@ -96,7 +96,6 @@ bool Channel::is_channel(std::map<std::string, Channel*> channels, std::string c
 {
 	for (std::map<std::string, Channel*>::iterator it = channels.begin(); it != channels.end(); it++)
 	{
-		std::cout << it->first << " : " << channelTarg << std::endl;
 		if (it->first == channelTarg)
 			return true;
 	}
@@ -125,17 +124,23 @@ void Channel::ban_client(Client* client, std::string reason)
 			send_msg_to_everyone_in_channel(client->get_nickname() + " is banned from the channel " + get_channel_name() + " because " + reason + "\r\n");
 		this->_Clients.erase(it);
 		set_nbClient(this->_nbClient - 1);
-		_Banned[client->get_fd()] = client;
+		_Banned.insert(std::make_pair(it->first, it->second));
 		client->set_nb_channel(client->get_nb_channel() - 1);
 	}
 	else
 		NumericReplies::ERR_NOTONCHANNEL(client, get_channel_name());
 }
 
+void Channel::unban_client(Client* client)
+{
+	this->_Clients.insert(std::make_pair(client->get_fd(), client));
+	_Banned.erase(client->get_fd());
+	send_msg_to_everyone_in_channel(client->get_nickname() + " is unbanned from the channel " + get_channel_name() + "\r\n"); 
+}
+
 void Channel::remove_client_from_channel(Client* client, std::string reason)
 {
 	std::map<int, Client*>::iterator it = _Clients.find(client->get_fd());
-
 	if (it != _Clients.end())
 	{
 		if (reason.empty())

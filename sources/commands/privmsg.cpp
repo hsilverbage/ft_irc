@@ -19,19 +19,18 @@ void Command::privmsg(std::vector<std::string> args, Client* client)
 
 	if (args[1][0] && (args[1][0] == '@' || args[1][0] == '#' || args[1][0] == '%'))
 	{
-		std::cout << args[1] << std::endl;
 		while (args[i + 1][0] && args[i + 1][0] != ':')
 		{
 			if (ite->second->is_channel(channel, args[i + 1]))
 				target_vec.push_back(args[i + 1]);
-			else if (ite == channel.end())
+			else
 				return (NumericReplies::ERR_NOSUCHNICK(client, args[i + 1]));
 			i++;
 		}
 		if (args[i + 1][0] && args[i + 1][0] == ':')
 		{
 			i++;
-			while (i < args.size())
+			while (i + 1 < args.size())
 			{
 				message += args[i + 1];
 				if (i != args.size())
@@ -65,16 +64,13 @@ void Command::privmsg(std::vector<std::string> args, Client* client)
 		if (args[i + 1][0] && args[i + 1][0] == ':')
 		{
 			i++;
-			while (i < args.size())
+			while (i + 1 < args.size())
 			{
-				message += args[i + 1];std::cout << message.size() << std::endl;
 				if (i != args.size())
 					message.push_back(' ');
 				message.push_back('\0');
 				i++;
 			}
-			std::cout << "fin de boucle" << std::endl;
-
 		}
 		else
 			return (NumericReplies::ERR_NORECIPIENT(client, "PRIVMSG"));

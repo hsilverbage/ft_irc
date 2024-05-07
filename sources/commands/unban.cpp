@@ -1,8 +1,8 @@
 #include "Command.hpp"
 
-void Command::ban(std::vector<std::string> args, Client* client)
+void Command::unban(std::vector<std::string> args, Client* client)
 {
-    std::cout << "BAN CMD\t" << args[0] << client->get_nickname() << std::endl;
+    std::cout << "UNBAN CMD\t" << args[0] << client->get_nickname() << std::endl;
 	if (client->get_isConnected() == false)
 		return;
     if (args.size() < 3)
@@ -13,8 +13,6 @@ void Command::ban(std::vector<std::string> args, Client* client)
 
 	if (it == channel.end())
 		return (NumericReplies::ERR_NOSUCHCHANNEL(client, args[1]));
-    if (!it->second->is_client_in_channel(client->get_fd()))
-        return (NumericReplies::ERR_NOTONCHANNEL(client, client->get_nickname()));
     if (!it->second->isOperator(client->get_fd()))
         return (NumericReplies::ERR_CHANOPRIVSNEEDED(client, it->second->get_channel_name()));
 
@@ -22,16 +20,11 @@ void Command::ban(std::vector<std::string> args, Client* client)
 	std::map<int, Client*>::iterator iter;
 	for (iter = client_map.begin(); iter != client_map.end(); iter++) 
 	{
-        if (it->second->is_client_in_channel(iter->first) && iter->first != client->get_fd())
+        if (it->second->is_banned(iter->second->get_nickname()) && iter->first != client->get_fd())
         {
-            if (args.size() == 3)
-                it->second->ban_client(iter->second, "No reason");
-            else if (args.size() == 4)
-                it->second->ban_client(iter->second, args[4]);
+            std::cout << "debug in the if to deban " << std::endl;
+            it->second->unban_client(iter->second);
             return ;
         }
     }
-    if (iter == client_map.end())
-	    return (NumericReplies::ERR_USERNOTINCHANNEL(client, args[2], args[1]));
-
 }

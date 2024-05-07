@@ -40,7 +40,7 @@ void Command::join(std::vector<std::string> args, Client* client)
 		{
 			std::map<int, Client*> banned = it->second->get_banned();
 			std::map<int, Client*>::iterator ite;
-    		for (ite = banned.begin(); ite != banned.end(); ++ite) 
+    		for (ite = banned.begin(); ite != banned.end(); ite++) 
 			{
         		if (ite->second->get_nickname() == client->get_nickname())
 					return (NumericReplies::ERR_BANNEDFROMCHAN(client, channelName));
