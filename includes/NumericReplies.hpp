@@ -30,7 +30,8 @@ class NumericReplies
 		static void ERR_NORECIPIENT(Client* client, std::string command);
 		static void	ERR_CANNOTSENDTOCHAN(Client* client, std::string channel);
 		static void	ERR_USERSDONTMATCH(Client* client);
-
+		static void ERR_UMODEUNKNOWNFLAG(Client* client);
+		
 		// NOTIFICATION
 
 		static void NOTIF_CHANGENICK(Client* client, std::string newNick);
@@ -46,7 +47,6 @@ class NumericReplies
 		static void RPL_TOPIC(Client* client, std::string channelName, std::string topicName);
 		static void RPL_NOTOPIC(Client* client, std::string channelName);
 		static void RPL_TOPICWHOTIME(Client* client, Channel* channel);
-		static void RPL_UMODEIS(Client* client);
 
 	private:
 

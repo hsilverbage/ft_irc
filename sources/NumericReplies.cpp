@@ -15,15 +15,14 @@ void NumericReplies::ERR_NEEDMOREPARAMS(Client* client, std::string cmd)
 		std::cerr << "send() failed" << std::endl;
 }
 
-
 void NumericReplies::ERR_USERNOTINCHANNEL(Client* client, std::string nickname, std::string channel)
 {
 	std::stringstream ss;
 
-
 	//   "<client> <nick> <channel> :They aren't on that channel"
 
-	ss << "441 : " <<client->get_nickname() << " " << nickname << " " << channel << " " << " : They aren't on that channel\r\n";
+	ss << "441 : " << client->get_nickname() << " " << nickname << " " << channel << " "
+	   << " : They aren't on that channel\r\n";
 	std::string str = ss.str();
 	if (ss.fail())
 	{
@@ -38,7 +37,6 @@ void NumericReplies::ERR_NORECIPIENT(Client* client, std::string command)
 {
 	std::stringstream ss;
 
-
 	// "<client> :No recipient given (<command>)"
 	ss << "411 : " << client->get_nickname() << " : :No recipient given " << command << "\r\n";
 	std::string str = ss.str();
@@ -51,11 +49,9 @@ void NumericReplies::ERR_NORECIPIENT(Client* client, std::string command)
 		std::cerr << "send() failed" << std::endl;
 }
 
-
 void NumericReplies::ERR_NOSUCHNICK(Client* client, std::string noSuchelement)
 {
 	std::stringstream ss;
-
 
 	// CHECK  "<client> <nickname> :No such nick/channel"
 	ss << "401 : " << client->get_nickname() << " : No such " << noSuchelement << "\r\n";
@@ -74,7 +70,7 @@ void NumericReplies::ERR_CANNOTSENDTOCHAN(Client* client, std::string channel)
 	std::stringstream ss;
 
 	// CHECK "<client> <channel> :Cannot send to channel"
-	ss << "404 : " <<client->get_nickname() << " " << channel << " : Cannot send to channel\r\n";
+	ss << "404 : " << client->get_nickname() << " " << channel << " : Cannot send to channel\r\n";
 	std::string str = ss.str();
 	if (ss.fail())
 	{
@@ -89,7 +85,7 @@ void NumericReplies::ERR_NOSUCHCHANNEL(Client* client, std::string channel)
 {
 	std::stringstream ss;
 
-	ss << "403 : " <<client->get_nickname() << " " << channel << " : No such channel\r\n";
+	ss << "403 : " << client->get_nickname() << " " << channel << " : No such channel\r\n";
 	std::string str = ss.str();
 	if (ss.fail())
 	{
@@ -100,7 +96,7 @@ void NumericReplies::ERR_NOSUCHCHANNEL(Client* client, std::string channel)
 		std::cerr << "send() failed" << std::endl;
 }
 
-void	NumericReplies::RPL_TOPICWHOTIME(Client* client)
+void NumericReplies::RPL_TOPICWHOTIME(Client* client)
 {
 	std::stringstream ss;
 
@@ -115,12 +111,12 @@ void	NumericReplies::RPL_TOPICWHOTIME(Client* client)
 		std::cerr << "send() failed" << std::endl;
 }
 
-void	NumericReplies::RPL_NAMREPLY(Client* client, std::map<int, Client*> clients, std::string channel)
+void NumericReplies::RPL_NAMREPLY(Client* client, std::map<int, Client*> clients, std::string channel)
 {
 	std::stringstream ss;
 
 	// CHECK :  "<client> <symbol> <channel> :[prefix]<nick>{ [prefix]<nick>}"
-	ss <<  "353 : " << client->get_nickname() << " " << channel << " :\n";
+	ss << "353 : " << client->get_nickname() << " " << channel << " :\n";
 	for (std::map<int, Client*>::iterator it = clients.begin(); it != clients.end(); it++)
 		ss << it->second->get_nickname() << "\n";
 	ss << "\r\n";
@@ -134,7 +130,7 @@ void	NumericReplies::RPL_NAMREPLY(Client* client, std::map<int, Client*> clients
 		std::cerr << "send() failed" << std::endl;
 }
 
-void	NumericReplies::RPL_INVITING(Client* client, std::string channel)
+void NumericReplies::RPL_INVITING(Client* client, std::string channel)
 {
 	std::stringstream ss;
 
@@ -150,7 +146,7 @@ void	NumericReplies::RPL_INVITING(Client* client, std::string channel)
 		std::cerr << "send() failed" << std::endl;
 }
 
-void	NumericReplies::RPL_ENDOFNAMES(Client* client, std::string channel)
+void NumericReplies::RPL_ENDOFNAMES(Client* client, std::string channel)
 {
 	std::stringstream ss;
 
@@ -166,7 +162,7 @@ void	NumericReplies::RPL_ENDOFNAMES(Client* client, std::string channel)
 		std::cerr << "send() failed" << std::endl;
 }
 
-void	NumericReplies::RPL_TOPIC(Client* client)
+void NumericReplies::RPL_TOPIC(Client* client)
 {
 	std::stringstream ss;
 
@@ -181,7 +177,7 @@ void	NumericReplies::RPL_TOPIC(Client* client)
 		std::cerr << "send() failed" << std::endl;
 }
 
-void	NumericReplies::ERR_INVITEONLYCHAN(Client* client, std::string channel)
+void NumericReplies::ERR_INVITEONLYCHAN(Client* client, std::string channel)
 {
 	std::stringstream ss;
 
@@ -197,7 +193,7 @@ void	NumericReplies::ERR_INVITEONLYCHAN(Client* client, std::string channel)
 		std::cerr << "send() failed" << std::endl;
 }
 
-void	NumericReplies::ERR_BANNEDFROMCHAN(Client* client, std::string channel)
+void NumericReplies::ERR_BANNEDFROMCHAN(Client* client, std::string channel)
 {
 	std::stringstream ss;
 
@@ -213,7 +209,7 @@ void	NumericReplies::ERR_BANNEDFROMCHAN(Client* client, std::string channel)
 		std::cerr << "send() failed" << std::endl;
 }
 
-void	NumericReplies::ERR_CHANNELISFULL(Client* client, std::string channel)
+void NumericReplies::ERR_CHANNELISFULL(Client* client, std::string channel)
 {
 	std::stringstream ss;
 
@@ -342,7 +338,8 @@ void NumericReplies::NOTIF_USERNAME_SET(Client* client)
 {
 	std::stringstream ss;
 
-	ss << "User gets registered with username \"" << client->get_username() << "\" and real name \"" << client->get_realname() << "\"\r\n";
+	ss << "User gets registered with username \"" << client->get_username() << "\" and real name \""
+	   << client->get_realname() << "\"\r\n";
 	std::string str = ss.str();
 	if (ss.fail())
 	{
@@ -372,7 +369,8 @@ void NumericReplies::RPL_WELCOME(Client* client)
 {
 	std::stringstream ss;
 
-	ss << "001 : " << client->get_nickname() << " :Welcome to the best_irc Network, " << client->get_nickname() << "[!" << client->get_username() << "@localhost]\r\n";
+	ss << "001 : " << client->get_nickname() << " :Welcome to the best_irc Network, " << client->get_nickname() << "[!"
+	   << client->get_username() << "@localhost]\r\n";
 	std::string str = ss.str();
 	if (ss.fail())
 	{
@@ -397,6 +395,7 @@ void NumericReplies::ERR_CHANOPRIVSNEEDED(Client* client, std::string channel)
 	if (send(client->get_fd(), str.c_str(), str.size(), 0) == -1)
 		std::cerr << "send() failed" << std::endl;
 }
+
 void NumericReplies::ERR_USERONCHANNEL(Client* client, std::string channel)
 {
 	std::stringstream ss;
@@ -412,7 +411,6 @@ void NumericReplies::ERR_USERONCHANNEL(Client* client, std::string channel)
 		std::cerr << "send() failed" << std::endl;
 }
 
-
 void NumericReplies::ERR_NOTONCHANNEL(Client* client, std::string name)
 {
 	std::stringstream ss;
@@ -427,7 +425,6 @@ void NumericReplies::ERR_NOTONCHANNEL(Client* client, std::string name)
 	if (send(client->get_fd(), str.c_str(), str.size(), 0) == -1)
 		std::cerr << "send() failed" << std::endl;
 }
-
 
 void NumericReplies::RPL_NOTOPIC(Client* client, std::string channelName)
 {
@@ -463,7 +460,8 @@ void NumericReplies::RPL_TOPICWHOTIME(Client* client, Channel* channel)
 {
 	std::stringstream ss;
 
-	ss << "333 : " << client->get_nickname() << " " << channel->get_channel_name() << " the topic was set by" << channel->who_set_topic() << "\r\n";
+	ss << "333 : " << client->get_nickname() << " " << channel->get_channel_name() << " the topic was set by"
+	   << channel->who_set_topic() << "\r\n";
 	std::string str = ss.str();
 	if (ss.fail())
 	{
@@ -474,7 +472,7 @@ void NumericReplies::RPL_TOPICWHOTIME(Client* client, Channel* channel)
 		std::cerr << "send() failed" << std::endl;
 }
 
-void	NumericReplies::ERR_USERSDONTMATCH(Client* client)
+void NumericReplies::ERR_USERSDONTMATCH(Client* client)
 {
 	std::stringstream ss;
 
@@ -489,14 +487,11 @@ void	NumericReplies::ERR_USERSDONTMATCH(Client* client)
 		std::cerr << "send() failed" << std::endl;
 }
 
-void	NumericReplies::RPL_UMODEIS(Client* client)
+void NumericReplies::ERR_UMODEUNKNOWNFLAG(Client* client)
 {
-	"<client> <user modes>"
 	std::stringstream ss;
 
-	ss << "221 : " << client->get_nickname();
-	if ()
-	ss << "/r/n";
+	ss << "501 : " << client->get_nickname() << " :Unknown MODE flag\r\n";
 	std::string str = ss.str();
 	if (ss.fail())
 	{
