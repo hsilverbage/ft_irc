@@ -473,3 +473,36 @@ void NumericReplies::RPL_TOPICWHOTIME(Client* client, Channel* channel)
 	if (send(client->get_fd(), str.c_str(), str.size(), 0) == -1)
 		std::cerr << "send() failed" << std::endl;
 }
+
+void	NumericReplies::ERR_USERSDONTMATCH(Client* client)
+{
+	std::stringstream ss;
+
+	ss << "502 : " << client->get_nickname() << " :Cant change mode for other users\r\n";
+	std::string str = ss.str();
+	if (ss.fail())
+	{
+		std::cerr << "stringstream failed" << std::endl;
+		return;
+	}
+	if (send(client->get_fd(), str.c_str(), str.size(), 0) == -1)
+		std::cerr << "send() failed" << std::endl;
+}
+
+void	NumericReplies::RPL_UMODEIS(Client* client)
+{
+	"<client> <user modes>"
+	std::stringstream ss;
+
+	ss << "221 : " << client->get_nickname();
+	if ()
+	ss << "/r/n";
+	std::string str = ss.str();
+	if (ss.fail())
+	{
+		std::cerr << "stringstream failed" << std::endl;
+		return;
+	}
+	if (send(client->get_fd(), str.c_str(), str.size(), 0) == -1)
+		std::cerr << "send() failed" << std::endl;
+}

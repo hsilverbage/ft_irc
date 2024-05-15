@@ -5,6 +5,18 @@ void Command::mode(std::vector<std::string> args, Client* client)
 	std::cout << "MODE CMD\t" << args[0] << client->get_nickname() << std::endl;
 	if (client->get_isConnected() == false)
 		return;
+	if (args.size() < 2)
+		return (NumericReplies::ERR_NEEDMOREPARAMS(client, "MODE"));
+
+	std::map<int, Client*> clients = _Serv->get_clients_map();
+	std::map<int, Client*>::iterator it = clients.find(args[1]);
+
+	if (it == clients.end())
+		return (NumericReplies::ERR_NOSUCHNICK(client, args[0]));
+	if (args[1] != client->get_nickname())
+		return (NumericReplies::ERR_USERSDONTMATCH(client));
+	if (args.size() == 2)
+		return (NumericReplies::RPL_UMODEIS(client))
 }
 
 /*
