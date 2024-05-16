@@ -50,7 +50,8 @@ class Channel
 		bool is_client_in_channel(int fd);
 		bool is_nick_in_channel(std::string nickname);
 		bool is_channel(std::map<std::string, Channel*> channels, std::string channelTarg);
-
+		bool get_pwd_protected();
+		void set_pwd_protected(bool status);
 
 	private :
 
@@ -60,9 +61,8 @@ class Channel
 		std::map<int, Client*>	_Clients;
 		std::map<int, Client*>	_ClientOperators;
 		std::map<int, Client*>	_Banned;
-		std::vector<Client*>	_Invited;	
+		std::vector<Client*>	_Invited;
 
-		bool	_inviteOnly;
 		size_t _nbClient;
 		size_t _maxClient;
 
@@ -70,9 +70,11 @@ class Channel
 		std::string _key;
 		std::string _topic;
 		std::string	_whoSetTopic;
-	
 
+
+		bool	_inviteOnly;
 		bool	_topicProtected;
+		bool	_pwdProtected;
 };
 
 #endif

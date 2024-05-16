@@ -40,7 +40,7 @@ void Command::join(std::vector<std::string> args, Client* client)
 		{
 			std::map<int, Client*> banned = it->second->get_banned();
 			std::map<int, Client*>::iterator ite;
-    		for (ite = banned.begin(); ite != banned.end(); ite++) 
+    		for (ite = banned.begin(); ite != banned.end(); ite++)
 			{
         		if (ite->second->get_nickname() == client->get_nickname())
 					return (NumericReplies::ERR_BANNEDFROMCHAN(client, channelName));
@@ -51,7 +51,7 @@ void Command::join(std::vector<std::string> args, Client* client)
 			{
 				NumericReplies::ERR_CHANNELISFULL(client, channelName);
 			}
-			else if (it->second->get_key() != channelKey)
+			else if (it->second->get_key() != channelKey && it->second->get_pwd_protected())
 			{
 				NumericReplies::ERR_BADCHANNELKEY(client, channelName);
 			}
@@ -86,7 +86,6 @@ void Command::join(std::vector<std::string> args, Client* client)
 			Channel* channel = new Channel(channelKey, client, channelName);
 
 			channel->add_client_to_channel(client);
-			std::cout << "OK" << std::endl;
 			_Serv->add_channel_to_map(channel, argsChannel[i]);
 		}
 	}

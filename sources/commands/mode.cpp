@@ -18,23 +18,29 @@ void	limit_mode(std::vector<std::string> args, Client* client, Channel* channel)
 {
 	if (args[2][0] == '+')
 	{
-		channel->set_maxClient()
+		if (args.size() < 4)
+			return (NumericReplies::ERR_NEEDMOREPARAMS(client, "MODE"));
+		if (args[3].find_first_not_of("0123456789") != std::string::npos)
+			return (NumericReplies::ERR_UMODEUNKNOWNFLAG(client));
+		if (std::atoi(args[3].c_str()) > SIZE_MAX)
+			return (NumericReplies::ERR_UMODEUNKNOWNFLAG(client));
+		channel->set_maxClient(std::atoi(args[3].c_str()));
 	}
 	else
-	{
-		
-	}
+		channel->set_maxClient(SIZE_MAX);
 }
 
 void	topic_mode(std::vector<std::string> args, Client* client, Channel* channel)
 {
 	if (args[2][0] == '+')
 	{
-
+		channel->set_topicProtected(true);
+		channel->send_msg_to_everyone_in_channel(channel->get_channel_name() + " channel mode topic protection is activated by " + client->get_nickname());
 	}
 	else
 	{
-		
+		channel->set_topicProtected(false);
+		channel->send_msg_to_everyone_in_channel(channel->get_channel_name() + " channel mode topic protection is desactivated by " + client->get_nickname());
 	}
 }
 
@@ -42,11 +48,13 @@ void	key_mode(std::vector<std::string> args, Client* client, Channel* channel)
 {
 	if (args[2][0] == '+')
 	{
-
+		channel->set_pwd_protected(true);
+		channel->send_msg_to_everyone_in_channel(channel->get_channel_name() + " channel mode key protection is activated by " + client->get_nickname());
 	}
 	else
 	{
-		
+		channel->set_pwd_protected(false);
+		channel->send_msg_to_everyone_in_channel(channel->get_channel_name() + " channel mode key protection is desactivated by " + client->get_nickname());
 	}
 }
 
@@ -54,13 +62,28 @@ void	operator_mode(std::vector<std::string> args, Client* client, Channel* chann
 {
 	if (args.size() < 4)
 		return (NumericReplies::ERR_NEEDMOREPARAMS(client, "MODE"));
-	if (args[2][0] == '+')
-	{
+	if (!channel->is_nick_in_channel(args[3]))
+		return (NumericReplies::ERR_NOSUCHNICK(client, args[3]));
+	std::map<int, Client*> clients = channel->get_clients();
+	std::map<int, Client*>::iterator it;
 
-	}
-	else
+	for (it = clients.begin(); it != clients.end(); it++)
 	{
-		
+		if (it->second->get_nickname() == args[3])
+			break;
+	}
+	if (it != clients.end())
+	{
+		if (args[2][0] == '+')
+		{
+			channel->add_client_to_operators(it->second);
+			channel->send_msg_to_everyone_in_channel(channel->get_channel_name() + " " + args[3] + " is now operator thanks to " + client->get_nickname());
+		}
+		else
+		{
+			channel->remove_client_from_operators(it->second);
+			channel->send_msg_to_everyone_in_channel(channel->get_channel_name() + " " + args[3] + " is now no longer operator because of " + client->get_nickname());
+		}
 	}
 }
 
@@ -72,7 +95,6 @@ void Command::mode(std::vector<std::string> args, Client* client)
 	if (args.size() < 3)
 		return (NumericReplies::ERR_NEEDMOREPARAMS(client, "MODE"));
 
-
 	std::map<std::string, Channel*> channels	 = _Serv->get_channel();
 	std::map<std::string, Channel*>::iterator it = channels.find(args[1]);
 
@@ -83,15 +105,15 @@ void Command::mode(std::vector<std::string> args, Client* client)
 	if (args[2][0] != '-' || args[2][0] != '+')
 		return (NumericReplies::ERR_UMODEUNKNOWNFLAG(client));
 	if (args[2][1] == 'i')
-		invite_mode(args, client, it->second);
+		return (invite_mode(args, client, it->second));
 	if (args[2][1] == 'l')
-		limit_mode(args, client, it->second);
+		return (limit_mode(args, client, it->second));
 	if (args[2][1] == 't')
-		topic_mode(args, client, it->second);
+		return (topic_mode(args, client, it->second));
 	if (args[2][1] == 'k')
-		key_mode(args, client, it->second);
+		return (key_mode(args, client, it->second));
 	if (args[2][1] == 'o')
-		operator_mode(args, client, it->second);
+		return (operator_mode(args, client, it->second));
 	return (NumericReplies::ERR_UMODEUNKNOWNFLAG(client));
 }
 

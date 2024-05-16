@@ -17,6 +17,7 @@
 #include <sys/types.h>	//for socket()
 #include <unistd.h>
 #include <vector>
+#include <limits.h>
 
 #include "Channel.hpp"
 #include "Client.hpp"

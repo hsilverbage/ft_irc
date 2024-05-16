@@ -8,6 +8,10 @@ Channel::Channel(std::string key, Client* client, std::string channelName) : _ke
 	this->_topicProtected = false;
 	this->_nbClient					   = 0;
 	this->_inviteOnly 				   = false;
+	if (key.empty())
+		this->_pwdProtected = false;
+	else
+		this->_pwdProtected = true;
 }
 
 Channel::~Channel() {}
@@ -119,7 +123,7 @@ void Channel::ban_client(Client* client, std::string reason)
 	if (it != _Clients.end())
 	{
 		if (reason.empty())
-			send_msg_to_everyone_in_channel(client->get_nickname() + " is banned from the channel " + get_channel_name() + "\r\n"); 
+			send_msg_to_everyone_in_channel(client->get_nickname() + " is banned from the channel " + get_channel_name() + "\r\n");
 		else
 			send_msg_to_everyone_in_channel(client->get_nickname() + " is banned from the channel " + get_channel_name() + " because " + reason + "\r\n");
 		this->_Clients.erase(it);
@@ -135,7 +139,7 @@ void Channel::unban_client(Client* client)
 {
 	this->_Clients.insert(std::make_pair(client->get_fd(), client));
 	_Banned.erase(client->get_fd());
-	send_msg_to_everyone_in_channel(client->get_nickname() + " is unbanned from the channel " + get_channel_name() + "\r\n"); 
+	send_msg_to_everyone_in_channel(client->get_nickname() + " is unbanned from the channel " + get_channel_name() + "\r\n");
 }
 
 void Channel::remove_client_from_channel(Client* client, std::string reason)
@@ -228,4 +232,14 @@ bool	Channel::is_nick_in_channel(const std::string nickname)
 			return (true);
 	}
 	return (false);
+}
+
+bool Channel::get_pwd_protected()
+{
+	return (this->_pwdProtected);
+}
+
+void Channel::set_pwd_protected(bool status)
+{
+	this->_pwdProtected = status;
 }

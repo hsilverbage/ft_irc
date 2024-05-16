@@ -31,7 +31,7 @@ class NumericReplies
 		static void	ERR_CANNOTSENDTOCHAN(Client* client, std::string channel);
 		static void	ERR_USERSDONTMATCH(Client* client);
 		static void ERR_UMODEUNKNOWNFLAG(Client* client);
-		
+
 		// NOTIFICATION
 
 		static void NOTIF_CHANGENICK(Client* client, std::string newNick);
