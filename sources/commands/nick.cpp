@@ -31,5 +31,4 @@ void Command::nick(std::vector<std::string> args, Client* client)
 		NumericReplies::RPL_WELCOME(client);
 		client->set_isConnected(true);
 	}
-	std::cout << "NICK IS SET TO " << client->get_nickname() << std::endl;
 }

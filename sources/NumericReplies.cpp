@@ -501,3 +501,18 @@ void NumericReplies::ERR_UMODEUNKNOWNFLAG(Client* client)
 	if (send(client->get_fd(), str.c_str(), str.size(), 0) == -1)
 		std::cerr << "send() failed" << std::endl;
 }
+
+void	NumericReplies::RPL_JOIN(Client* client, std::string channel)
+{
+	std::stringstream ss;
+
+	ss << ":" << client->get_nickname() << " JOIN #" << channel << "\r\n";
+	std::string str = ss.str();
+	if (ss.fail())
+	{
+		std::cerr << "stringstream failed" << std::endl;
+		return;
+	}
+	if (send(client->get_fd(), str.c_str(), str.size(), 0) == -1)
+		std::cerr << "send() failed" << std::endl;
+}

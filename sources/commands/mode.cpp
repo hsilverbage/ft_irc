@@ -14,21 +14,31 @@ void	invite_mode(std::vector<std::string> args, Client* client, Channel* channel
 	}
 }
 
-void	limit_mode(std::vector<std::string> args, Client* client, Channel* channel)
-{
-	if (args[2][0] == '+')
-	{
-		if (args.size() < 4)
-			return (NumericReplies::ERR_NEEDMOREPARAMS(client, "MODE"));
-		if (args[3].find_first_not_of("0123456789") != std::string::npos)
-			return (NumericReplies::ERR_UMODEUNKNOWNFLAG(client));
-		if (std::atoi(args[3].c_str()) > SIZE_MAX)
-			return (NumericReplies::ERR_UMODEUNKNOWNFLAG(client));
-		channel->set_maxClient(std::atoi(args[3].c_str()));
-	}
-	else
-		channel->set_maxClient(SIZE_MAX);
-}
+// void	limit_mode(std::vector<std::string> args, Client* client, Channel* channel)
+// {
+// 	// if (args[2][0] == '+')
+// 	// {
+// 	// 	if (args.size() < 4)
+// 	// 		return (NumericReplies::ERR_NEEDMOREPARAMS(client, "MODE"));
+// 	// 	if (args[3].find_first_not_of("0123456789") != std::string::npos)
+// 	// 		return (NumericReplies::ERR_UMODEUNKNOWNFLAG(client));
+// 	// 	// std::stringstream ss;
+// 	// 	// size_t	max;
+
+// 	// 	// ss << args[3];
+// 	// 	// ss >> max;
+// 	// 	// if (ss.fail())
+// 	// 	// {
+// 	// 	// 	std::cerr << "stringstream failed" << std::endl;
+// 	// 	// 	return;
+// 	// 	// }
+// 	// 	// if (max > SIZE_MAX)
+// 	// 	// 	return (NumericReplies::ERR_UMODEUNKNOWNFLAG(client));
+// 	// 	// channel->set_maxClient(std::atoi(args[3].c_str()));
+// 	// }
+// 	// else
+// 	// 	channel->set_maxClient(SIZE_MAX);
+// }
 
 void	topic_mode(std::vector<std::string> args, Client* client, Channel* channel)
 {
@@ -106,8 +116,8 @@ void Command::mode(std::vector<std::string> args, Client* client)
 		return (NumericReplies::ERR_UMODEUNKNOWNFLAG(client));
 	if (args[2][1] == 'i')
 		return (invite_mode(args, client, it->second));
-	if (args[2][1] == 'l')
-		return (limit_mode(args, client, it->second));
+	// if (args[2][1] == 'l')
+	// 	return (limit_mode(args, client, it->second));
 	if (args[2][1] == 't')
 		return (topic_mode(args, client, it->second));
 	if (args[2][1] == 'k')

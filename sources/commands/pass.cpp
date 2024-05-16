@@ -22,10 +22,15 @@ void Command::pass(std::vector<std::string> args, Client* client)
 	if (pass != this->_Serv->get_pwd())
 	{
 		NumericReplies::ERR_PASSWDMISMATCH(client);
-		client->set_isConnected(false);
+		client->set_pwdIsCorrect(false);
 		return;
 	}
 	client->set_pwdIsCorrect(true);
+	if (client->get_pwdIsCorrect() && client->get_nickname() != "" && client->get_username() != "" && client->get_isConnected() == false)
+	{
+		NumericReplies::RPL_WELCOME(client);
+		client->set_isConnected(true);
+	}
 }
 
 /*

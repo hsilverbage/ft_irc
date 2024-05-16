@@ -36,7 +36,7 @@ void Command::exec_cmd(std::vector<std::string> args, int fd)
 		}
 		catch (const std::out_of_range& e)
 		{
-			std::cout << "COMMAND NOT FUND" << args[0] << std::endl;
+
 		}
 	}
 }

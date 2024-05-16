@@ -1,1 +1,9 @@
-USER a 0 *:a : SEG_FAULT
+TO DO :
+
+	-> creator of channel is operator from start
+	-> FIX SEG FAULT IN JOIN void NumericReplies::RPL_NAMREPLY()
+
+
+NORMALLY FIXED :
+
+	-> USER a 0 *:a : SEG_FAULT

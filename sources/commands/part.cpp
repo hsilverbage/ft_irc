@@ -6,10 +6,7 @@ void Command::part(std::vector<std::string> args, Client* client)
 	if (client->get_isConnected() == false)
 		return;
 	if (args.size() < 2)
-	{
-		NumericReplies::ERR_NEEDMOREPARAMS(client, "PART");
-		return;
-	}
+		return (NumericReplies::ERR_NEEDMOREPARAMS(client, "PART"));
 
 	std::map<std::string, Channel*> channel = _Serv->get_channel();
 	std::string reason = "";

@@ -12,14 +12,14 @@ void Command::join(std::vector<std::string> args, Client* client)
 		for (std::map<std::string, Channel*>::iterator it = channel.begin(); it != channel.end(); it++)
 		{
 			it->second->remove_client_from_channel(client, "");
-			//TODO SEND A MSG TO TELL EVERYONE THAT THE CLIENT LEFT THE CHHANEL AS IN PART PROBABLY GONNA PUT IN DIRECTLY IN THE FUNCTION ABOVE AS IN ASS IN add_client_to_channel()
+			// TODO SEND A MSG TO TELL EVERYONE THAT THE CLIENT LEFT THE CHHANEL AS IN PART PROBABLY GONNA PUT IN
+			// DIRECTLY IN THE FUNCTION ABOVE AS IN ASS IN add_client_to_channel()
 		}
 	}
 
 	std::map<std::string, Channel*> channel_map = _Serv->get_channel();
 	std::vector<std::string> argsChannel;
 	std::vector<std::string> argsKey;
-
 
 	for (size_t i = 1; i < args.size(); i++)
 		if (args[i][0] == '&' || args[i][0] == '#')
@@ -31,8 +31,8 @@ void Command::join(std::vector<std::string> args, Client* client)
 	for (size_t i = 0; i < argsChannel.size(); i++)
 	{
 		std::map<std::string, Channel*>::iterator it = channel_map.find(argsChannel[i]);
-		std::string	channelName = argsChannel[i];
-		std::string	channelKey = "";
+		std::string channelName						 = argsChannel[i];
+		std::string channelKey						 = "";
 
 		if (i < argsKey.size())
 			channelKey = argsKey[i];
@@ -40,51 +40,43 @@ void Command::join(std::vector<std::string> args, Client* client)
 		{
 			std::map<int, Client*> banned = it->second->get_banned();
 			std::map<int, Client*>::iterator ite;
-    		for (ite = banned.begin(); ite != banned.end(); ite++)
-			{
-        		if (ite->second->get_nickname() == client->get_nickname())
+			for (ite = banned.begin(); ite != banned.end(); ite++)
+				if (ite->second->get_nickname() == client->get_nickname())
 					return (NumericReplies::ERR_BANNEDFROMCHAN(client, channelName));
-			}
 			if (client->get_nb_channel() >= MAXCHANNEL)
-				NumericReplies::ERR_TOOMANYCHANNELS(client, channelName);
+				return (NumericReplies::ERR_TOOMANYCHANNELS(client, channelName));
 			else if (it->second->get_nbClient() >= MAXCLIENT)
-			{
-				NumericReplies::ERR_CHANNELISFULL(client, channelName);
-			}
+				return (NumericReplies::ERR_CHANNELISFULL(client, channelName));
 			else if (it->second->get_key() != channelKey && it->second->get_pwd_protected())
-			{
-				NumericReplies::ERR_BADCHANNELKEY(client, channelName);
-			}
+				return (NumericReplies::ERR_BADCHANNELKEY(client, channelName));
 			else
 			{
 				if (it->second->get_invite_only() == true)
 				{
 					std::vector<Client*> invited = it->second->get_invited();
 					for (size_t j = 0; j < invited.size(); j++)
-					{
 						if (invited[j]->get_nickname() == client->get_nickname())
 							break;
 						else
 							return (NumericReplies::ERR_INVITEONLYCHAN(client, channelName));
-					}
 				}
 				it->second->add_client_to_channel(client);
+				std::cout << "test2" << std::endl;
+				NumericReplies::RPL_JOIN(client, args[1]);
 				NumericReplies::RPL_NAMREPLY(client, it->second->get_clients(), channelName);
 				NumericReplies::RPL_ENDOFNAMES(client, channelName);
 				if (!it->second->get_topic().empty())
 					NumericReplies::RPL_TOPIC(client);
-				/*TODO : if joining the channel is successful :
-						- all relevant information about that channel including the JOIN,PART, KICK, and MODE messages affecting the channel
-						- They receive all PRIVMSG and NOTICE messages sent to the channel
-						- receive QUIT messages from other clients joined to the same channel
-						- A JOIN message with the client as the message <source> and the channel they have joined as the first parameter of the message.
-				*/
 			}
 		}
 		else
 		{
 			Channel* channel = new Channel(channelKey, client, channelName);
 
+			NumericReplies::RPL_JOIN(client, args[1]);
+			NumericReplies::RPL_NAMREPLY(client, it->second->get_clients(), channelName);
+			NumericReplies::RPL_ENDOFNAMES(client, channelName);
+			std::cout << "test" << std::endl;
 			channel->add_client_to_channel(client);
 			_Serv->add_channel_to_map(channel, argsChannel[i]);
 		}
