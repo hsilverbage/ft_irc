@@ -75,8 +75,9 @@ void Command::join(std::vector<std::string> args, Client* client)
 
 			channel->add_client_to_channel(client);
 			_Serv->add_channel_to_map(channel, argsChannel[i]);
-			
+
 			NumericReplies::RPL_JOIN(client, args[1]);
+			NumericReplies::RPL_NAMREPLY(client, channel->get_clients(), channelName);
 			NumericReplies::RPL_ENDOFNAMES(client, channelName);
 		}
 	}
