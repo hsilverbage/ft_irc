@@ -115,11 +115,21 @@ void NumericReplies::RPL_NAMREPLY(Client* client, std::map<int, Client*> clients
 {
 	std::stringstream ss;
 
+	std::cout << "test in namerply" << std::endl;
 	// CHECK :  "<client> <symbol> <channel> :[prefix]<nick>{ [prefix]<nick>}"
-	ss << "353 : " << client->get_nickname() << " " << channel << " :\n";
-	for (std::map<int, Client*>::iterator it = clients.begin(); it != clients.end(); it++)
-		ss << it->second->get_nickname() << "\n";
-	ss << "\r\n";
+	ss << "353 : " << client->get_nickname() << " " << channel << " :\r\n";
+	if (clients.size() > 0)
+	{
+		for (std::map<int, Client*>::iterator ite = clients.begin(); ite != clients.end(); ite++)
+		{
+			// std::string name = ite->second->get_nickname();
+			// std::cout << name << std::endl;
+			// ss << ite->second->get_nickname() << "\r\n";
+			std::cout << ite->first << std::endl;
+			std::cout << "SEG FAULTING HERE" << std::endl;
+		}
+		ss << "\r\n";
+	}
 	std::string str = ss.str();
 	if (ss.fail())
 	{
@@ -506,7 +516,7 @@ void	NumericReplies::RPL_JOIN(Client* client, std::string channel)
 {
 	std::stringstream ss;
 
-	ss << ":" << client->get_nickname() << " JOIN #" << channel << "\r\n";
+	ss << ":" << client->get_nickname() << " JOIN " << channel << "\r\n";
 	std::string str = ss.str();
 	if (ss.fail())
 	{
