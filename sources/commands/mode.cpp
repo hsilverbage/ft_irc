@@ -104,7 +104,7 @@ void Command::mode(std::vector<std::string> args, Client* client)
 	std::map<std::string, Channel*> channels	 = _Serv->get_channel();
 	std::map<std::string, Channel*>::iterator it = channels.find(args[1]);
 
-	if (it != channels.end())
+	if (it == channels.end())
 		return (NumericReplies::ERR_NOSUCHCHANNEL(client, args[1]));
 	if (!it->second->isOperator(client->get_fd()))
 		return (NumericReplies::ERR_CHANOPRIVSNEEDED(client, args[1]));
