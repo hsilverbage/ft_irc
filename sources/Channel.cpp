@@ -87,6 +87,11 @@ void Channel::set_nbClient(size_t actualNb)
 	this->_nbClient = actualNb;
 }
 
+void	Channel::set_maxClient(size_t max)
+{
+	this->_maxClient = max;
+}
+
 void Channel::add_client_to_channel(Client* client)
 {
 	this->_Clients[client->get_fd()] = client;
