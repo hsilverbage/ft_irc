@@ -1,0 +1,13 @@
+.obj/commands/ban.o: sources//commands/ban.cpp includes/Command.hpp \
+  includes/Server.hpp includes/Client.hpp includes/Channel.hpp \
+  includes/NumericReplies.hpp
+
+includes/Command.hpp:
+
+includes/Server.hpp:
+
+includes/Client.hpp:
+
+includes/Channel.hpp:
+
+includes/NumericReplies.hpp:
