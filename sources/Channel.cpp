@@ -97,7 +97,7 @@ void Channel::add_client_to_channel(Client* client)
 	this->_Clients[client->get_fd()] = client;
 	client->set_nb_channel(client->get_nb_channel() + 1);
 	set_nbClient(this->_nbClient + 1);
-	send_msg_to_everyone_in_channel(client->get_nickname() + " is joining the channel " + get_channel_name());
+	// send_msg_to_everyone_in_channel(client->get_nickname() + " is joining the channel " + get_channel_name());
 }
 
 
