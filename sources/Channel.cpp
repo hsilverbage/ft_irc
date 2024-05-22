@@ -179,18 +179,18 @@ void Channel::remove_client_from_operators(Client* client)
 		this->_ClientOperators.erase(it);
 }
 
-void Channel::send_msg_to_someone(int fd, std::string str)
+void Channel::send_msg_to_someone(std::map<int, Client *> client, std::string str, std::string messenger)
 {
-	str += "\r\n";
-	if (send(fd, str.c_str(), str.size(), 0) == -1)
+	str = ":" + it->second->get_nickname() + " PRIVMSG " + messenger + " " + str + "\r\n";
+	if (send(client->it->second->get_fd(), str.c_str(), str.size(), 0) == -1)
 		std::cerr << "send() failed" << std::endl;
 }
 
-void Channel::send_msg_to_everyone_in_channel(std::string str)
+void Channel::send_msg_to_everyone_in_channel(std::string str, std::string client)
 {
-	str = ":" + str + "\r\n";
 	for (std::map<int, Client*>::iterator it = _Clients.begin(); it != _Clients.end(); it++)
 	{
+		str = ":" + client + " PRIVMSG " + it->second->get_nickname() + " " + str + "\r\n";
 		if (is_banned(it->second->get_nickname()))
 			it++;
 		if (send(it->first, str.c_str(), str.size(), 0) == -1)

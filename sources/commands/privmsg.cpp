@@ -81,7 +81,7 @@ void Command::privmsg(std::vector<std::string> args, Client* client)
 		{
 			if (it->second->get_nickname() == target_vec[i])
 			{
-				ite->second->send_msg_to_someone(it->second->get_fd(), message);
+				ite->second->send_msg_to_someone(client_map, message, client->get_nickname());
 				i++;
 			}
 			else if (it == client_map.end())
