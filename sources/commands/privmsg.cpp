@@ -28,14 +28,12 @@ void Command::privmsg(std::vector<std::string> args, Client* client)
 		}
 		if (args[i + 1][0] && args[i + 1][0] == ':')
 		{
-			i++;
 			message = client->get_nickname() + " : ";
 			while (i + 1 < args.size())
 			{
 				message += args[i + 1];
-				if (i != args.size())
+				if (i + 1 != args.size())
 					message.push_back(' ');
-				message.push_back('\0');
 				i++;
 			}
 		}
@@ -63,14 +61,12 @@ void Command::privmsg(std::vector<std::string> args, Client* client)
 		}
 		if (args[i + 1][0] && args[i + 1][0] == ':')
 		{
-			i++;
 			message = client->get_nickname() + " : ";
 			while (i + 1 < args.size())
 			{
 				message += args[i + 1];
-				if (i != args.size())
+				if (i + 1 != args.size())
 					message.push_back(' ');
-				message.push_back('\0');
 				i++;
 			}
 		}
