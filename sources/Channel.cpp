@@ -97,7 +97,7 @@ void Channel::add_client_to_channel(Client* client)
 	this->_Clients[client->get_fd()] = client;
 	client->set_nb_channel(client->get_nb_channel() + 1);
 	set_nbClient(this->_nbClient + 1);
-	send_msg_to_everyone_in_channel(":" + client->get_nickname() + " is joining the channel " + get_channel_name() + "\r\n");
+	send_msg_to_everyone_in_channel(client->get_nickname() + " is joining the channel " + get_channel_name() + "\r\n");
 }
 
 
@@ -179,14 +179,16 @@ void Channel::remove_client_from_operators(Client* client)
 		this->_ClientOperators.erase(it);
 }
 
-void Channel::send_msg_to_someone(int fd, const std::string str)
+void Channel::send_msg_to_someone(int fd, std::string str)
 {
+	str += "\r\n";
 	if (send(fd, str.c_str(), str.size(), 0) == -1)
 		std::cerr << "send() failed" << std::endl;
 }
 
-void Channel::send_msg_to_everyone_in_channel(const std::string str)
+void Channel::send_msg_to_everyone_in_channel(std::string str)
 {
+	str += "\r\n";
 	for (std::map<int, Client*>::iterator it = _Clients.begin(); it != _Clients.end(); it++)
 	{
 		if (is_banned(it->second->get_nickname()))
