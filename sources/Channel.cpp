@@ -159,7 +159,7 @@ void Channel::remove_client_from_channel(Client* client, std::string reason)
 			send_msg_to_everyone_in_channel(client->get_nickname() + " is leaving the channel " + get_channel_name() +
 											" because " + reason + "\r\n");
 		this->_Clients.erase(it);
-		set_nbClient(this->_nbClient - 1);
+		set_nbClient(this->_nbClient - 1);	
 		client->set_nb_channel(client->get_nb_channel() - 1);
 	}
 	else
