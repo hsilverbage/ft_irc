@@ -1,5 +1,18 @@
 #include "Command.hpp"
 
+void	send_part(Channel* channel, Client* client, std::string reason)
+{
+	std::map<int, Client*> clients = channel->get_clients();
+	std::string msg				   = ":" + client->get_nickname() + " QUIT\r\n";
+
+	if (!reason.empty())
+		msg += reason;
+	for (std::map<int, Client*>::iterator it = clients.begin(); it != clients.end(); it++)
+		if (send(it->first, msg.c_str(), msg.size(), 0) == -1)
+			std::cerr << "send() failed" << std::endl;
+}
+
+
 void Command::part(std::vector<std::string> args, Client* client)
 {
 	std::cout << "PART CMD\t" << args[0] << client->get_nickname() << std::endl;
@@ -27,16 +40,12 @@ void Command::part(std::vector<std::string> args, Client* client)
 	{
 		std::map<std::string, Channel*>::iterator it = channel.find(args[i]);
 
-		std::cout << "test1" << std::endl;
 		if (it == channel.end())
-		{
 			NumericReplies::ERR_NOSUCHCHANNEL(client, args[i]);
-			std::cout << "test2" << std::endl;
-		}
 		else
 		{
-			it->second->remove_client_from_channel(client, reason);	
-			std::cout << "test3" << std::endl;
+			it->second->remove_client_from_channel(client);	
+			send_part(it->second, client, reason);
 		}
 	}
 }

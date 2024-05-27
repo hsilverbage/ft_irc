@@ -1,5 +1,18 @@
 #include "Command.hpp"
 
+void send_quit_join(Channel* channel, Client* client, std::string reason)
+{
+	std::map<int, Client*> clients = channel->get_clients();
+	std::string msg				   = ":" + client->get_nickname() + " QUIT\r\n";
+
+	if (!reason.empty())
+		msg += ": " + reason;
+	for (std::map<int, Client*>::iterator it = clients.begin(); it != clients.end(); it++)
+		if (send(it->first, msg.c_str(), msg.size(), 0) == -1)
+			std::cerr << "send() failed" << std::endl;
+}
+
+
 void Command::join(std::vector<std::string> args, Client* client)
 {
 	if (client->get_isConnected() == false)
@@ -11,9 +24,8 @@ void Command::join(std::vector<std::string> args, Client* client)
 		std::map<std::string, Channel*> channel = _Serv->get_channel();
 		for (std::map<std::string, Channel*>::iterator it = channel.begin(); it != channel.end(); it++)
 		{
-			it->second->remove_client_from_channel(client, "");
-			// TODO SEND A MSG TO TELL EVERYONE THAT THE CLIENT LEFT THE CHHANEL AS IN PART PROBABLY GONNA PUT IN
-			// DIRECTLY IN THE FUNCTION ABOVE AS IN ASS IN add_client_to_channel()
+			send_quit_join(it->second, client, "");
+			it->second->remove_client_from_channel(client);
 		}
 	}
 
@@ -62,7 +74,7 @@ void Command::join(std::vector<std::string> args, Client* client)
 				}
 				it->second->add_client_to_channel(client);
 				std::cout << "test2" << std::endl;
-				NumericReplies::RPL_JOIN(client, args[1]);
+				NumericReplies::RPL_JOIN(client, args[1], it->second);
 				NumericReplies::RPL_NAMREPLY(client, it->second->get_clients(), channelName);
 				NumericReplies::RPL_ENDOFNAMES(client, channelName);
 				if (!it->second->get_topic().empty())
@@ -76,7 +88,7 @@ void Command::join(std::vector<std::string> args, Client* client)
 			channel->add_client_to_channel(client);
 			_Serv->add_channel_to_map(channel, argsChannel[i]);
 
-			NumericReplies::RPL_JOIN(client, args[1]);
+			NumericReplies::RPL_JOIN(client, args[1], channel);
 			NumericReplies::RPL_NAMREPLY(client, channel->get_clients(), channelName);
 			NumericReplies::RPL_ENDOFNAMES(client, channelName);
 		}

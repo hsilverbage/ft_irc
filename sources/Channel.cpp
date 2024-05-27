@@ -97,7 +97,6 @@ void Channel::add_client_to_channel(Client* client)
 	this->_Clients[client->get_fd()] = client;
 	client->set_nb_channel(client->get_nb_channel() + 1);
 	set_nbClient(this->_nbClient + 1);
-	// send_msg_to_everyone_in_channel(client->get_nickname() + " is joining the channel " + get_channel_name());
 }
 
 
@@ -124,17 +123,23 @@ bool Channel::is_banned(std::string nickname)
 void Channel::ban_client(Client* client, std::string reason)
 {
 	std::map<int, Client*>::iterator it = _Clients.find(client->get_fd());
+	std::string msg;
 
 	if (it != _Clients.end())
 	{
 		if (reason.empty())
-			send_msg_to_everyone_in_channel(client->get_nickname() + " is banned from the channel " + get_channel_name() + "\r\n");
+			msg = client->get_nickname() + " is banned from the channel " + get_channel_name() + "\r\n";
 		else
-			send_msg_to_everyone_in_channel(client->get_nickname() + " is banned from the channel " + get_channel_name() + " because " + reason + "\r\n");
+			msg = client->get_nickname() + " is banned from the channel " + get_channel_name() + " because " + reason + "\r\n";
 		this->_Clients.erase(it);
 		set_nbClient(this->_nbClient - 1);
 		_Banned.insert(std::make_pair(it->first, it->second));
 		client->set_nb_channel(client->get_nb_channel() - 1);
+		for (it = _Clients.begin(); it != _Clients.end(); it++)
+		{
+			if (send(it->first, msg.c_str(), msg.size(), 0) == -1)
+				std::cerr << "send() failed" << std::endl;
+		}
 	}
 	else
 		NumericReplies::ERR_NOTONCHANNEL(client, get_channel_name());
@@ -142,25 +147,30 @@ void Channel::ban_client(Client* client, std::string reason)
 
 void Channel::unban_client(Client* client)
 {
+	std::string msg = client->get_nickname() + " is unbanned from the channel " + get_channel_name() + "\r\n";
 	this->_Clients.insert(std::make_pair(client->get_fd(), client));
 	_Banned.erase(client->get_fd());
-	send_msg_to_everyone_in_channel(client->get_nickname() + " is unbanned from the channel " + get_channel_name() + "\r\n");
+	for (std::map<int, Client*>::iterator it = _Clients.begin(); it != _Clients.end(); it++)
+	{
+		if (send(it->first, msg.c_str(), msg.size(), 0) == -1)
+				std::cerr << "send() failed" << std::endl;
+	}
 }
 
-void Channel::remove_client_from_channel(Client* client, std::string reason)
+void Channel::remove_client_from_channel(Client* client)
 {
 	std::map<int, Client*>::iterator it = _Clients.find(client->get_fd());
+	std::string msg;
 	if (it != _Clients.end())
 	{
-		if (reason.empty())
-			send_msg_to_everyone_in_channel(client->get_nickname() + " is leaving the channel " + get_channel_name() +
-											"\r\n");
-		else
-			send_msg_to_everyone_in_channel(client->get_nickname() + " is leaving the channel " + get_channel_name() +
-											" because " + reason + "\r\n");
 		this->_Clients.erase(it);
 		set_nbClient(this->_nbClient - 1);	
 		client->set_nb_channel(client->get_nb_channel() - 1);
+		for (it = _Clients.begin(); it != _Clients.end(); it++)
+		{
+			if (send(it->first, msg.c_str(), msg.size(), 0) == -1)
+				std::cerr << "send() failed" << std::endl;
+		}
 	}
 	else
 		NumericReplies::ERR_NOTONCHANNEL(client, get_channel_name());
@@ -179,22 +189,22 @@ void Channel::remove_client_from_operators(Client* client)
 		this->_ClientOperators.erase(it);
 }
 
-void Channel::send_msg_to_someone(std::map<int, Client *> client, std::string str, std::string messenger)
+void Channel::send_msg_to_someone(Client* client, std::string str, Client* target)
 {
-	str = ":" + it->second->get_nickname() + " PRIVMSG " + messenger + " " + str + "\r\n";
-	if (send(client->it->second->get_fd(), str.c_str(), str.size(), 0) == -1)
+	str = ":" + client->get_nickname() + " PRIVMSG " + target->get_nickname() + " " + str + "\r\n";
+	if (send(client->get_fd(), str.c_str(), str.size(), 0) == -1)
 		std::cerr << "send() failed" << std::endl;
 }
 
 void Channel::send_msg_to_everyone_in_channel(std::string str, std::string client)
 {
-	str += "\r\n";
+	std::string msg;
 	for (std::map<int, Client*>::iterator it = _Clients.begin(); it != _Clients.end(); it++)
 	{
-		str = ":" + client + " PRIVMSG " + it->second->get_nickname() + " " + str + "\r\n";
+		msg = ":" + client + " PRIVMSG " + it->second->get_nickname() + " " + str + "\r\n";
 		if (is_banned(it->second->get_nickname()))
 			it++;
-		if (send(it->first, str.c_str(), str.size(), 0) == -1)
+		if (send(it->first, msg.c_str(), msg.size(), 0) == -1)
 			std::cerr << "send() failed" << std::endl;
 	}
 }

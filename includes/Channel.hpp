@@ -36,11 +36,11 @@ class Channel
 		void set_nbClient(size_t actualNb);
 		void set_topic(std::string topic);
 		void add_client_to_channel(Client* client);
-		void remove_client_from_channel(Client* client, std::string reason);
+		void remove_client_from_channel(Client* client);
 		void add_client_to_operators(Client* client);
 		void remove_client_from_operators(Client* client);
 		void send_msg_to_everyone_in_channel(std::string str, std::string client);
-		void send_msg_to_someone(std::map<int, Client *> client, const std::string str, std::string messenger);
+		void send_msg_to_someone(Client * client, const std::string str, Client* target);
 		void set_maxClient(size_t max);
 		void set_topic(std::string topic, Client* client);
 		void set_topicProtected(bool status);

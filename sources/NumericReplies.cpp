@@ -503,17 +503,23 @@ void NumericReplies::ERR_UMODEUNKNOWNFLAG(Client* client)
 		std::cerr << "send() failed" << std::endl;
 }
 
-void	NumericReplies::RPL_JOIN(Client* client, std::string channel)
+void	NumericReplies::RPL_JOIN(Client* client, std::string channelName, Channel* channel)
 {
 	std::stringstream ss;
 
-	ss << ":" << client->get_nickname() << " JOIN " << channel << "\r\n";
+	ss << ":" << client->get_nickname() << " JOIN " << channelName << "\r\n";
 	std::string str = ss.str();
 	if (ss.fail())
 	{
 		std::cerr << "stringstream failed" << std::endl;
 		return;
 	}
-	if (send(client->get_fd(), str.c_str(), str.size(), 0) == -1)
-		std::cerr << "send() failed" << std::endl;
+	
+	std::map<int, Client*>	clients = channel->get_clients();
+
+	for (std::map<int, Client*>::iterator it = clients.begin(); it != clients.end(); it++)
+	{
+		if (send(it->first, str.c_str(), str.size(), 0) == -1)
+			std::cerr << "send() failed" << std::endl;
+	}
 }

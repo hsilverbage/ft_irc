@@ -1,5 +1,17 @@
 #include "Command.hpp"
 
+void	send_topic(Channel* channel, Client* client, std::string topic)
+{
+	std::map<int, Client*> clients = channel->get_clients();
+	std::string msg				   = ":" + client->get_nickname() + " QUIT\r\n";
+
+	if (!reason.empty())
+		msg += reason;
+	for (std::map<int, Client*>::iterator it = clients.begin(); it != clients.end(); it++)
+		if (send(it->first, msg.c_str(), msg.size(), 0) == -1)
+			std::cerr << "send() failed" << std::endl;
+}
+
 void	Command::topic(std::vector<std::string> args, Client* client)
 {
 	if (client->get_isConnected() == false)
