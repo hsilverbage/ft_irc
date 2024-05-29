@@ -34,7 +34,6 @@ class Channel
 		void ban_client(Client* client, std::string reason);
 		void unban_client(Client* client);
 		void set_nbClient(size_t actualNb);
-		void set_topic(std::string topic);
 		void add_client_to_channel(Client* client);
 		void remove_client_from_channel(Client* client);
 		void add_client_to_operators(Client* client);

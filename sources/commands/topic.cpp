@@ -5,8 +5,8 @@ void	send_topic(Channel* channel, Client* client, std::string topic)
 	std::map<int, Client*> clients = channel->get_clients();
 	std::string msg				   = ":" + client->get_nickname() + " QUIT\r\n";
 
-	if (!reason.empty())
-		msg += reason;
+	if (!topic.empty())
+		msg += topic;
 	for (std::map<int, Client*>::iterator it = clients.begin(); it != clients.end(); it++)
 		if (send(it->first, msg.c_str(), msg.size(), 0) == -1)
 			std::cerr << "send() failed" << std::endl;
@@ -56,16 +56,16 @@ void	Command::topic(std::vector<std::string> args, Client* client)
 		}
 		if (args[2][0] == ':' && args[2].size() == 1)
 		{
-			// it_channel->second->set_topic("");
-			it_channel->second->send_msg_to_everyone_in_channel("Clearing the topic on " + args[1]);
+			it_channel->second->set_topic("", client);
+			send_topic(it_channel->second, client, "");
 		}
 		else
 		{
 			if (it_channel->second->get_topic().empty())
-				it_channel->second->send_msg_to_everyone_in_channel(client->get_nickname() + " set the topic to : " + args[2] +  " on " + it_channel->second->get_channel_name());
+				send_topic(it_channel->second, client, args[2]);
 			else
-				it_channel->second->send_msg_to_everyone_in_channel(client->get_nickname() + " changed the topic : " + it_channel->second->get_topic() + " to" + args[2] + " on " + it_channel->second->get_channel_name());
-			// it_channel->second->set_topic(args[2]);
+				send_topic(it_channel->second, client, args[2]);
+			it_channel->second->set_topic(args[2], client);
 		}
 	}
 

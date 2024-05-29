@@ -370,8 +370,7 @@ void NumericReplies::RPL_WELCOME(Client* client)
 {
 	std::stringstream ss;
 
-	ss << "001 : " << client->get_nickname() << " :Welcome to the best_irc Network, " << client->get_nickname() << "[!"
-	   << client->get_username() << "@localhost]\r\n";
+	ss << "001 : " << client->get_nickname() << " :Welcome to the best_irc Network, " << client->get_nickname() << "[!" << client->get_username() << "@localhost]\r\n";
 	std::string str = ss.str();
 	if (ss.fail())
 	{

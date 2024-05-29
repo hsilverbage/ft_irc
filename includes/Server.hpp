@@ -66,6 +66,7 @@ class Server
 		int _socketFd;
 		std::string _pwd;
 		static bool _signal;
+		char*	_tempBuff;
 
 		std::map<int, Client*> _clients;
 		std::map<std::string, Channel*> _channel;

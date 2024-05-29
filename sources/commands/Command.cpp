@@ -46,6 +46,7 @@ void Command::parse_cmd(std::string buff, int fd)
 	std::string line = "";
 	std::vector<std::string> args;
 
+	std::cout << "buff is = " << buff << std::endl;
 	for (size_t i = 0; i < buff.size(); i++)
 	{
 		if (buff[i] == '\n')
