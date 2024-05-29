@@ -27,6 +27,34 @@ void Server::clear_clients(int fd)
 	}
 }
 
+char* join(const char* str1, const char* str2)
+{
+    size_t len1 = std::strlen(str1);
+    size_t len2 = std::strlen(str2);
+
+    char* result = new char[len1 + len2 + 1];
+
+    std::strcpy(result, str1);
+
+    std::strcat(result, str2);
+
+    return result;
+}
+
+bool find_first_of_remix(const char* str, const char c)
+{
+	int i = 0;
+    if (str == NULL)
+        return false;
+    while (str[i])
+	{
+        if (str[i] == c)
+            return true;
+		i++;
+    }
+    return false;
+}
+
 void Server::receive_new_data(int fd)
 {
 	char buff[1024];
@@ -40,15 +68,16 @@ void Server::receive_new_data(int fd)
 	}
 	else
 		buff[bytes] = '\0';
-	_tempBuff += buff;
-	int len = sizeof(_tempBuff);
-	if (_tempBuff[len - 1] == '\n')
+	_tempBuff = join(_tempBuff, buff);
+	if (find_first_of_remix(_tempBuff, '\n'))
 	{
 		Command	Cmd(this);
 
-		Cmd.parse_cmd(buff, fd);
+		Cmd.parse_cmd(_tempBuff, fd);
+		_tempBuff = NULL;
 	}
 	else
+		// _tempBuff = join(_tempBuff, buff);
 		std::cout << "TEST 123" << std::endl;
 }
 
@@ -140,7 +169,6 @@ Server::Server(std::string port, std::string pwd) : _pwd(pwd)
 		throw InvalidPort();
 	if (_port < 1024 || _port > 65535)
 		throw InvalidPort();
-	char* _tempBuff = new char[1024];
 }
 
 
@@ -171,7 +199,7 @@ Server::~Server()
 		delete it->second;
 	for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
 		delete it->second;
-	delete _tempBuff;
+	delete[] _tempBuff;
 }
 
 Server::Server(const Server& rhs)
