@@ -10,8 +10,8 @@ void Server::SignalHandler(int signum)
 
 void Server::clear_clients(int fd)
 {
-	std::map<int, Client*>::iterator	it;
-	
+	std::map<int, Client*>::iterator it;
+
 	it = _clients.find(fd);
 	if (it != _clients.end())
 		_clients.erase(it);
@@ -27,37 +27,23 @@ void Server::clear_clients(int fd)
 	}
 }
 
-char* join(const char* str1, const char* str2)
+bool check_buff(char* str)
 {
-    size_t len1 = std::strlen(str1);
-    size_t len2 = std::strlen(str2);
+	size_t i = 0;
 
-    char* result = new char[len1 + len2 + 1];
-
-    std::strcpy(result, str1);
-
-    std::strcat(result, str2);
-
-    return result;
-}
-
-bool find_first_of_remix(const char* str, const char c)
-{
-	int i = 0;
-    if (str == NULL)
-        return false;
-    while (str[i])
+	while (str[i])
 	{
-        if (str[i] == c)
-            return true;
+		if (str[i] == '\n')
+			return (true);
 		i++;
-    }
-    return false;
+	}
+	return (false);
 }
 
 void Server::receive_new_data(int fd)
 {
 	char buff[1024];
+	std::string args;
 	memset(buff, 0, sizeof(buff));
 
 	ssize_t bytes = recv(fd, buff, sizeof(buff) - 1, 0);
@@ -68,22 +54,29 @@ void Server::receive_new_data(int fd)
 	}
 	else
 		buff[bytes] = '\0';
-	_tempBuff = join(_tempBuff, buff);
-	if (find_first_of_remix(_tempBuff, '\n'))
+	if (check_buff(buff))
 	{
-		Command	Cmd(this);
+		std::cout << _tempBuff.size() << std::endl;
+		if (_tempBuff.size() > 0)
+		{
+			for (size_t i = 0; i < _tempBuff.size(); i++)
+				args += _tempBuff[i];
+		}
+		args += buff;
 
-		Cmd.parse_cmd(_tempBuff, fd);
-		_tempBuff = NULL;
+		Command Cmd(this);
+
+		std::cout << args << std::endl;
+
+		Cmd.parse_cmd(args, fd);
+		_tempBuff.clear();
 	}
 	else
-		// _tempBuff = join(_tempBuff, buff);
-		std::cout << "TEST 123" << std::endl;
+		_tempBuff.push_back(buff);
 }
 
 void Server::accept_new_client()
 {
-
 	struct pollfd poll;
 	socklen_t len = sizeof(struct_socket);
 
@@ -104,7 +97,7 @@ void Server::accept_new_client()
 	_fds.push_back(poll);
 
 	Client* client = new Client(acc);
-	_clients[acc] = client;
+	_clients[acc]  = client;
 	_clients[acc]->set_ip_address(inet_ntoa((struct_socket.sin_addr)));
 }
 
@@ -171,13 +164,12 @@ Server::Server(std::string port, std::string pwd) : _pwd(pwd)
 		throw InvalidPort();
 }
 
-
-std::map<int, Client*>&	Server::get_clients_map()
+std::map<int, Client*>& Server::get_clients_map()
 {
 	return (this->_clients);
 }
 
-std::string&	Server::get_pwd()
+std::string& Server::get_pwd()
 {
 	return (this->_pwd);
 }
@@ -189,17 +181,15 @@ std::map<std::string, Channel*>& Server::get_channel()
 
 void Server::add_channel_to_map(Channel* channel, std::string name)
 {
-	std::cout << "TEST2" << std::endl;
 	_channel[name] = channel;
 }
 
-Server::~Server() 
+Server::~Server()
 {
 	for (std::map<std::string, Channel*>::iterator it = _channel.begin(); it != _channel.end(); it++)
 		delete it->second;
 	for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
 		delete it->second;
-	delete[] _tempBuff;
 }
 
 Server::Server(const Server& rhs)
@@ -219,4 +209,3 @@ const char* Server::InvalidPort::what() const throw()
 {
 	return ("Invalid port, a valid port is a number between 1024 and 65535");
 }
-
