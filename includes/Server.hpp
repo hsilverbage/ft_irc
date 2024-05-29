@@ -52,6 +52,8 @@ class Server
 		void setSocket();
 		void ServInit();
 		void add_channel_to_map(Channel* channel, std::string name);
+		void quit_client(int fd);
+
 
 		std::string& get_pwd();
 
@@ -67,7 +69,7 @@ class Server
 		int _socketFd;
 		std::string _pwd;
 		static bool _signal;
-		std::vector<std::string>	_tempBuff;
+		std::map<int,std::string>	_tempBuff;
 
 		std::map<int, Client*> _clients;
 		std::map<std::string, Channel*> _channel;

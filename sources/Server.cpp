@@ -56,23 +56,17 @@ void Server::receive_new_data(int fd)
 		buff[bytes] = '\0';
 	if (check_buff(buff))
 	{
-		std::cout << _tempBuff.size() << std::endl;
-		if (_tempBuff.size() > 0)
-		{
-			for (size_t i = 0; i < _tempBuff.size(); i++)
-				args += _tempBuff[i];
-		}
+		if (_tempBuff[fd].size() > 0)
+			args += _tempBuff[fd];
 		args += buff;
 
 		Command Cmd(this);
 
-		std::cout << args << std::endl;
-
 		Cmd.parse_cmd(args, fd);
-		_tempBuff.clear();
+		_tempBuff[fd].clear();
 	}
 	else
-		_tempBuff.push_back(buff);
+		_tempBuff[fd] += buff;
 }
 
 void Server::accept_new_client()
@@ -208,4 +202,10 @@ Server& Server::operator=(const Server& rhs)
 const char* Server::InvalidPort::what() const throw()
 {
 	return ("Invalid port, a valid port is a number between 1024 and 65535");
+}
+
+void	Server::quit_client(int fd)
+{
+	_clients.erase(fd);
+	_tempBuff.erase(fd);
 }
