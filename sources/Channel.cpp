@@ -293,3 +293,8 @@ std::string	Channel::get_modes()
 		modes += "k";
 	return (modes);
 }
+
+void Channel::set_pwd(std::string pwd)
+{
+	this->_key = pwd;
+}
