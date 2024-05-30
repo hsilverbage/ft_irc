@@ -118,9 +118,7 @@ void NumericReplies::RPL_NAMREPLY(Client* client, std::map<int, Client*> clients
 	// CHECK :  "<client> <symbol> <channel> :[prefix]<nick>{ [prefix]<nick>}"
 	ss << ": 353 " << client->get_nickname() << " = " << channel << " : ";
 	for (std::map<int, Client*>::iterator it = clients.begin(); it != clients.end(); it++)
-	{
 		ss << it->second->get_nickname() << " ";
-	}
 	ss << "\r\n";
 	std::string str = ss.str();
 	if (ss.fail())
@@ -309,7 +307,7 @@ void NumericReplies::NOTIF_CHANGENICK(Client* client, std::string newNick)
 	{
 		std::stringstream ss;
 
-		ss << client->get_nickname() << " changed his nickname to " << newNick << "\"\r\n";
+		ss << ":" << client->get_nickname() << " NICK " << newNick << "\"\r\n";
 		std::string str = ss.str();
 		if (ss.fail())
 		{
@@ -371,7 +369,8 @@ void NumericReplies::RPL_WELCOME(Client* client)
 {
 	std::stringstream ss;
 
-	ss << "001 : " << client->get_nickname() << " :Welcome to the best_irc Network, " << client->get_nickname() << "[!" << client->get_username() << "@localhost]\r\n";
+	ss << "001 : " << client->get_nickname() << " :Welcome to the best_irc Network, " << client->get_nickname() << "[!"
+	   << client->get_username() << "@localhost]\r\n";
 	std::string str = ss.str();
 	if (ss.fail())
 	{
@@ -503,7 +502,7 @@ void NumericReplies::ERR_UMODEUNKNOWNFLAG(Client* client)
 		std::cerr << "send() failed" << std::endl;
 }
 
-void	NumericReplies::RPL_JOIN(Client* client, std::string channelName, Channel* channel)
+void NumericReplies::RPL_JOIN(Client* client, std::string channelName, Channel* channel)
 {
 	std::stringstream ss;
 
@@ -514,12 +513,10 @@ void	NumericReplies::RPL_JOIN(Client* client, std::string channelName, Channel* 
 		std::cerr << "stringstream failed" << std::endl;
 		return;
 	}
-	
-	std::map<int, Client*>	clients = channel->get_clients();
+
+	std::map<int, Client*> clients = channel->get_clients();
 
 	for (std::map<int, Client*>::iterator it = clients.begin(); it != clients.end(); it++)
-	{
 		if (send(it->first, str.c_str(), str.size(), 0) == -1)
 			std::cerr << "send() failed" << std::endl;
-	}
 }
