@@ -116,11 +116,12 @@ void NumericReplies::RPL_NAMREPLY(Client* client, std::map<int, Client*> clients
 	std::stringstream ss;
 
 	// CHECK :  "<client> <symbol> <channel> :[prefix]<nick>{ [prefix]<nick>}"
-	ss << "353 : " << client->get_nickname() << " " << channel << " :\r\n";
+	ss << ": 353 " << client->get_nickname() << " = " << channel << " : ";
 	for (std::map<int, Client*>::iterator it = clients.begin(); it != clients.end(); it++)
 	{
-		ss << it->second->get_nickname() << "\r\n";
+		ss << it->second->get_nickname() << " ";
 	}
+	ss << "\r\n";
 	std::string str = ss.str();
 	if (ss.fail())
 	{
@@ -152,7 +153,7 @@ void NumericReplies::RPL_ENDOFNAMES(Client* client, std::string channel)
 	std::stringstream ss;
 
 	// CHECK :   "<client> <channel> :End of /NAMES list"
-	ss << "366 : " << client->get_nickname() << " " << channel << " : End of /NAMES list\r\n";
+	ss << ": 366 " << client->get_nickname() << " " << channel << " :End of /NAMES list\r\n";
 	std::string str = ss.str();
 	if (ss.fail())
 	{

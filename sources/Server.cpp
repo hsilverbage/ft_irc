@@ -102,6 +102,7 @@ void Server::ServInit()
 
 	while (Server::_signal == false)
 	{
+		std::cout << "test" << std::endl;
 		if ((poll(&_fds[0], _fds.size(), -1) == -1) && Server::_signal == false)
 			throw(std::runtime_error("poll() failed"));
 		for (size_t i = 0; i < _fds.size(); i++)

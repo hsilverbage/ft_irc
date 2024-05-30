@@ -43,7 +43,7 @@ void Command::privmsg(std::vector<std::string> args, Client* client)
 		for (ite = channel.begin(); ite != channel.end(); ite++)
 		{
 			if (ite->first == target_vec[i] && ite->second->is_client_in_channel(client->get_fd()))
-				ite->second->send_msg_to_everyone_in_channel(message, client->get_nickname());
+				ite->second->send_msg_to_everyone_in_channel(message, client->get_nickname(), ite->first);
 			else if (ite->first == target_vec[i] && !ite->second->is_client_in_channel(client->get_fd()))
 				return (NumericReplies::ERR_CANNOTSENDTOCHAN(client, target_vec[i]));
 			i++;

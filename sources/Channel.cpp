@@ -196,12 +196,12 @@ void Channel::send_msg_to_someone(Client* client, std::string str, Client* targe
 		std::cerr << "send() failed" << std::endl;
 }
 
-void Channel::send_msg_to_everyone_in_channel(std::string str, std::string client)
+void Channel::send_msg_to_everyone_in_channel(std::string str, std::string client, std::string channelName)
 {
 	std::string msg;
 	for (std::map<int, Client*>::iterator it = _Clients.begin(); it != _Clients.end(); it++)
 	{
-		msg = ":" + client + " PRIVMSG " + it->second->get_nickname() + " " + str + "\r\n";
+		msg = ":" + client + " PRIVMSG " + channelName + " " + str + "\r\n";
 		if (is_banned(it->second->get_nickname()))
 			it++;
 		if (send(it->first, msg.c_str(), msg.size(), 0) == -1)
