@@ -21,6 +21,12 @@ Command::Command(Server* Serv) : _Serv(Serv)
 
 Command::~Command() {}
 
+void to_uppercase(std::string &str) {
+    for (std::size_t i = 0; i < str.size(); ++i) {
+        str[i] = std::toupper(str[i]);
+    }
+}
+
 void Command::exec_cmd(std::vector<std::string> args, int fd)
 {
 	std::map<int, Client*>::iterator it;
@@ -30,6 +36,8 @@ void Command::exec_cmd(std::vector<std::string> args, int fd)
 		try
 		{
 			Client* client			 = it->second;
+			to_uppercase(args[0]);
+			std::cout << args[0] << std::endl;
 			find_cmd_function ft_ptr = _commands.at(args[0]);
 
 			(this->*ft_ptr)(args, client);

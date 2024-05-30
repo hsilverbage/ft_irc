@@ -307,7 +307,7 @@ void NumericReplies::NOTIF_CHANGENICK(Client* client, std::string newNick)
 	{
 		std::stringstream ss;
 
-		ss << ":" << client->get_nickname() << " NICK " << newNick << "\"\r\n";
+		ss << ":" << client->get_nickname() << " NICK " << newNick << "\r\n";
 		std::string str = ss.str();
 		if (ss.fail())
 		{

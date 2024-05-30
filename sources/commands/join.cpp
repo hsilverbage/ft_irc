@@ -64,7 +64,6 @@ void Command::join(std::vector<std::string> args, Client* client)
 				return (NumericReplies::ERR_BADCHANNELKEY(client, channelName));
 			else
 			{
-				std::cout << "..." << std::endl;
 				if (it->second->get_invite_only() == true)
 				{
 					std::vector<Client*> invited = it->second->get_invited();

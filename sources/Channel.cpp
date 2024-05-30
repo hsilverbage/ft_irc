@@ -191,8 +191,9 @@ void Channel::remove_client_from_operators(Client* client)
 
 void Channel::send_msg_to_someone(Client* client, std::string str, Client* target)
 {
+	std::cout << client->get_nickname() << " " << target->get_nickname() << std::endl;
 	str = ":" + client->get_nickname() + " PRIVMSG " + target->get_nickname() + " " + str + "\r\n";
-	if (send(client->get_fd(), str.c_str(), str.size(), 0) == -1)
+	if (send(target->get_fd(), str.c_str(), str.size(), 0) == -1)
 		std::cerr << "send() failed" << std::endl;
 }
 
