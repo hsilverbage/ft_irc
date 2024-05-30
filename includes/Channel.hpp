@@ -53,6 +53,10 @@ class Channel
 		bool get_pwd_protected();
 		void set_pwd_protected(bool status);
 		void remove_client_from_channel_no_check(Client* client);
+		void set_limit_mode(bool status);
+		bool get_limit_mode();
+		std::string	get_modes();
+
 
 	private :
 
@@ -71,11 +75,13 @@ class Channel
 		std::string _key;
 		std::string _topic;
 		std::string	_whoSetTopic;
+		std::string _modes;
 
 
 		bool	_inviteOnly;
 		bool	_topicProtected;
 		bool	_pwdProtected;
+		bool	_limitMode;
 };
 
 #endif

@@ -20,7 +20,6 @@ void send_msg_mode_operator(Channel* channel, std::string mode, std::string targ
 			std::cerr << "send() failed" << std::endl;
 }
 
-
 void invite_mode(std::vector<std::string> args, Channel* channel)
 {
 	if (args[2][0] == '+')
@@ -53,11 +52,13 @@ void limit_mode(std::vector<std::string> args, Client* client, Channel* channel)
 			return (NumericReplies::ERR_UMODEUNKNOWNFLAG(client));
 		channel->set_maxClient(max);
 		send_msg_mode(channel, "+l");
+		channel->set_limit_mode(true);
 	}
 	else
 	{
 		channel->set_maxClient(SIZE_MAX - 1);
 		send_msg_mode(channel, "-l");
+		channel->set_limit_mode(false);
 	}
 }
 
@@ -75,7 +76,7 @@ void topic_mode(std::vector<std::string> args, Channel* channel)
 	}
 }
 
-void key_mode(std::vector<std::string> args, Channel* channel) 
+void key_mode(std::vector<std::string> args, Channel* channel)
 {
 	if (args[2][0] == '+')
 	{
@@ -120,18 +121,26 @@ void Command::mode(std::vector<std::string> args, Client* client)
 {
 	if (client->get_isConnected() == false)
 		return;
-	if (args.size() < 3)
+	if (args.size() < 2)
 		return (NumericReplies::ERR_NEEDMOREPARAMS(client, "MODE"));
 
 	std::map<std::string, Channel*> channels	 = _Serv->get_channel();
 	std::map<std::string, Channel*>::iterator it = channels.find(args[1]);
 
+	if (args.size() == 2 && it != channels.end())
+		return (NumericReplies::RPL_CHANNELMODEIS(client, it->second, it->second->get_modes()));
+	if (args.size() < 3)
+		return (NumericReplies::ERR_NEEDMOREPARAMS(client, "MODE"));
 	if (it == channels.end())
 		return (NumericReplies::ERR_NOSUCHCHANNEL(client, args[1]));
 	if (!it->second->isOperator(client->get_fd()))
 		return (NumericReplies::ERR_CHANOPRIVSNEEDED(client, args[1]));
+	
 	if (args[2][0] != '-' || args[2][0] != '+')
+	{
+		std::cout << "args[2][0] = " << args[2][0] << std::endl;
 		return (NumericReplies::ERR_UMODEUNKNOWNFLAG(client));
+	}
 	if (args[2][1] == 'i')
 		return (invite_mode(args, it->second));
 	if (args[2][1] == 'l')
@@ -142,5 +151,6 @@ void Command::mode(std::vector<std::string> args, Client* client)
 		return (key_mode(args, it->second));
 	if (args[2][1] == 'o')
 		return (operator_mode(args, client, it->second));
+	std::cout  << "letter not fund" << std::endl;
 	return (NumericReplies::ERR_UMODEUNKNOWNFLAG(client));
 }

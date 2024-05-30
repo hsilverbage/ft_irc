@@ -268,3 +268,28 @@ void Channel::remove_client_from_channel_no_check(Client* client)
 				std::cerr << "send() failed" << std::endl;
 	}
 }
+
+void Channel::set_limit_mode(bool status)
+{
+	this->_limitMode = status;
+}
+
+bool Channel::get_limit_mode()
+{
+	return (this->_limitMode);
+}
+
+std::string	Channel::get_modes()
+{
+	std::string modes = "";
+
+	if (get_invite_only())
+		modes += "i";
+	if (get_limit_mode())
+		modes += "l";
+	if (get_topicProtected())
+		modes += "t";
+	if (get_pwd_protected())
+		modes += "k";
+	return (modes);
+}
