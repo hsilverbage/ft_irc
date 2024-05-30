@@ -201,11 +201,15 @@ void Channel::send_msg_to_everyone_in_channel(std::string str, std::string clien
 	std::string msg;
 	for (std::map<int, Client*>::iterator it = _Clients.begin(); it != _Clients.end(); it++)
 	{
+		std::cout << str << std::endl;
 		msg = ":" + client + " PRIVMSG " + channelName + " " + str + "\r\n";
 		if (is_banned(it->second->get_nickname()))
 			it++;
-		if (send(it->first, msg.c_str(), msg.size(), 0) == -1)
+		if (client != it->second->get_nickname())
+		{
+			if (send(it->first, msg.c_str(), msg.size(), 0) == -1)
 			std::cerr << "send() failed" << std::endl;
+		}
 	}
 }
 
