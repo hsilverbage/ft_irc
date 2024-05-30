@@ -36,9 +36,9 @@ class Channel
 		void set_nbClient(size_t actualNb);
 		void set_topic(std::string topic);
 		void add_client_to_channel(Client* client);
+		void remove_client_from_operators(Client* client);
 		void remove_client_from_channel(Client* client);
 		void add_client_to_operators(Client* client);
-		void remove_client_from_operators(Client* client);
 		void send_msg_to_everyone_in_channel(std::string str, std::string client, std::string channelName);
 		void send_msg_to_someone(Client* client, std::string str, Client* target);
 		void set_maxClient(size_t max);
@@ -52,6 +52,7 @@ class Channel
 		bool is_channel(std::map<std::string, Channel*> channels, std::string channelTarg);
 		bool get_pwd_protected();
 		void set_pwd_protected(bool status);
+		void remove_client_from_channel_no_check(Client* client);
 
 	private :
 
