@@ -52,7 +52,7 @@ class Server
 		void setSocket();
 		void ServInit();
 		void add_channel_to_map(Channel* channel, std::string name);
-		void quit_client(int fd);
+		void quit_client(Client* client);
 
 
 		std::string& get_pwd();
