@@ -135,7 +135,7 @@ void NumericReplies::RPL_INVITING(Client* client, std::string channel)
 	std::stringstream ss;
 
 	// CHECK :   "<client> <nick> <channel>"
-	ss << "341 : " << client->get_nickname() << " " << channel << "\r\n";
+	ss << ": 341 " << client->get_nickname() << " " << channel << "\r\n";
 	std::string str = ss.str();
 	if (ss.fail())
 	{

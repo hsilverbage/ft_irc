@@ -50,7 +50,6 @@ void Command::privmsg(std::vector<std::string> args, Client* client)
 	}
 	else
 	{
-		std::cout << "l53" << std::endl;
 		while (args[i + 1][0] && args[i + 1][0] != ':')
 		{
 			if (client->is_client(client_map, args[i + 1]))
@@ -74,7 +73,6 @@ void Command::privmsg(std::vector<std::string> args, Client* client)
 		i = 0;
 		for (it = client_map.begin(); it != client_map.end(); it++)
 		{
-			std::cout << "l77" << std::endl;
 			if (it->second->get_nickname() == target_vec[i])
 				ite->second->send_msg_to_someone(client, message, it->second);
 			else if (it == client_map.end())

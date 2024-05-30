@@ -191,7 +191,6 @@ void Channel::remove_client_from_operators(Client* client)
 
 void Channel::send_msg_to_someone(Client* client, std::string str, Client* target)
 {
-	std::cout << client->get_nickname() << " " << target->get_nickname() << std::endl;
 	str = ":" + client->get_nickname() + " PRIVMSG " + target->get_nickname() + " " + str + "\r\n";
 	if (send(target->get_fd(), str.c_str(), str.size(), 0) == -1)
 		std::cerr << "send() failed" << std::endl;
@@ -202,14 +201,13 @@ void Channel::send_msg_to_everyone_in_channel(std::string str, std::string clien
 	std::string msg;
 	for (std::map<int, Client*>::iterator it = _Clients.begin(); it != _Clients.end(); it++)
 	{
-		std::cout << str << std::endl;
 		msg = ":" + client + " PRIVMSG " + channelName + " " + str + "\r\n";
 		if (is_banned(it->second->get_nickname()))
 			it++;
 		if (client != it->second->get_nickname())
 		{
 			if (send(it->first, msg.c_str(), msg.size(), 0) == -1)
-			std::cerr << "send() failed" << std::endl;
+				std::cerr << "send() failed" << std::endl;
 		}
 	}
 }
