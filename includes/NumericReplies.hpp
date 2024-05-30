@@ -28,8 +28,8 @@ class NumericReplies
 		static void ERR_USERNOTINCHANNEL(Client* client, std::string nickname, std::string channel);
 		static void ERR_NOSUCHNICK(Client* client, std::string noSuchelement);
 		static void ERR_NORECIPIENT(Client* client, std::string command);
-		static void	ERR_CANNOTSENDTOCHAN(Client* client, std::string channel);
-		static void	ERR_USERSDONTMATCH(Client* client);
+		static void ERR_CANNOTSENDTOCHAN(Client* client, std::string channel);
+		static void ERR_USERSDONTMATCH(Client* client);
 		static void ERR_UMODEUNKNOWNFLAG(Client* client);
 
 		// NOTIFICATION
@@ -41,7 +41,7 @@ class NumericReplies
 
 		static void RPL_WELCOME(Client* client);
 		static void RPL_TOPIC(Client* client);
-		static void	RPL_JOIN(Client* client, std::string channelName, Channel* channel);
+		static void RPL_JOIN(Client* client, std::string channelName, Channel* channel);
 		static void RPL_TOPICWHOTIME(Client* client);
 		static void RPL_NAMREPLY(Client* client, std::map<int, Client*> clients, std::string channel);
 		static void RPL_ENDOFNAMES(Client* client, std::string channel);

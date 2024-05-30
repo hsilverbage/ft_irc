@@ -29,5 +29,5 @@ void Command::quit(std::vector<std::string> args, Client* client)
 			send_quit(it->second, client, reason);
 		}
 	}
-	this->_Serv->quit_client(client->get_fd());
+	this->_Serv->quit_client(client);
 }

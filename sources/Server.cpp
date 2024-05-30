@@ -204,8 +204,13 @@ const char* Server::InvalidPort::what() const throw()
 	return ("Invalid port, a valid port is a number between 1024 and 65535");
 }
 
-void	Server::quit_client(int fd)
+void	Server::quit_client(Client* client)
 {
-	_clients.erase(fd);
-	_tempBuff.erase(fd);
+	for (std::map<std::string, Channel*>::iterator it = _channel.begin(); it != _channel.end(); it++)
+	{
+		it->second->remove_client_from_channel(client);
+		it->second->remove_client_from_operators(client); 
+	}
+	_clients.erase(client->get_fd());
+	_tempBuff.erase(client->get_fd());
 }

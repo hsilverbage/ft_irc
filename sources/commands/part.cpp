@@ -3,7 +3,7 @@
 void send_part(Channel* channel, Client* client, std::string reason)
 {
 	std::map<int, Client*> clients = channel->get_clients();
-	std::string msg				   = ":" + client->get_nickname() + " PART " + channel->get_channel_name() + "\r\n";
+	std::string msg				   = client->get_nickname() + " PART " + channel->get_channel_name() + " Leaving\r\n";
 
 	if (!reason.empty())
 		msg += reason;
@@ -14,7 +14,8 @@ void send_part(Channel* channel, Client* client, std::string reason)
 
 void Command::part(std::vector<std::string> args, Client* client)
 {
-	std::cout << "PART CMD\t" << args[0] << client->get_nickname() << std::endl;
+	for (size_t i = 0; i < args.size(); i++)
+		std::cout << args[i] << std::endl;
 	if (client->get_isConnected() == false)
 		return;
 	if (args.size() < 2)
