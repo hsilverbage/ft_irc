@@ -31,6 +31,7 @@ void Command::kick(std::vector<std::string> args, Client* client)
 
 	std::map<int, Client*> client_map = _Serv->get_clients_map();
 	std::map<int, Client*>::iterator iter;
+	
 	for (iter = client_map.begin(); iter != client_map.end(); iter++)
 	{
 		if (it->second->is_nick_in_channel(args[2]))

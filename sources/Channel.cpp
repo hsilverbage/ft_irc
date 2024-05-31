@@ -5,9 +5,9 @@ Channel::Channel(std::string key, Client* client, std::string channelName) : _ke
 	this->_topic					   = "";
 	_ClientOperators[client->get_fd()] = client;
 	this->_channelName				   = channelName;
-	this->_topicProtected = false;
+	this->_topicProtected			   = false;
 	this->_nbClient					   = 0;
-	this->_inviteOnly 				   = false;
+	this->_inviteOnly				   = false;
 	if (key.empty())
 		this->_pwdProtected = false;
 	else
@@ -26,7 +26,7 @@ std::string& Channel::get_topic()
 	return (this->_topic);
 }
 
-bool	Channel::get_invite_only()
+bool Channel::get_invite_only()
 {
 	return (this->_inviteOnly);
 }
@@ -38,11 +38,11 @@ void Channel::set_invite_only(bool status)
 
 void Channel::set_topic(std::string topic, Client* client)
 {
-	this->_topic = topic;
+	this->_topic	   = topic;
 	this->_whoSetTopic = client->get_nickname();
 }
 
-std::string&	Channel::who_set_topic()
+std::string& Channel::who_set_topic()
 {
 	return (this->_whoSetTopic);
 }
@@ -87,7 +87,7 @@ void Channel::set_nbClient(size_t actualNb)
 	this->_nbClient = actualNb;
 }
 
-void	Channel::set_maxClient(size_t max)
+void Channel::set_maxClient(size_t max)
 {
 	this->_maxClient = max;
 }
@@ -99,24 +99,19 @@ void Channel::add_client_to_channel(Client* client)
 	set_nbClient(this->_nbClient + 1);
 }
 
-
 bool Channel::is_channel(std::map<std::string, Channel*> channels, std::string channelTarg)
 {
 	for (std::map<std::string, Channel*>::iterator it = channels.begin(); it != channels.end(); it++)
-	{
 		if (it->first == channelTarg)
 			return true;
-	}
 	return false;
 }
 
 bool Channel::is_banned(std::string nickname)
 {
 	for (std::map<int, Client*>::iterator it = _Banned.begin(); it != _Banned.end(); it++)
-	{
 		if (it->second->get_nickname() == nickname)
 			return true;
-	}
 	return false;
 }
 
@@ -130,16 +125,15 @@ void Channel::ban_client(Client* client, std::string reason)
 		if (reason.empty())
 			msg = client->get_nickname() + " is banned from the channel " + get_channel_name() + "\r\n";
 		else
-			msg = client->get_nickname() + " is banned from the channel " + get_channel_name() + " because " + reason + "\r\n";
+			msg = client->get_nickname() + " is banned from the channel " + get_channel_name() + " because " + reason +
+				  "\r\n";
 		this->_Clients.erase(it);
 		set_nbClient(this->_nbClient - 1);
 		_Banned.insert(std::make_pair(it->first, it->second));
 		client->set_nb_channel(client->get_nb_channel() - 1);
 		for (it = _Clients.begin(); it != _Clients.end(); it++)
-		{
 			if (send(it->first, msg.c_str(), msg.size(), 0) == -1)
 				std::cerr << "send() failed" << std::endl;
-		}
 	}
 	else
 		NumericReplies::ERR_NOTONCHANNEL(client, get_channel_name());
@@ -151,10 +145,8 @@ void Channel::unban_client(Client* client)
 	this->_Clients.insert(std::make_pair(client->get_fd(), client));
 	_Banned.erase(client->get_fd());
 	for (std::map<int, Client*>::iterator it = _Clients.begin(); it != _Clients.end(); it++)
-	{
 		if (send(it->first, msg.c_str(), msg.size(), 0) == -1)
-				std::cerr << "send() failed" << std::endl;
-	}
+			std::cerr << "send() failed" << std::endl;
 }
 
 void Channel::remove_client_from_channel(Client* client)
@@ -164,21 +156,14 @@ void Channel::remove_client_from_channel(Client* client)
 	if (it != _Clients.end())
 	{
 		this->_Clients.erase(it);
-		set_nbClient(this->_nbClient - 1);	
+		set_nbClient(this->_nbClient - 1);
 		client->set_nb_channel(client->get_nb_channel() - 1);
 		for (it = _Clients.begin(); it != _Clients.end(); it++)
-		{
 			if (send(it->first, msg.c_str(), msg.size(), 0) == -1)
 				std::cerr << "send() failed" << std::endl;
-		}
 	}
 	else
 		NumericReplies::ERR_NOTONCHANNEL(client, get_channel_name());
-}
-
-void Channel::add_client_to_operators(Client* client)
-{
-	this->_ClientOperators[client->get_fd()] = client;
 }
 
 void Channel::remove_client_from_operators(Client* client)
@@ -187,6 +172,11 @@ void Channel::remove_client_from_operators(Client* client)
 
 	if (it != _ClientOperators.end())
 		this->_ClientOperators.erase(it);
+}
+
+void Channel::add_client_to_operators(Client* client)
+{
+	this->_ClientOperators[client->get_fd()] = client;
 }
 
 void Channel::send_msg_to_someone(Client* client, std::string str, Client* target)
@@ -217,17 +207,17 @@ std::string& Channel::get_channel_name()
 	return (this->_channelName);
 }
 
-bool	Channel::get_topicProtected()
+bool Channel::get_topicProtected()
 {
 	return (this->_topicProtected);
 }
 
-void	Channel::set_topicProtected(bool status)
+void Channel::set_topicProtected(bool status)
 {
 	this->_topicProtected = status;
 }
 
-bool	Channel::isOperator(int fd)
+bool Channel::isOperator(int fd)
 {
 	std::map<int, Client*>::iterator it = _ClientOperators.find(fd);
 
@@ -236,7 +226,7 @@ bool	Channel::isOperator(int fd)
 	return (false);
 }
 
-bool	Channel::is_client_in_channel(int fd)
+bool Channel::is_client_in_channel(int fd)
 {
 	std::map<int, Client*>::iterator it = _Clients.find(fd);
 
@@ -245,13 +235,11 @@ bool	Channel::is_client_in_channel(int fd)
 	return (true);
 }
 
-bool	Channel::is_nick_in_channel(const std::string nickname)
+bool Channel::is_nick_in_channel(const std::string nickname)
 {
 	for (std::map<int, Client*>::iterator it = _Clients.begin(); it != _Clients.end(); it++)
-	{
 		if (it->second->get_nickname() == nickname)
 			return (true);
-	}
 	return (false);
 }
 
@@ -263,4 +251,49 @@ bool Channel::get_pwd_protected()
 void Channel::set_pwd_protected(bool status)
 {
 	this->_pwdProtected = status;
+}
+
+void Channel::remove_client_from_channel_no_check(Client* client)
+{
+	std::map<int, Client*>::iterator it = _Clients.find(client->get_fd());
+	std::string msg;
+	if (it != _Clients.end())
+	{
+		this->_Clients.erase(it);
+		set_nbClient(this->_nbClient - 1);
+		client->set_nb_channel(client->get_nb_channel() - 1);
+		for (it = _Clients.begin(); it != _Clients.end(); it++)
+			if (send(it->first, msg.c_str(), msg.size(), 0) == -1)
+				std::cerr << "send() failed" << std::endl;
+	}
+}
+
+void Channel::set_limit_mode(bool status)
+{
+	this->_limitMode = status;
+}
+
+bool Channel::get_limit_mode()
+{
+	return (this->_limitMode);
+}
+
+std::string	Channel::get_modes()
+{
+	std::string modes = "";
+
+	if (get_invite_only())
+		modes += "i";
+	if (get_limit_mode())
+		modes += "l";
+	if (get_topicProtected())
+		modes += "t";
+	if (get_pwd_protected())
+		modes += "k";
+	return (modes);
+}
+
+void Channel::set_pwd(std::string pwd)
+{
+	this->_key = pwd;
 }

@@ -21,7 +21,7 @@ class NumericReplies
 		static void ERR_BANNEDFROMCHAN(Client* client, std::string channel);
 		static void ERR_CHANNELISFULL(Client* client, std::string channel);
 		static void ERR_INVITEONLYCHAN(Client* client, std::string channel);
-		static void RPL_INVITING(Client* client, std::string channel);
+		static void RPL_INVITING(Client* client, std::string channel, std::string target);
 		static void ERR_NOTONCHANNEL(Client* client, std::string name);
 		static void ERR_USERONCHANNEL(Client* client, std::string channel);
 		static void ERR_CHANOPRIVSNEEDED(Client* client, std::string channelName);
@@ -34,7 +34,7 @@ class NumericReplies
 
 		// NOTIFICATION
 
-		static void NOTIF_CHANGENICK(Client* client, std::string newNick);
+		static void NOTIF_CHANGENICK(Client* client, std::string newNick, int fd);
 		static void NOTIF_USERNAME_SET(Client* client);
 
 		// REPLY
@@ -48,6 +48,7 @@ class NumericReplies
 		static void RPL_TOPIC(Client* client, std::string channelName, std::string topicName);
 		static void RPL_NOTOPIC(Client* client, std::string channelName);
 		static void RPL_TOPICWHOTIME(Client* client, Channel* channel);
+		static void	RPL_CHANNELMODEIS(Client* client, Channel* channel, std::string modes);
 
 	private:
 

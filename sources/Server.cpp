@@ -208,7 +208,7 @@ void	Server::quit_client(Client* client)
 {
 	for (std::map<std::string, Channel*>::iterator it = _channel.begin(); it != _channel.end(); it++)
 	{
-		it->second->remove_client_from_channel(client);
+		it->second->remove_client_from_channel_no_check(client);
 		it->second->remove_client_from_operators(client); 
 	}
 	_clients.erase(client->get_fd());

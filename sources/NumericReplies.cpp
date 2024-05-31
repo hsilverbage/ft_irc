@@ -130,12 +130,12 @@ void NumericReplies::RPL_NAMREPLY(Client* client, std::map<int, Client*> clients
 		std::cerr << "send() failed" << std::endl;
 }
 
-void NumericReplies::RPL_INVITING(Client* client, std::string channel)
+void NumericReplies::RPL_INVITING(Client* client, std::string channel, std::string target)
 {
 	std::stringstream ss;
 
 	// CHECK :   "<client> <nick> <channel>"
-	ss << ": 341 " << client->get_nickname() << " " << channel << "\r\n";
+	ss << ": 341 " << client->get_nickname() << " "  << target << " " << channel << "\r\n";
 	std::string str = ss.str();
 	if (ss.fail())
 	{
@@ -301,7 +301,7 @@ void NumericReplies::ERR_ERRONEUSNICKNAME(Client* client)
 		std::cerr << "send() failed" << std::endl;
 }
 
-void NumericReplies::NOTIF_CHANGENICK(Client* client, std::string newNick)
+void NumericReplies::NOTIF_CHANGENICK(Client* client, std::string newNick, int fd)
 {
 	if (client->get_nickname() != "")
 	{
@@ -314,7 +314,7 @@ void NumericReplies::NOTIF_CHANGENICK(Client* client, std::string newNick)
 			std::cerr << "stringstream failed" << std::endl;
 			return;
 		}
-		if (send(client->get_fd(), str.c_str(), str.size(), 0) == -1)
+		if (send(fd, str.c_str(), str.size(), 0) == -1)
 			std::cerr << "send() failed" << std::endl;
 	}
 }
@@ -519,4 +519,19 @@ void NumericReplies::RPL_JOIN(Client* client, std::string channelName, Channel* 
 	for (std::map<int, Client*>::iterator it = clients.begin(); it != clients.end(); it++)
 		if (send(it->first, str.c_str(), str.size(), 0) == -1)
 			std::cerr << "send() failed" << std::endl;
+}
+
+void	NumericReplies::RPL_CHANNELMODEIS(Client* client, Channel* channel, std::string modes)
+{
+	std::stringstream ss;
+
+	ss << "324 : " << client->get_nickname() << " " << channel->get_channel_name() << " " << modes << "\r\n";
+	std::string str = ss.str();
+	if (ss.fail())
+	{
+		std::cerr << "stringstream failed" << std::endl;
+		return;
+	}
+	if (send(client->get_fd(), str.c_str(), str.size(), 0) == -1)
+		std::cerr << "send() failed" << std::endl;
 }
