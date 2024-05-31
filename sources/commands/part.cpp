@@ -3,7 +3,7 @@
 void send_part(Channel* channel, Client* client, std::string reason)
 {
 	std::map<int, Client*> clients = channel->get_clients();
-	std::string msg				   = client->get_nickname() + " PART " + channel->get_channel_name() + " Leaving\r\n";
+	std::string msg				   = ":" + client->get_nickname() + "!" + client->get_username() +  "@localhost"  + " PART " + "Leaving\r\n";
 
 	if (!reason.empty())
 		msg += reason;
