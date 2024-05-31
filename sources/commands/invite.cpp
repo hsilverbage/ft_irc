@@ -25,10 +25,10 @@ void Command::invite(std::vector<std::string> args, Client* client)
 			else if (it->second->is_banned(args[1]))
 			{
 				it->second->unban_client(iter->second);
-				NumericReplies::RPL_INVITING(client, args[2]);
+				NumericReplies::RPL_INVITING(client, args[2], iter->second->get_nickname());
 			}
 			else
-				NumericReplies::RPL_INVITING(client, args[2]);
+				NumericReplies::RPL_INVITING(client, args[2], iter->second->get_nickname());
 		}
 		// MAYBE AN ERROR WHEN THE NICK DON'T MATCH WITH THE CLIENT_MAP
 	}
