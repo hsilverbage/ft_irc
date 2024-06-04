@@ -36,9 +36,6 @@ class Client
 
 	private:
 
-		// Client(const Client& rhs);
-		// Client& operator=(const Client& rhs);
-
 		std::string _ipAddress;
 		std::string	_nickname;
 		std::string	_username;

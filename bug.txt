@@ -1,8 +1,0 @@
-TO DO :
-
-	-> FIX SEG FAULT IN JOIN void NumericReplies::RPL_NAMREPLY()
-
-
-NORMALLY FIXED :
-
-	-> USER a 0 *:a : SEG_FAULT

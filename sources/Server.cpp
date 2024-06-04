@@ -62,6 +62,8 @@ void Server::receive_new_data(int fd)
 
 		Command Cmd(this);
 
+		std::cout << args << std::endl;
+
 		Cmd.parse_cmd(args, fd);
 		_tempBuff[fd].clear();
 	}
@@ -77,12 +79,12 @@ void Server::accept_new_client()
 	int acc = accept(_socketFd, (sockaddr*)&struct_socket, &len);
 	if (acc == -1)
 	{
-		std::cout << "accept() failed" << std::endl;
+		std::cerr << "accept() failed" << std::endl;
 		return;
 	}
 	if (fcntl(acc, F_SETFL, O_NONBLOCK) == -1)
 	{
-		std::cout << "fcntl() failed" << std::endl;
+		std::cerr << "fcntl() failed" << std::endl;
 		return;
 	}
 	poll.fd		 = acc;
@@ -213,4 +215,5 @@ void	Server::quit_client(Client* client)
 	}
 	_clients.erase(client->get_fd());
 	_tempBuff.erase(client->get_fd());
+	delete client;
 }

@@ -48,7 +48,6 @@ void Command::join(std::vector<std::string> args, Client* client)
 
 		if (i < argsKey.size())
 			channelKey = argsKey[i];
-		std::cout << argsChannel[i] << std::endl;
 		if (it != channel_map.end())
 		{
 			std::map<int, Client*> banned = it->second->get_banned();
@@ -74,12 +73,11 @@ void Command::join(std::vector<std::string> args, Client* client)
 							return (NumericReplies::ERR_INVITEONLYCHAN(client, channelName));
 				}
 				it->second->add_client_to_channel(client);
-				std::cout << "test2" << std::endl;
 				NumericReplies::RPL_JOIN(client, channelName, it->second);
 				NumericReplies::RPL_NAMREPLY(client, it->second->get_clients(), channelName);
 				NumericReplies::RPL_ENDOFNAMES(client, channelName);
 				if (!it->second->get_topic().empty())
-					NumericReplies::RPL_TOPIC(client);
+					NumericReplies::RPL_TOPIC(client, channelName, it->second->get_topic());
 			}
 		}
 		else

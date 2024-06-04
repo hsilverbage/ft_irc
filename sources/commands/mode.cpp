@@ -147,6 +147,5 @@ void Command::mode(std::vector<std::string> args, Client* client)
 		return (key_mode(args, it->second, client));
 	if (args[2].compare(0, 2, "-o") == 0 || args[2].compare(0, 2, "+o") == 0)
 		return (operator_mode(args, client, it->second));
-	std::cout << "letter not fund" << std::endl;
 	return (NumericReplies::ERR_UMODEUNKNOWNFLAG(client));
 }

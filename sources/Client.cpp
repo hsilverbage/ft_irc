@@ -93,17 +93,3 @@ bool Client::is_client(std::map<int, Client*> client_map, std::string nickname)
 	}
 	return false;
 }
-
-
-// Client::Client(const Client& rhs)
-// {
-// 	*this = rhs;
-// }
-
-// Client& Client::operator=(const Client& rhs)
-// {
-// 	if (this != &rhs)
-// 	{
-// 	}
-// 	return (*this);
-// }

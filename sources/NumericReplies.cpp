@@ -162,21 +162,6 @@ void NumericReplies::RPL_ENDOFNAMES(Client* client, std::string channel)
 		std::cerr << "send() failed" << std::endl;
 }
 
-void NumericReplies::RPL_TOPIC(Client* client)
-{
-	std::stringstream ss;
-
-	// WRITE THE ERROR MSG W/ CHANNEL :  "<client> <channel> :<topic>"
-	std::string str = ss.str();
-	if (ss.fail())
-	{
-		std::cerr << "stringstream failed" << std::endl;
-		return;
-	}
-	if (send(client->get_fd(), str.c_str(), str.size(), 0) == -1)
-		std::cerr << "send() failed" << std::endl;
-}
-
 void NumericReplies::ERR_INVITEONLYCHAN(Client* client, std::string channel)
 {
 	std::stringstream ss;
@@ -229,7 +214,7 @@ void NumericReplies::ERR_BADCHANNELKEY(Client* client, std::string channel)
 {
 	std::stringstream ss;
 
-	ss << client->get_nickname() << " " << channel << " : Cannot join channel (+k)" << std::endl;
+	ss << client->get_nickname() << " " << channel << " : Cannot join channel (+k)\r\n";
 	std::string str = ss.str();
 	if (ss.fail())
 	{
@@ -244,8 +229,7 @@ void NumericReplies::ERR_TOOMANYCHANNELS(Client* client, std::string channel)
 {
 	std::stringstream ss;
 
-	std::cout << client->get_nickname() << " " << channel << " : You have joined too many channels" << std::endl;
-	// CHECK  :  "<client> <channel> :You have joined too many channels"
+	ss << client->get_nickname() << " " << channel << " : You have joined too many channels\r\n";
 	std::string str = ss.str();
 	if (ss.fail())
 	{

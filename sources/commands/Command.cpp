@@ -31,13 +31,13 @@ void Command::exec_cmd(std::vector<std::string> args, int fd)
 {
 	std::map<int, Client*>::iterator it;
 	it = _Serv->get_clients_map().find(fd);
+
 	if (it != _Serv->get_clients_map().end())
 	{
 		try
 		{
 			Client* client			 = it->second;
 			to_uppercase(args[0]);
-			std::cout << args[0] << std::endl;
 			find_cmd_function ft_ptr = _commands.at(args[0]);
 
 			(this->*ft_ptr)(args, client);
@@ -54,7 +54,6 @@ void Command::parse_cmd(std::string buff, int fd)
 	std::string line = "";
 	std::vector<std::string> args;
 
-	std::cout << "buff is = " << buff << std::endl;
 	for (size_t i = 0; i < buff.size(); i++)
 	{
 		if (buff[i] == '\n')

@@ -40,7 +40,7 @@ class NumericReplies
 		// REPLY
 
 		static void RPL_WELCOME(Client* client);
-		static void RPL_TOPIC(Client* client);
+		// static void RPL_TOPIC(Client* client);
 		static void RPL_JOIN(Client* client, std::string channelName, Channel* channel);
 		static void RPL_TOPICWHOTIME(Client* client);
 		static void RPL_NAMREPLY(Client* client, std::map<int, Client*> clients, std::string channel);
